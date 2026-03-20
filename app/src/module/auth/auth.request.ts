@@ -1,15 +1,15 @@
-import { IsEmail, IsString, Length } from 'class-validator'
+import { IsNumberString, IsPhoneNumber, Length } from 'class-validator'
 
 export class AuthRequest {
-  @IsEmail()
-  readonly mail: string
+  @IsPhoneNumber('BR')
+  readonly phone: string
 }
 
 export class VerifyRequest {
-  @IsEmail()
-  readonly mail: string
+  @IsPhoneNumber('BR')
+  readonly phone: string
 
-  @IsString()
+  @IsNumberString({ no_symbols: true })
   @Length(6, 6)
   readonly code: string
 }

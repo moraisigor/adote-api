@@ -1,18 +1,20 @@
-import type { UserDocument } from '../user/repository/user.schema'
+import type { UserDocument } from '@/module/user/repository/user.schema'
+
+import type { Token } from './type/token'
 
 export class AuthResponse {
   readonly id: string
-  readonly mail: string
+  readonly phone: string
 
   constructor(user: UserDocument) {
     this.id = user.id
-    this.mail = user.mail
+    this.phone = user.phone
   }
 }
 
 export class TokenResponse {
   constructor(
-    readonly token: string,
-    readonly renew: string
+    readonly token: Token,
+    readonly renew: Token
   ) {}
 }
