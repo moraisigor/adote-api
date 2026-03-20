@@ -12,7 +12,7 @@ export type BreedDocument = HydratedDocument<Breed>
   collection: 'Breed'
 })
 export class Breed {
-  @Prop({ type: String, required: true })
+  @Prop({ type: String, unique: true, required: true })
   name: string
 
   @Prop({ type: String, enum: Kind, required: true })

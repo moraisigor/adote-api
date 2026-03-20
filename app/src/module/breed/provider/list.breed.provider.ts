@@ -1,6 +1,6 @@
 import { BreedResponse } from '../breed.response'
 import { BreedRepository } from '../repository/breed.repository'
-import { Kind } from '../type/kind.enum'
+import type { Kind } from '../type/kind.enum'
 
 export class ListBreedProvider {
   constructor(private readonly repository: BreedRepository) {}
