@@ -1,9 +1,10 @@
+import { CacheModule } from '@nestjs/cache-manager'
 import { Module } from '@nestjs/common'
 import { APP_GUARD } from '@nestjs/core'
 import { JwtModule } from '@nestjs/jwt'
 import { PassportModule } from '@nestjs/passport'
 
-import { MailModule } from '@/module/mail/mail.module'
+import { MessageModule } from '@/module/message/message.module'
 import { UserModule } from '@/module/user/user.module'
 
 import { AuthController } from './auth.controller'
@@ -14,7 +15,16 @@ import { TokenRenewStrategy } from './strategy/token.renew.strategy'
 import { TokenStrategy } from './strategy/token.strategy'
 
 @Module({
-  imports: [JwtModule, PassportModule, MailModule, UserModule],
+  imports: [
+    UserModule,
+    MessageModule,
+    // dependency
+    JwtModule,
+    PassportModule,
+    CacheModule.register({
+      ttl: 2 * 60 * 1000
+    })
+  ],
   providers: [
     AuthProvider,
     TokenStrategy,

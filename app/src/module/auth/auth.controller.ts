@@ -1,18 +1,27 @@
-import { Body, Controller, HttpCode, HttpStatus, Post, UseGuards } from '@nestjs/common'
+import { Body, Controller, Headers, HttpCode, HttpStatus, Post, UseGuards } from '@nestjs/common'
 
-import type { User } from '@/type/auth.type'
+import type { User } from '@/type/token'
 
 import { Public } from '@/decorator/public.decorator'
 import { UserCurrent } from '@/decorator/user.current.decorator'
 
 import { AuthRequest, VerifyRequest } from './auth.request'
 import { AuthResponse, TokenResponse } from './auth.response'
+import { KeyGuard } from './guard/key.guard'
 import { TokenRenewGuard } from './guard/token.renew.guard'
 import { AuthProvider } from './provider'
 
 @Controller('auth')
 export class AuthController {
   constructor(private readonly provider: AuthProvider) {}
+
+  @Post('key')
+  @Public()
+  @HttpCode(HttpStatus.OK)
+  @UseGuards(KeyGuard)
+  key(@Headers() header: Record<string, string>): Promise<TokenResponse> {
+    return this.provider.key.run(header['key'])
+  }
 
   @Post()
   @Public()
