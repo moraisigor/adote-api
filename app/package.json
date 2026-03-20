@@ -16,7 +16,7 @@
   "dependencies": {
     "@aws-sdk/client-s3": "^3.663.0",
     "@aws-sdk/client-ses": "^3.662.0",
-    "@fastify/compress": "^6.5.0",
+    "@fastify/compress": "^7.0.3",
     "@fastify/helmet": "^11.1.1",
     "@nestjs-modules/mailer": "^2.0.2",
     "@nestjs/common": "^10.2.7",
