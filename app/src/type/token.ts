@@ -1,4 +1,4 @@
-import { Role } from '@/module/user/type/role.enum'
+import { Role } from '@/module/user/type/role'
 
 export type User = {
   readonly id: string
