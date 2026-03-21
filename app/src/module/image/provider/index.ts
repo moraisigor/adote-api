@@ -11,6 +11,6 @@ export class ImageProvider {
 
   constructor(private readonly config: ConfigService) {
     this.save = new SaveImageProvider(this.config)
-    this.remove = new RemoveImageProvider()
+    this.remove = new RemoveImageProvider(this.config)
   }
 }

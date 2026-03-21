@@ -1,3 +1,7 @@
+import { ConfigService } from '@nestjs/config'
+
 export class RemoveImageProvider {
-  run() {}
+  constructor(private readonly config: ConfigService) {}
+
+  async run() {}
 }
