@@ -1,6 +1,6 @@
 import { Controller, Delete, HttpCode, HttpStatus, Param, Post } from '@nestjs/common'
 
-import type { User } from '@/type/auth.type'
+import type { User } from '@/type/token'
 
 import { UserCurrent } from '@/decorator/user.current.decorator'
 
