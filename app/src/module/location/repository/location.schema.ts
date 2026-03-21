@@ -10,7 +10,7 @@ export type LocationDocument = HydratedDocument<Location>
   collection: 'Location'
 })
 export class Location {
-  @Prop({ type: String, required: true })
+  @Prop({ type: String, unique: true, required: true })
   city: string
 
   @Prop({ type: String, required: true })

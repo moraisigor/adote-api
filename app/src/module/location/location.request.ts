@@ -3,7 +3,7 @@ import { IsString, MinLength } from 'class-validator'
 
 export class SearchLocationRequest {
   @IsString()
-  @MinLength(4)
+  @MinLength(2)
   @Transform(({ value }: TransformFnParams) => value?.trim())
-  readonly city: string
+  readonly search: string
 }

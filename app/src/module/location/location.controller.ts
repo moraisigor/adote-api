@@ -13,8 +13,8 @@ export class LocationController {
   @Get()
   @Public()
   search(@Query() request: SearchLocationRequest): Promise<LocationResponse[]> {
-    const { city } = request
+    const { search } = request
 
-    return this.provider.search.run(city)
+    return this.provider.search.run(search)
   }
 }

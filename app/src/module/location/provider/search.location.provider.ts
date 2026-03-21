@@ -4,10 +4,10 @@ import { LocationRepository } from '../repository/location.repository'
 export class SearchLocationProvider {
   constructor(private readonly repository: LocationRepository) {}
 
-  async run(city: string): Promise<LocationResponse[]> {
+  async run(search: string): Promise<LocationResponse[]> {
     const list = await this.repository.list({
       city: {
-        $regex: city,
+        $regex: search,
         $options: 'i'
       }
     })
