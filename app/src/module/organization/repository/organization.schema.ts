@@ -5,6 +5,8 @@ import { Types, type HydratedDocument } from 'mongoose'
 import type { PetDocument } from '@/module/pet/repository/pet.schema'
 import type { PostDocument } from '@/module/post/repository/post.schema'
 
+import { Member } from './member'
+
 export type OrganizationDocument = HydratedDocument<Organization>
 
 export class Contact {
@@ -32,6 +34,9 @@ export class Organization {
 
   @Prop({ type: Contact })
   contact?: Contact
+
+  @Prop({ type: [Member], required: true })
+  member: Member[]
 
   @Prop({ type: [{ type: Types.ObjectId, ref: 'Pet' }], default: [] })
   pet?: PetDocument[] = []
