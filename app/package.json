@@ -1,14 +1,14 @@
 {
-  "name": "oreo",
+  "name": "adote",
   "version": "1.0.0",
   "description": "",
   "author": "hollow",
   "private": true,
   "scripts": {
+    "lint": "eslint \"{src,spec}/**/*.ts\" --fix",
+    "lint:check": "eslint \"{src,spec}/**/*.ts\"",
     "format": "prettier --write \"src/**/*.ts\" \"spec/**/*.ts\"",
     "format:check": "prettier --check \"src/**/*.ts\" \"spec/**/*.ts\"",
-    "lint": "eslint \"{src,apps,libs,spec}/**/*.ts\" --fix",
-    "lint:check": "eslint \"{src,apps,libs,spec}/**/*.ts\"",
     "start": "bun --watch ./src/main.ts",
     "test": "bun test",
     "test:watch": "bun test --watch"
@@ -67,23 +67,5 @@
     "ts-loader": "^9.5.0",
     "tsconfig-paths": "^4.2.0",
     "typescript": "^5.7.2"
-  },
-  "jest": {
-    "moduleNameMapper": {
-      "@/(.*)": "<rootDir>/src/$1"
-    },
-    "moduleFileExtensions": [
-      "js",
-      "ts"
-    ],
-    "rootDir": ".",
-    "testRegex": ".spec\\.ts$",
-    "transform": {
-      "^.+\\.(t|j)s$": "ts-jest"
-    },
-    "collectCoverageFrom": [
-      "**/*.(t|j)s"
-    ],
-    "coverageDirectory": "../coverage"
   }
 }
