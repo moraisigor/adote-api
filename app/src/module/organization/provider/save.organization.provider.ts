@@ -1,0 +1,31 @@
+import { BadRequestException } from '@nestjs/common'
+
+import { isNil } from 'lodash'
+import { Types } from 'mongoose'
+
+import { SaveOrganizationRequest } from '../organization.request'
+import { OrganizationResponse } from '../organization.response'
+import { OrganizationRepository } from '../repository/organization.repository'
+
+export class SaveOrganizationProvider {
+  constructor(private readonly repository: OrganizationRepository) {}
+
+  async run(id: string, request: SaveOrganizationRequest): Promise<OrganizationResponse> {
+    const { name, document, contact } = request
+
+    const map: { [key: string]: unknown } = {
+      'name': name,
+      'document': document,
+      'contact.mail': contact?.mail,
+      'contact.phone': contact?.phone
+    }
+
+    const organization = await this.repository.save(new Types.ObjectId(id), map)
+
+    if (isNil(organization)) {
+      throw new BadRequestException()
+    }
+
+    return new OrganizationResponse(organization)
+  }
+}
