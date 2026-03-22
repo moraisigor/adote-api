@@ -4,14 +4,14 @@ import { PassportStrategy } from '@nestjs/passport'
 
 import { ExtractJwt, Strategy } from 'passport-jwt'
 
-import type { Token, User } from '@/type/auth.type'
+import type { Token, User } from '@/type/token'
 
 @Injectable()
 export class TokenStrategy extends PassportStrategy(Strategy, 'Token') {
   constructor(readonly config: ConfigService) {
     super({
-      jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
-      secretOrKey: config.get<string>('TOKEN_SECRET')
+      secretOrKey: config.getOrThrow<string>('TOKEN_RENEW_SECRET'),
+      jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken()
     })
   }
 
