@@ -3,19 +3,19 @@ import { Reflector } from '@nestjs/core'
 
 import { isNil } from 'lodash'
 
-import { Role } from '@/module/user/type/role.enum'
+import type { Role } from '@/module/user/type/role'
 
 @Injectable()
 export class PermissionGuard implements CanActivate {
   constructor(private readonly reflector: Reflector) {}
 
-  canActivate(context: ExecutionContext) {
-    const list = this.reflector.getAllAndOverride<Role[]>('permission', [
+  async canActivate(context: ExecutionContext) {
+    const permission = this.reflector.getAllAndOverride<Role[]>('permission', [
       context.getClass(),
       context.getHandler()
     ])
 
-    if (isNil(list)) {
+    if (isNil(permission)) {
       return true
     }
 
@@ -23,6 +23,6 @@ export class PermissionGuard implements CanActivate {
       user: { role }
     } = context.switchToHttp().getRequest()
 
-    return list.includes(role)
+    return permission.includes(role)
   }
 }
