@@ -1,0 +1,32 @@
+import type { Contact, OrganizationDocument } from './repository/organization.schema'
+
+export class ContactResponse {
+  readonly mail?: string
+  readonly phone?: string
+
+  constructor(contact: Contact) {
+    this.mail = contact.mail
+    this.phone = contact.phone
+  }
+}
+
+export class OrganizationResponse {
+  readonly id: string
+  readonly name: string
+  readonly image?: string
+  readonly document?: string
+  readonly contact?: ContactResponse
+
+  constructor(organization: OrganizationDocument) {
+    const { contact } = organization
+
+    this.id = organization.id
+    this.name = organization.name
+    this.image = organization.image
+    this.document = organization.document
+
+    if (contact) {
+      this.contact = new ContactResponse(contact)
+    }
+  }
+}
