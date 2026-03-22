@@ -6,21 +6,25 @@ import { afterAll, beforeAll, describe, expect, test } from 'bun:test'
 
 import { HealthModule } from '@/module/health/health.module'
 
-describe('health controller', async () => {
-  const module = await Test.createTestingModule({
-    imports: [HealthModule]
-  }).compile()
+describe('health module', async () => {
+  let application: NestFastifyApplication
 
-  const application = module.createNestApplication<NestFastifyApplication>(new FastifyAdapter())
+  beforeAll(async () => {
+    const module = await Test.createTestingModule({
+      imports: [HealthModule]
+    }).compile()
 
-  await application.init()
-  await application.getHttpAdapter().getInstance().ready()
+    application = module.createNestApplication<NestFastifyApplication>(new FastifyAdapter())
+
+    await application.init()
+    await application.getHttpAdapter().getInstance().ready()
+  })
 
   describe('/get', () => {
     test('should return http code 200', async () => {
       const result = await application.inject({
         url: '/health',
-        method: 'GET'
+        method: 'get'
       })
 
       const { statusCode: code } = result
