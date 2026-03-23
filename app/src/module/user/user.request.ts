@@ -10,7 +10,6 @@ import {
   Length,
   ValidateNested
 } from 'class-validator'
-import { isString } from 'lodash'
 
 export class GetUserParam {
   @IsMongoId({ message: 'the id is invalid' })
