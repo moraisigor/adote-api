@@ -22,14 +22,13 @@ describe('health module', async () => {
 
   describe('/get', () => {
     test('should verify health', async () => {
-      const response = await application.inject({
-        url: '/health',
-        method: 'get'
+      const { json } = await application.inject().get('/health').end()
+
+      const result = json<{ state: boolean }>()
+
+      expect(result).toMatchObject({
+        state: true
       })
-
-      const { statusCode: code } = response
-
-      expect(code).toBe(HttpStatus.OK)
     })
   })
 
