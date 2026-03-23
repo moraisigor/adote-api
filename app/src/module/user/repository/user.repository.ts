@@ -1,47 +1,51 @@
 import { Injectable } from '@nestjs/common'
 import { InjectModel } from '@nestjs/mongoose'
 
-import { Model, type FilterQuery } from 'mongoose'
+import type { Model, ProjectionType, QueryFilter, QueryOptions, Types } from 'mongoose'
 
 import { User, type UserDocument } from './user.schema'
 
-import type { Role } from '../type/role.enum'
+import type { Role } from '../type/role'
 
 @Injectable()
 export class UserRepository {
-  constructor(@InjectModel(User.name) private model: Model<User>) {}
+  constructor(@InjectModel(User.name) private readonly model: Model<User>) {}
 
-  list(query: FilterQuery<User>): Promise<UserDocument[]> {
-    return this.model
-      .find(query)
-      .populate([{ path: 'location' }])
-      .exec()
+  list(
+    query?: QueryFilter<User>,
+    projection?: ProjectionType<User>,
+    options?: QueryOptions<User>
+  ): Promise<UserDocument[]> {
+    return this.model.find(query).projection(projection).options(options).exec()
   }
 
-  find(query: FilterQuery<User>): Promise<UserDocument | null> {
-    return this.model
-      .findOne(query)
-      .populate([{ path: 'location' }])
-      .exec()
+  find(
+    query: QueryFilter<User>,
+    projection?: ProjectionType<User>,
+    options?: QueryOptions<User>
+  ): Promise<UserDocument | null> {
+    return this.model.findOne(query, projection, options).exec()
   }
 
+  // prettier-ignore
   create(user: {
-    mail: string
-    name?: string
-    contact: { mail: string }
+    key: string,
+    name?: string,
+    phone: string,    
     role?: Role
   }): Promise<UserDocument> {
     return this.model.create(user)
   }
 
-  save(id: string, user: { [key: string]: unknown }, query: FilterQuery<User>): Promise<UserDocument | null> {
-    return this.model
-      .findByIdAndUpdate(id, user, query)
-      .populate([{ path: 'location' }])
-      .exec()
+  save(
+    id: Types.ObjectId,
+    organization: { [key: string]: unknown },
+    options?: QueryOptions<User>
+  ): Promise<UserDocument | null> {
+    return this.model.findByIdAndUpdate(id, organization, options).exec()
   }
 
-  async remove(query: FilterQuery<User>): Promise<number> {
+  async remove(query: QueryFilter<User>): Promise<number> {
     const { deletedCount: amount } = await this.model.deleteOne(query).exec()
 
     return amount
