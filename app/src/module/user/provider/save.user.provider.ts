@@ -11,17 +11,17 @@ export class SaveUserProvider {
   constructor(private readonly repository: UserRepository) {}
 
   async run(id: string, request: SaveUserRequest): Promise<UserResponse> {
-    const { name, description, contact, location } = request
+    const { name, contact, location } = request
 
     const map: { [key: string]: unknown } = {
       'name': name,
-      'description': description,
+      'contact.mail': contact.mail,
       'contact.phone': contact.phone,
       'contact.social': contact.social,
       'location': new Types.ObjectId(location)
     }
 
-    const user = await this.repository.save(id, map, { new: true })
+    const user = await this.repository.save(new Types.ObjectId(id), map, { new: true })
 
     if (isNil(user)) {
       throw new BadRequestException()

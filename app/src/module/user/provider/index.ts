@@ -18,14 +18,11 @@ export class UserProvider {
   readonly image: SaveImageProvider
   readonly remove: RemoveUserProvider
 
-  constructor(
-    private readonly _image: ImageProvider,
-    private readonly repository: UserRepository
-  ) {
+  constructor(private readonly repository: UserRepository) {
     this.get = new GetUserProvider(this.repository)
     this.list = new ListUserProvider(this.repository)
     this.save = new SaveUserProvider(this.repository)
-    this.image = new SaveImageProvider(this._image, this.repository)
+    this.image = new SaveImageProvider(this.repository)
     this.remove = new RemoveUserProvider(this.repository)
   }
 }
