@@ -21,13 +21,13 @@ describe('health module', async () => {
   })
 
   describe('/get', () => {
-    test('should return http code 200', async () => {
-      const result = await application.inject({
+    test('should verify health', async () => {
+      const response = await application.inject({
         url: '/health',
         method: 'get'
       })
 
-      const { statusCode: code } = result
+      const { statusCode: code } = response
 
       expect(code).toBe(HttpStatus.OK)
     })
