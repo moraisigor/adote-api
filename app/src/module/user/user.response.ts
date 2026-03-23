@@ -1,9 +1,9 @@
-import { Contact, type UserDocument } from './repository/user.schema'
+import type { Contact, UserDocument } from './repository/user.schema'
 
 import type { LocationDocument } from '../location/repository/location.schema'
 
 class ContactResponse {
-  readonly mail: string
+  readonly mail?: string
   readonly phone?: string
   readonly social?: string
 
@@ -28,22 +28,25 @@ class LocationResponse {
 
 export class UserResponse {
   readonly id: string
-  readonly mail: string
+  readonly key: string
+  readonly phone: string
   readonly name?: string
   readonly image?: string
-  readonly description?: string
-  readonly contact: ContactResponse
-  readonly location: LocationResponse
+  readonly contact?: ContactResponse
+  readonly location?: LocationResponse
 
   constructor(user: UserDocument) {
     const { contact, location } = user
 
     this.id = user.id
-    this.mail = user.mail
+    this.key = user.key
+    this.phone = user.phone
     this.name = user.name
     this.image = user.image
-    this.description = user.description
-    this.contact = new ContactResponse(contact)
+
+    if (contact) {
+      this.contact = new ContactResponse(contact)
+    }
 
     if (location) {
       this.location = new LocationResponse(location)
