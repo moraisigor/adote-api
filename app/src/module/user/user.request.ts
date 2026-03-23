@@ -2,6 +2,7 @@ import { Transform, Type, type TransformFnParams } from 'class-transformer'
 import {
   IsEmail,
   IsMongoId,
+  IsNotEmpty,
   IsOptional,
   IsPhoneNumber,
   IsString,
@@ -9,6 +10,7 @@ import {
   Length,
   ValidateNested
 } from 'class-validator'
+import { isString } from 'lodash'
 
 export class GetUserParam {
   @IsMongoId({ message: 'the id is invalid' })
@@ -42,4 +44,11 @@ export class SaveUserRequest {
   @IsMongoId({ message: 'the id is invalid' })
   @IsOptional()
   readonly location?: string
+}
+
+export class SaveImageRequest {
+  @IsString()
+  @IsNotEmpty()
+  @Transform(({ value }: TransformFnParams) => value?.trim())
+  readonly image: string
 }
