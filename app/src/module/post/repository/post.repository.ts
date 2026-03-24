@@ -1,70 +1,90 @@
 import { Injectable } from '@nestjs/common'
 import { InjectModel } from '@nestjs/mongoose'
 
-import { Model, Types, type FilterQuery } from 'mongoose'
+import type { Model, ProjectionType, QueryFilter, QueryOptions, Types } from 'mongoose'
+
+import type { OrganizationDocument } from '@/module/organization/repository/organization.schema'
+import type { PetDocument } from '@/module/pet/repository/pet.schema'
+import type { UserDocument } from '@/module/user/repository/user.schema'
 
 import { Post, type PostDocument } from './post.schema'
 
-import { Gender } from '../type/gender.enum'
-import { Size } from '../type/size.enum'
-
 @Injectable()
 export class PostRepository {
-  constructor(@InjectModel(Post.name) private model: Model<Post>) {}
+  constructor(@InjectModel(Post.name) private readonly model: Model<Post>) {}
 
-  list(skip: number, limit: number, query: FilterQuery<Post>): Promise<PostDocument[]> {
+  list(
+    skip: number,
+    limit: number,
+    query?: QueryFilter<Post>,
+    projection?: ProjectionType<Post>,
+    options?: QueryOptions<Post>
+  ): Promise<PostDocument[]> {
     return this.model
       .find(query)
+      .projection(projection)
+      .options(options)
       .skip(skip)
       .limit(limit)
       .populate([
-        { path: 'pet', populate: { path: 'breed' } },
-        { path: 'user', populate: { path: 'location' } }
+        { path: 'pet' },
+        { path: 'user', populate: { path: 'location' } },
+        { path: 'organization', populate: { path: 'location' } }
       ])
       .exec()
   }
 
-  find(query: FilterQuery<Post>): Promise<PostDocument | null> {
+  find(
+    query: QueryFilter<Post>,
+    projection?: ProjectionType<Post>,
+    options?: QueryOptions<Post>
+  ): Promise<PostDocument | null> {
     return this.model
-      .findOne(query)
+      .findOne(query, projection, options)
       .populate([
-        { path: 'pet', populate: { path: 'breed' } },
-        { path: 'user', populate: { path: 'location' } }
+        { path: 'pet' },
+        { path: 'user', populate: { path: 'location' } },
+        { path: 'organization', populate: { path: 'location' } }
       ])
       .exec()
   }
 
-  async create(post: {
-    description: string
+  // prettier-ignore
+  create(post: {
+    name: string,
     image: string[]
-    pet: {
-      name: string
-      birth: Date
-      size: Size
-      gender: Gender
-      breed: Types.ObjectId
-    }
-    user: Types.ObjectId
+    pet: PetDocument
+    user?: UserDocument
+    organization?: OrganizationDocument
+    publish: boolean
   }): Promise<PostDocument> {
-    return this.model.create(post).then((type) =>
-      type.populate([
-        { path: 'pet', populate: { path: 'breed' } },
-        { path: 'user', populate: { path: 'location' } }
-      ])
-    )
+    return this.model
+      .create(post)
+      .then((model) =>
+        model.populate([
+          { path: 'pet' },
+          { path: 'user', populate: { path: 'location' } },
+          { path: 'organization', populate: { path: 'location' } }
+        ])
+      )
   }
 
-  save(id: string, post: { [key: string]: unknown }, query: FilterQuery<Post>): Promise<PostDocument | null> {
+  save(
+    id: Types.ObjectId,
+    post: { [key: string]: unknown },
+    options?: QueryOptions<Post>
+  ): Promise<PostDocument | null> {
     return this.model
-      .findByIdAndUpdate(id, post, query)
+      .findByIdAndUpdate(id, post, options)
       .populate([
-        { path: 'pet', populate: { path: 'breed' } },
-        { path: 'user', populate: { path: 'location' } }
+        { path: 'pet' },
+        { path: 'user', populate: { path: 'location' } },
+        { path: 'organization', populate: { path: 'location' } }
       ])
       .exec()
   }
 
-  async remove(query: FilterQuery<Post>): Promise<number> {
+  async remove(query?: QueryFilter<Post>): Promise<number> {
     const { deletedCount: amount } = await this.model.deleteOne(query).exec()
 
     return amount
