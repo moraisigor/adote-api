@@ -11,6 +11,8 @@ import { AuthController } from './auth.controller'
 import { PermissionGuard } from './guard/permission.guard'
 import { TokenGuard } from './guard/token.guard'
 import { AuthProvider } from './provider'
+import { BasicStrategy } from './strategy/basic.strategy'
+import { KeyStrategy } from './strategy/key.strategy'
 import { TokenRenewStrategy } from './strategy/token.renew.strategy'
 import { TokenStrategy } from './strategy/token.strategy'
 
@@ -27,6 +29,8 @@ import { TokenStrategy } from './strategy/token.strategy'
   ],
   providers: [
     AuthProvider,
+    KeyStrategy,
+    BasicStrategy,
     TokenStrategy,
     TokenRenewStrategy,
     { provide: APP_GUARD, useClass: TokenGuard },
