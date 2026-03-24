@@ -14,15 +14,15 @@ describe('breed module', async () => {
 
   beforeAll(async () => {
     await spec.start()
-  })
 
-  describe('/breed', async () => {
     await spec.application
       .inject()
       .post('/configuration/breed')
       .headers({ Authorization: `Basic ${value}` })
       .end()
+  })
 
+  describe('/breed', () => {
     test('should list cat', async () => {
       const { json } = await spec.application.inject().get('/breed').query({ kind: Kind.CAT }).end()
 
