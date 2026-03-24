@@ -6,19 +6,16 @@ import { Spec } from '../spec'
 describe('organization module', async () => {
   const spec = await Spec.build()
 
-  let token: TokenResponse
-
   beforeAll(async () => {
     await spec.start()
-
-    token = await spec.token()
+    await spec.basic()
   })
 
   describe('/organization', () => {
     test('should create organization', async () => {
       const {
         token: { hash }
-      } = token
+      } = spec.token ?? { token: { hash: '' } }
 
       const { json } = await spec.application
         .inject()
