@@ -10,7 +10,7 @@ import type { Token, User } from '@/type/token'
 export class TokenStrategy extends PassportStrategy(Strategy, 'Token') {
   constructor(readonly config: ConfigService) {
     super({
-      secretOrKey: config.getOrThrow<string>('TOKEN_RENEW_SECRET'),
+      secretOrKey: config.getOrThrow<string>('TOKEN_SECRET'),
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken()
     })
   }
