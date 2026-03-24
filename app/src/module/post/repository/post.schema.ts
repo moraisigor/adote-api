@@ -14,9 +14,6 @@ export type PostDocument = HydratedDocument<Post>
   collection: 'Post'
 })
 export class Post {
-  @Prop({ type: String, required: true })
-  name: string
-
   @Prop({ type: [String], required: true })
   image: string[]
 

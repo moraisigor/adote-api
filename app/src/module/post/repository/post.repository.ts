@@ -51,7 +51,6 @@ export class PostRepository {
 
   // prettier-ignore
   create(post: {
-    name: string,
     image: string[]
     pet: PetDocument
     user?: UserDocument
