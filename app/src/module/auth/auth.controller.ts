@@ -26,19 +26,19 @@ export class AuthController {
   @Post()
   @Public()
   @HttpCode(HttpStatus.OK)
-  mail(@Body() request: AuthRequest): Promise<AuthResponse> {
-    const { mail } = request
+  phone(@Body() request: AuthRequest): Promise<AuthResponse> {
+    const { phone } = request
 
-    return this.provider.mail.run(mail)
+    return this.provider.phone.run(phone)
   }
 
   @Post('verify')
   @Public()
   @HttpCode(HttpStatus.OK)
   code(@Body() request: VerifyRequest): Promise<TokenResponse> {
-    const { mail, code } = request
+    const { phone, code } = request
 
-    return this.provider.verify.run(mail, code)
+    return this.provider.verify.run(phone, code)
   }
 
   @Post('renew')
