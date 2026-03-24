@@ -4,10 +4,12 @@ import type { Token } from './type/token'
 
 export class AuthResponse {
   readonly id: string
+  readonly key: string
   readonly phone: string
 
   constructor(user: UserDocument) {
     this.id = user.id
+    this.key = user.key
     this.phone = user.phone
   }
 }
