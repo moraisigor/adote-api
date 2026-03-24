@@ -1,3 +1,4 @@
+import type { BreedResponse } from '@/module/breed/breed.response'
 import type { LocationResponse } from '@/module/location/location.response'
 import type { UserResponse } from '@/module/user/user.response'
 
@@ -29,6 +30,25 @@ describe('configuration module', async () => {
         key: expect.any(String),
         name: expect.any(String),
         phone: expect.any(String)
+      })
+    })
+  })
+
+  describe('/configuration/breed', () => {
+    test('should set breed', async () => {
+      const { json } = await spec.application
+        .inject()
+        .post('/configuration/breed')
+        .headers({ Authorization: `Basic ${value}` })
+        .end()
+
+      const result = json<BreedResponse[]>()
+
+      expect(result).toHaveLength(67)
+
+      expect(result[1]).toMatchObject({
+        id: expect.any(String),
+        name: expect.any(String)
       })
     })
   })

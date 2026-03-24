@@ -5,6 +5,7 @@ import { Public } from '@/decorator/public.decorator'
 import { ConfigurationProvider } from './provider'
 
 import { BasicGuard } from '../auth/guard/basic.guard'
+import type { BreedResponse } from '../breed/breed.response'
 import type { LocationResponse } from '../location/location.response'
 import type { UserResponse } from '../user/user.response'
 
@@ -24,7 +25,7 @@ export class ConfigurationController {
   @Public()
   @HttpCode(HttpStatus.OK)
   @UseGuards(BasicGuard)
-  breed(): Promise<void> {
+  breed(): Promise<BreedResponse[]> {
     return this.provider.breed.run()
   }
 

@@ -1,3 +1,4 @@
+import { BreedResponse } from '@/module/breed/breed.response'
 import { BreedRepository } from '@/module/breed/repository/breed.repository'
 import { Kind } from '@/module/breed/type/kind.enum'
 
@@ -7,25 +8,28 @@ import dog from '../dog.json'
 export class SetBreedProvider {
   constructor(private readonly repository: BreedRepository) {}
 
-  async run(): Promise<void> {
+  async run(): Promise<BreedResponse[]> {
     await this.repository.remove()
 
-    await this.repository.create(
-      cat.map((name) => {
-        return {
-          name,
-          kind: Kind.CAT
-        }
-      })
-    )
+    const list = await Promise.all([
+      this.repository.create(
+        cat.map((name) => {
+          return {
+            name,
+            kind: Kind.CAT
+          }
+        })
+      ),
+      this.repository.create(
+        dog.map((name) => {
+          return {
+            name,
+            kind: Kind.DOG
+          }
+        })
+      )
+    ])
 
-    await this.repository.create(
-      dog.map((name) => {
-        return {
-          name,
-          kind: Kind.DOG
-        }
-      })
-    )
+    return list.flat().map((e) => new BreedResponse(e))
   }
 }
