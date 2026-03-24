@@ -57,7 +57,7 @@ export class VerifyAuthProvider {
         secret: this.TokenSecret,
         expiresIn: this.TokenExpire
       }),
-      expire: this.TokenExpire
+      expire: +this.TokenExpire
     }
 
     const renew = {
@@ -65,7 +65,7 @@ export class VerifyAuthProvider {
         secret: this.TokenRenewSecret,
         expiresIn: this.TokenRenewExpire
       }),
-      expire: this.TokenRenewExpire
+      expire: +this.TokenRenewExpire
     }
 
     return new TokenResponse(token, renew)
