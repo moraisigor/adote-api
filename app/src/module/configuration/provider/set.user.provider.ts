@@ -1,23 +1,24 @@
 import { UserRepository } from '@/module/user/repository/user.repository'
 import { Role } from '@/module/user/type/role'
+import { UserResponse } from '@/module/user/user.response'
 
 import user from '../user.json'
 
 export class SetUserProvider {
   constructor(private readonly repository: UserRepository) {}
 
-  async run(): Promise<void> {
+  async run(): Promise<UserResponse> {
     await this.repository.remove()
 
-    const { name, phone } = user
+    const { key, name, phone } = user
 
-    await this.repository.create({
+    const result = await this.repository.create({
+      key,
       name,
       phone,
-      contact: {
-        phone
-      },
       role: Role.MANAGER
     })
+
+    return new UserResponse(result)
   }
 }
