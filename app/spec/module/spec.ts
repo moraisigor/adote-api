@@ -1,11 +1,24 @@
+import { CacheModule } from '@nestjs/cache-manager'
+import { ConfigModule } from '@nestjs/config'
+import { JwtModule } from '@nestjs/jwt'
+import { MongooseModule } from '@nestjs/mongoose'
+import { PassportModule } from '@nestjs/passport'
 import { FastifyAdapter, type NestFastifyApplication } from '@nestjs/platform-fastify'
 import { Test, type TestingModule } from '@nestjs/testing'
 
 import { MongoMemoryServer } from 'mongodb-memory-server'
 
+import { AuthModule } from '@/module/auth/auth.module'
 import type { TokenResponse } from '@/module/auth/auth.response'
-import { SetUserProvider } from '@/module/configuration/provider/set.user.provider'
+import { BreedModule } from '@/module/breed/breed.module'
+import { ConfigurationModule } from '@/module/configuration/configuration.module'
 import { HealthModule } from '@/module/health/health.module'
+import { LocationModule } from '@/module/location/location.module'
+import { MessageModule } from '@/module/message/message.module'
+import { OrganizationModule } from '@/module/organization/organization.module'
+import { UserModule } from '@/module/user/user.module'
+
+import { encode } from '@/helper/string'
 
 export class Spec {
   constructor(
@@ -18,7 +31,32 @@ export class Spec {
     const repository = await MongoMemoryServer.create()
 
     const module = await Test.createTestingModule({
-      imports: [HealthModule]
+      imports: [
+        AuthModule,
+        BreedModule,
+        ConfigurationModule,
+        HealthModule,
+        LocationModule,
+        MessageModule,
+        OrganizationModule,
+        UserModule,
+        // dependency
+        JwtModule,
+        PassportModule,
+        CacheModule.register({
+          ttl: 2 * 60 * 1000
+        }),
+        ConfigModule.forRoot({
+          isGlobal: true,
+          envFilePath: '.env.test'
+        }),
+        MongooseModule.forRootAsync({
+          useFactory: () => ({
+            uri: repository.getUri()
+          })
+        })
+      ],
+      providers: []
     }).compile()
 
     const application = module.createNestApplication<NestFastifyApplication>(new FastifyAdapter())
@@ -27,11 +65,15 @@ export class Spec {
   }
 
   async token() {
-    const provider = this.module.get(SetUserProvider)
+    const value = encode(`${process.env.USER}:${process.env.PASS}`)
 
-    const user = await provider.run()
+    await this.application
+      .inject()
+      .post('/configuration/user')
+      .headers({ Authorization: `Basic ${value}` })
+      .end()
 
-    console.log(user)
+    await this.application.inject().post('/auth').body({ phone: '+5599999999999' }).end()
 
     const { json } = await this.application
       .inject()
