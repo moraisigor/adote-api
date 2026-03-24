@@ -45,7 +45,7 @@ export class UserRepository {
     return this.model.findByIdAndUpdate(id, organization, options).exec()
   }
 
-  async remove(query: QueryFilter<User>): Promise<number> {
+  async remove(query?: QueryFilter<User>): Promise<number> {
     const { deletedCount: amount } = await this.model.deleteOne(query).exec()
 
     return amount
