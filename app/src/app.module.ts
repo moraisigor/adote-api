@@ -11,11 +11,13 @@ import { FavModule } from '@/module/fav/fav.module'
 import { HealthModule } from '@/module/health/health.module'
 import { ImageModule } from '@/module/image/image.module'
 import { LocationModule } from '@/module/location/location.module'
-import { MailModule } from '@/module/mail/mail.module'
+import { MessageModule } from '@/module/message/message.module'
+import { OrganizationModule } from '@/module/organization/organization.module'
+import { PetModule } from '@/module/pet/pet.module'
 import { PostModule } from '@/module/post/post.module'
 import { UserModule } from '@/module/user/user.module'
 
-import { isProduction } from '@/helper/environment'
+import { isProduction } from '@/helper/env'
 
 import { RepositoryConfigFactory } from './repository.config.factory'
 import { RequestConfigFactory } from './request.config.factory'
@@ -30,10 +32,13 @@ import { RouteConfig } from './router.config.factory'
     HealthModule,
     ImageModule,
     LocationModule,
-    MailModule,
+    MessageModule,
+    OrganizationModule,
+    PetModule,
     PostModule,
     UserModule,
     RouterModule.register(RouteConfig),
+    // dependency
     ConfigModule.forRoot({
       isGlobal: true,
       envFilePath: `.env.${process.env.ENV}`,
