@@ -2,6 +2,7 @@ import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose'
 
 import { Types, type HydratedDocument } from 'mongoose'
 
+import type { LocationDocument } from '@/module/location/repository/location.schema'
 import type { PetDocument } from '@/module/pet/repository/pet.schema'
 import type { PostDocument } from '@/module/post/repository/post.schema'
 
@@ -15,6 +16,9 @@ export class Contact {
 
   @Prop({ type: String })
   phone?: string
+
+  @Prop({ type: String })
+  social?: string
 }
 
 @Schema({
@@ -43,6 +47,9 @@ export class Organization {
 
   @Prop({ type: [{ type: Types.ObjectId, ref: 'Post' }], default: [] })
   post?: PostDocument[] = []
+
+  @Prop({ type: Types.ObjectId, ref: 'Location' })
+  location?: LocationDocument
 }
 
 export const OrganizationSchema = SchemaFactory.createForClass(Organization)
