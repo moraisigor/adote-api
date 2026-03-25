@@ -1,4 +1,4 @@
-import { ListPostRequest } from '../post.request'
+import type { ListPostRequest } from '../post.request'
 import { PostResponse } from '../post.response'
 import { PostRepository } from '../repository/post.repository'
 

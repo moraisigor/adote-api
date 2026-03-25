@@ -7,9 +7,9 @@ export class PublishPostProvider {
 
   async run(id: string, publish: boolean, user: string): Promise<void> {
     const map: { [key: string]: unknown } = {
-      publish: publish
+      publish
     }
 
-    await this.repository.save(id, map, { user: new Types.ObjectId(user) })
+    await this.repository.save(new Types.ObjectId(id), map, { new: true })
   }
 }

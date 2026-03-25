@@ -1,5 +1,7 @@
 import { Injectable } from '@nestjs/common'
 
+import { PetRepository } from '@/module/pet/repository/pet.repository'
+
 import { CreatePostProvider } from './create.post.provider'
 import { GetPostProvider } from './get.post.provider'
 import { ListPostProvider } from './list.post.provider'

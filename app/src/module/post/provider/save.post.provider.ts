@@ -1,36 +1,38 @@
-import { BadRequestException } from '@nestjs/common'
+import { NotFoundException } from '@nestjs/common'
 
 import { isNil } from 'lodash'
 import { Types } from 'mongoose'
 
-import { SavePostRequest } from '../post.request'
+import type { SavePostRequest } from '../post.request'
 import { PostResponse } from '../post.response'
 import { PostRepository } from '../repository/post.repository'
 
 export class SavePostProvider {
   constructor(private readonly repository: PostRepository) {}
 
-  async run(id: string, request: SavePostRequest, user: string): Promise<PostResponse> {
-    const { description, image, pet } = request
+  private build(request: SavePostRequest, user: string): { [key: string]: unknown } {
+    const { image, organization, publish } = request
 
-    const map: { [key: string]: unknown } = {
-      'description': description,
-      'image': image,
-      'pet.name': pet.name,
-      'pet.birth': pet.birth,
-      'pet.size': pet.size,
-      'pet.gender': pet.gender,
-      'pet.breed': new Types.ObjectId(pet.breed),
-      'user': new Types.ObjectId(user)
+    if (organization) {
+      return {
+        image,
+        organization: new Types.ObjectId(organization),
+        publish
+      }
     }
 
-    const post = await this.repository.save(id, map, {
-      new: true,
-      user: new Types.ObjectId(user)
-    })
+    return {
+      image,
+      user: new Types.ObjectId(user),
+      publish
+    }
+  }
+
+  async run(id: string, request: SavePostRequest, user: string): Promise<PostResponse> {
+    const post = await this.repository.save(new Types.ObjectId(id), this.build(request, user), { new: true })
 
     if (isNil(post)) {
-      throw new BadRequestException()
+      throw new NotFoundException()
     }
 
     return new PostResponse(post)
