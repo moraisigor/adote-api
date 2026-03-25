@@ -18,13 +18,13 @@ export class Post {
   image: string[]
 
   @Prop({ type: Types.ObjectId, ref: 'Pet', required: true })
-  pet: PetDocument
+  pet: Types.ObjectId | PetDocument
 
   @Prop({ type: Types.ObjectId, ref: 'User' })
-  user?: UserDocument
+  user?: Types.ObjectId | UserDocument
 
   @Prop({ type: Types.ObjectId, ref: 'Organization' })
-  organization?: OrganizationDocument
+  organization?: Types.ObjectId | OrganizationDocument
 
   @Prop({ type: Boolean, required: true })
   publish: boolean

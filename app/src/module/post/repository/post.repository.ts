@@ -3,10 +3,6 @@ import { InjectModel } from '@nestjs/mongoose'
 
 import type { Model, ProjectionType, QueryFilter, QueryOptions, Types } from 'mongoose'
 
-import type { OrganizationDocument } from '@/module/organization/repository/organization.schema'
-import type { PetDocument } from '@/module/pet/repository/pet.schema'
-import type { UserDocument } from '@/module/user/repository/user.schema'
-
 import { Post, type PostDocument } from './post.schema'
 
 @Injectable()
@@ -52,9 +48,9 @@ export class PostRepository {
   // prettier-ignore
   create(post: {
     image: string[]
-    pet: PetDocument
-    user?: UserDocument
-    organization?: OrganizationDocument
+    pet: Types.ObjectId
+    user?: Types.ObjectId
+    organization?: Types.ObjectId
     publish: boolean
   }): Promise<PostDocument> {
     return this.model
