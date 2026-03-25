@@ -1,27 +1,34 @@
 import { Types } from 'mongoose'
 
-import { SavePostRequest } from '../post.request'
+import type { CreatePostRequest } from '../post.request'
 import { PostResponse } from '../post.response'
 import { PostRepository } from '../repository/post.repository'
 
 export class CreatePostProvider {
   constructor(private readonly repository: PostRepository) {}
 
-  async run(request: SavePostRequest, user: string): Promise<PostResponse> {
-    const {
-      description,
-      image,
-      pet: { name, birth, size, gender, breed }
-    } = request
+  private build(request: CreatePostRequest, user: string) {
+    const { image, pet, organization, publish } = request
 
-    const create = {
-      description,
-      image,
-      pet: { name, birth, size, gender, breed: new Types.ObjectId(breed) },
-      user: new Types.ObjectId(user)
+    if (organization) {
+      return {
+        image,
+        pet: new Types.ObjectId(pet),
+        organization: new Types.ObjectId(organization),
+        publish
+      }
     }
 
-    const post = await this.repository.create(create)
+    return {
+      image,
+      pet: new Types.ObjectId(pet),
+      user: new Types.ObjectId(user),
+      publish
+    }
+  }
+
+  async run(request: CreatePostRequest, user: string): Promise<PostResponse> {
+    const post = await this.repository.create(this.build(request, user))
 
     return new PostResponse(post)
   }
