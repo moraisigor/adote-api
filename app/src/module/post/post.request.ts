@@ -20,7 +20,7 @@ export class SavePostParam {
   readonly id: string
 }
 
-export class SavePublishPostParam {
+export class PublishPostParam {
   @IsMongoId({ message: 'the id is invalid' })
   readonly id: string
 }
@@ -54,10 +54,6 @@ export class CreatePostRequest {
   @IsMongoId({ message: 'the pet is invalid' })
   readonly pet: string
 
-  @IsMongoId({ message: 'the user is invalid' })
-  @IsOptional()
-  readonly user?: string
-
   @IsMongoId({ message: 'the organization is invalid' })
   @IsOptional()
   readonly organization?: string
@@ -73,12 +69,16 @@ export class SavePostRequest {
   @IsNotEmpty({ each: true })
   readonly image: string[]
 
+  @IsMongoId({ message: 'the organization is invalid' })
+  @IsOptional()
+  readonly organization?: string
+
   @IsBoolean()
   @Type(() => Boolean)
   readonly publish: boolean
 }
 
-export class SavePublishPostRequest {
+export class PublishPostRequest {
   @IsBoolean()
   @Type(() => Boolean)
   readonly publish: boolean
