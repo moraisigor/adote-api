@@ -1,20 +1,21 @@
-import { Body, Controller, Delete, Get, HttpCode, HttpStatus, Param, Post, Put, Query } from '@nestjs/common'
+import { Body, Controller, Delete, Get, Param, Post, Put, Query } from '@nestjs/common'
 
-import type { User } from '@/type/auth.type'
+import type { User } from '@/type/token'
 
 import { Public } from '@/decorator/public.decorator'
 import { UserCurrent } from '@/decorator/user.current.decorator'
 
-import {
+import type {
+  CreatePostRequest,
   GetPostParam,
   ListPostRequest,
+  PublishPostParam,
+  PublishPostRequest,
   RemovePostParam,
   SavePostParam,
-  SavePostRequest,
-  SavePublishPostParam,
-  SavePublishPostRequest
+  SavePostRequest
 } from './post.request'
-import { PostResponse } from './post.response'
+import type { PostResponse } from './post.response'
 import { PostProvider } from './provider'
 
 @Controller('post')
@@ -36,14 +37,14 @@ export class PostController {
   }
 
   @Post()
-  create(@Body() request: SavePostRequest, @UserCurrent() user: User): Promise<PostResponse> {
+  create(@Body() request: CreatePostRequest, @UserCurrent() user: User): Promise<PostResponse> {
     const { id } = user
 
     return this.provider.create.run(request, id)
   }
 
   @Put(':id')
-  edit(
+  save(
     @Param() param: SavePostParam,
     @Body() request: SavePostRequest,
     @UserCurrent() user: User
@@ -55,10 +56,9 @@ export class PostController {
   }
 
   @Put(':id/publish')
-  @HttpCode(HttpStatus.NO_CONTENT)
   publish(
-    @Param() param: SavePublishPostParam,
-    @Body() request: SavePublishPostRequest,
+    @Param() param: PublishPostParam,
+    @Body() request: PublishPostRequest,
     @UserCurrent() user: User
   ): Promise<void> {
     const { id } = param
@@ -69,7 +69,6 @@ export class PostController {
   }
 
   @Delete(':id')
-  @HttpCode(HttpStatus.NO_CONTENT)
   remove(@Param() param: RemovePostParam, @UserCurrent() user: User): Promise<void> {
     const { id } = param
     const { id: current } = user
