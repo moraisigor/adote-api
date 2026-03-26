@@ -14,7 +14,6 @@ import type { TokenResponse } from '@/module/auth/auth.response'
 import type { Token } from '@/module/auth/type/token'
 import { BreedModule } from '@/module/breed/breed.module'
 import type { BreedResponse } from '@/module/breed/breed.response'
-import type { Kind } from '@/module/breed/type/kind.enum'
 import { ConfigurationModule } from '@/module/configuration/configuration.module'
 import { HealthModule } from '@/module/health/health.module'
 import { LocationModule } from '@/module/location/location.module'
@@ -22,6 +21,10 @@ import type { LocationResponse } from '@/module/location/location.response'
 import { MessageModule } from '@/module/message/message.module'
 import { OrganizationModule } from '@/module/organization/organization.module'
 import { PetModule } from '@/module/pet/pet.module'
+import type { PetResponse } from '@/module/pet/pet.response'
+import { Gender } from '@/module/pet/type/gender'
+import { Size } from '@/module/pet/type/size'
+import { PostModule } from '@/module/post/post.module'
 import { UserModule } from '@/module/user/user.module'
 
 import { encode } from '@/helper/string'
@@ -29,6 +32,8 @@ import { encode } from '@/helper/string'
 import { RouteConfig } from '@/router.config.factory'
 
 export type Result = {
+  pet?: PetResponse
+  // support
   breed: BreedResponse[]
   location: LocationResponse[]
 }
@@ -69,6 +74,7 @@ export class Spec {
         MessageModule,
         OrganizationModule,
         PetModule,
+        PostModule,
         UserModule,
         RouterModule.register(RouteConfig),
         // dependency
@@ -95,6 +101,7 @@ export class Spec {
     return new Spec(module, application, repository)
   }
 
+  // support
   async breed() {
     const { basic } = this.authorization
 
@@ -107,6 +114,7 @@ export class Spec {
     this.result.breed = json<BreedResponse[]>()
   }
 
+  // support
   async location() {
     const { basic } = this.authorization
 
@@ -117,6 +125,52 @@ export class Spec {
       .end()
 
     this.result.location = json<LocationResponse[]>()
+  }
+
+  async pet() {
+    const { token } = this.authorization
+
+    const { id: breed } = this.result.breed.find((e) => e.name.toLowerCase() === 'buldogue inglês') ?? {
+      breed: ''
+    }
+
+    const { json } = await this.application
+      .inject()
+      .post('/pet')
+      .headers({ Authorization: `Bearer ${token?.hash}` })
+      .body({
+        name: 'Oreo',
+        size: Size.MEDIUM,
+        gender: Gender.MALE,
+        breed: breed
+      })
+      .end()
+
+    this.result.pet = json<PetResponse>()
+  }
+
+  async user() {
+    const { token } = this.authorization
+
+    const { id: location } = this.result.location.find((e) => e.city.toLowerCase() === 'recife') ?? {
+      location: ''
+    }
+
+    await this.application
+      .inject()
+      .put('/user')
+      .headers({ Authorization: `Bearer ${token?.hash}` })
+      .body({
+        name: 'Name',
+        image: 'image.jpg',
+        contact: {
+          mail: 'mail@example.com',
+          phone: '+5599999999999',
+          social: 'https://example.com/name'
+        },
+        location: location
+      })
+      .end()
   }
 
   async authenticate() {
