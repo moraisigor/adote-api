@@ -10,21 +10,17 @@ export class CreatePostProvider {
   private build(request: CreatePostRequest, user: string) {
     const { image, pet, organization, publish } = request
 
-    if (organization) {
-      return {
-        image,
-        pet: new Types.ObjectId(pet),
-        organization: new Types.ObjectId(organization),
-        publish
-      }
-    }
-
-    return {
+    const post = {
       image,
       pet: new Types.ObjectId(pet),
-      user: new Types.ObjectId(user),
       publish
     }
+
+    if (organization) {
+      return Object.assign(post, { organization: new Types.ObjectId(organization) })
+    }
+
+    return Object.assign(post, { user: new Types.ObjectId(user) })
   }
 
   async run(request: CreatePostRequest, user: string): Promise<PostResponse> {
