@@ -1,0 +1,73 @@
+import { Injectable } from '@nestjs/common'
+import { InjectModel } from '@nestjs/mongoose'
+
+import type { Model, ProjectionType, QueryFilter, QueryOptions, Types } from 'mongoose'
+
+import { Pet, type PetDocument } from './pet.schema'
+
+import type { Gender } from '../type/gender'
+import type { Size } from '../type/size'
+
+@Injectable()
+export class PetRepository {
+  constructor(@InjectModel(Pet.name) private readonly model: Model<Pet>) {}
+
+  list(
+    query?: QueryFilter<Pet>,
+    projection?: ProjectionType<Pet>,
+    options?: QueryOptions<Pet>
+  ): Promise<PetDocument[]> {
+    return this.model
+      .find(query)
+      .projection(projection)
+      .options(options)
+      .populate([{ path: 'breed' }])
+      .exec()
+  }
+
+  find(
+    query: QueryFilter<Pet>,
+    projection?: ProjectionType<Pet>,
+    options?: QueryOptions<Pet>
+  ): Promise<PetDocument | null> {
+    return this.model
+      .findOne(query, projection, options)
+      .populate([{ path: 'breed' }])
+      .exec()
+  }
+
+  // prettier-ignore
+  create(pet: {
+    name: string,
+    size: Size,
+    gender: Gender,
+    breed: Types.ObjectId,
+    user?: Types.ObjectId,
+    organization?: Types.ObjectId
+  }): Promise<PetDocument> {
+    return this.model
+      .create(pet)
+      .then((model) =>
+        model.populate([
+          { path: 'breed' },
+        ])
+      )
+  }
+
+  save(
+    id: Types.ObjectId,
+    pet: { [key: string]: unknown },
+    options?: QueryOptions<Pet>
+  ): Promise<PetDocument | null> {
+    return this.model
+      .findByIdAndUpdate(id, pet, options)
+      .populate([{ path: 'breed' }])
+      .exec()
+  }
+
+  async remove(query?: QueryFilter<Pet>): Promise<number> {
+    const { deletedCount: amount } = await this.model.deleteOne(query).exec()
+
+    return amount
+  }
+}

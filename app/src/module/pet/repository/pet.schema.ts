@@ -27,13 +27,13 @@ export class Pet {
   gender: Gender
 
   @Prop({ type: Types.ObjectId, ref: 'Breed', required: true })
-  breed: BreedDocument
+  breed: Types.ObjectId | BreedDocument
 
   @Prop({ type: Types.ObjectId, ref: 'User' })
-  user?: UserDocument
+  user?: Types.ObjectId | UserDocument
 
   @Prop({ type: Types.ObjectId, ref: 'Organization' })
-  organization?: OrganizationDocument
+  organization?: Types.ObjectId | OrganizationDocument
 }
 
 export const PetSchema = SchemaFactory.createForClass(Pet)
