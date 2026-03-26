@@ -21,7 +21,7 @@ export class SaveUserProvider {
       'location': new Types.ObjectId(location)
     }
 
-    const user = await this.repository.save(new Types.ObjectId(id), map, { new: true })
+    const user = await this.repository.save(new Types.ObjectId(id), map, { returnDocument: 'after' })
 
     if (isNil(user)) {
       throw new BadRequestException()

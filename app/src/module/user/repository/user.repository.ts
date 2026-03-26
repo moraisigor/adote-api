@@ -39,10 +39,13 @@ export class UserRepository {
 
   save(
     id: Types.ObjectId,
-    organization: { [key: string]: unknown },
+    user: { [key: string]: unknown },
     options?: QueryOptions<User>
   ): Promise<UserDocument | null> {
-    return this.model.findByIdAndUpdate(id, organization, options).exec()
+    return this.model
+      .findByIdAndUpdate(id, user, options)
+      .populate([{ path: 'location' }])
+      .exec()
   }
 
   async remove(query?: QueryFilter<User>): Promise<number> {
