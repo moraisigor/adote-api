@@ -8,6 +8,7 @@ import {
   IsOptional,
   IsPhoneNumber,
   IsString,
+  IsUrl,
   Length,
   Min,
   ValidateNested
@@ -36,6 +37,10 @@ export class ContactRequest {
   @IsPhoneNumber('BR')
   @IsOptional()
   readonly phone?: string
+
+  @IsUrl()
+  @IsOptional()
+  readonly social?: string
 }
 
 export class CreateOrganizationRequest {
