@@ -174,14 +174,6 @@ export class Spec {
   }
 
   async authenticate() {
-    const { basic } = this.authorization
-
-    await this.application
-      .inject()
-      .post('/configuration/user')
-      .headers({ Authorization: `Basic ${basic}` })
-      .end()
-
     await this.application.inject().post('/auth').body({ phone: '+5599999999999' }).end()
 
     const { json } = await this.application

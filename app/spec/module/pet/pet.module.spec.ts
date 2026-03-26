@@ -1,4 +1,3 @@
-import { Kind } from '@/module/breed/type/kind.enum'
 import type { PetResponse } from '@/module/pet/pet.response'
 import { Gender } from '@/module/pet/type/gender'
 import { Size } from '@/module/pet/type/size'
@@ -11,9 +10,10 @@ describe('pet module', async () => {
   beforeAll(async () => {
     await spec.start()
 
-    await spec.authenticate()
-
+    // support
     await spec.breed()
+
+    await spec.authenticate()
   })
 
   describe('/pet', () => {

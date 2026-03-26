@@ -10,11 +10,11 @@ describe('post module', async () => {
   beforeAll(async () => {
     await spec.start()
 
-    await spec.authenticate()
-
     // support
     await spec.breed()
     await spec.location()
+
+    await spec.authenticate()
 
     await spec.pet()
     await spec.user()

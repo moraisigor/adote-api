@@ -8,9 +8,10 @@ describe('user module', async () => {
   beforeAll(async () => {
     await spec.start()
 
-    await spec.authenticate()
-
+    // support
     await spec.location()
+
+    await spec.authenticate()
   })
 
   describe('/user', () => {

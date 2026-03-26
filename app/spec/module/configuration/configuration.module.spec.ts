@@ -9,8 +9,6 @@ describe('configuration module', async () => {
 
   beforeAll(async () => {
     await spec.start()
-
-    await spec.breed()
   })
 
   describe('/configuration/user', () => {
