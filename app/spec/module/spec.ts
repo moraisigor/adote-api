@@ -10,8 +10,10 @@ import { MongoMemoryServer } from 'mongodb-memory-server'
 
 import { AuthModule } from '@/module/auth/auth.module'
 import type { TokenResponse } from '@/module/auth/auth.response'
+import type { Token } from '@/module/auth/type/token'
 import { BreedModule } from '@/module/breed/breed.module'
 import type { BreedResponse } from '@/module/breed/breed.response'
+import type { Kind } from '@/module/breed/type/kind.enum'
 import { ConfigurationModule } from '@/module/configuration/configuration.module'
 import { HealthModule } from '@/module/health/health.module'
 import { LocationModule } from '@/module/location/location.module'
@@ -30,7 +32,9 @@ export type Result = {
 
 export type Authorization = {
   basic: string
-  token?: TokenResponse
+  // auth
+  token?: Token
+  renew?: Token
 }
 
 export class Spec {
@@ -87,12 +91,13 @@ export class Spec {
     return new Spec(module, application, repository)
   }
 
-  async breed() {
+  async breed(kind: Kind) {
     const { basic } = this.authorization
 
     const { json } = await this.application
       .inject()
       .post('/configuration/breed')
+      .query({ kind })
       .headers({ Authorization: `Basic ${basic}` })
       .end()
 
@@ -111,7 +116,7 @@ export class Spec {
     this.result.location = json<LocationResponse[]>()
   }
 
-  async user() {
+  async authenticate() {
     const { basic } = this.authorization
 
     await this.application
@@ -131,7 +136,10 @@ export class Spec {
       })
       .end()
 
-    this.authorization.token = json<TokenResponse>()
+    const result = json<TokenResponse>()
+
+    this.authorization.token = result.token
+    this.authorization.renew = result.renew
   }
 
   async start() {
