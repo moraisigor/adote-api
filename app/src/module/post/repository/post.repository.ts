@@ -23,7 +23,7 @@ export class PostRepository {
       .skip(skip)
       .limit(limit)
       .populate([
-        { path: 'pet' },
+        { path: 'pet', populate: { path: 'breed' } },
         { path: 'user', populate: { path: 'location' } },
         { path: 'organization', populate: { path: 'location' } }
       ])
@@ -38,7 +38,7 @@ export class PostRepository {
     return this.model
       .findOne(query, projection, options)
       .populate([
-        { path: 'pet' },
+        { path: 'pet', populate: { path: 'breed' } },
         { path: 'user', populate: { path: 'location' } },
         { path: 'organization', populate: { path: 'location' } }
       ])
@@ -57,7 +57,7 @@ export class PostRepository {
       .create(post)
       .then((model) =>
         model.populate([
-          { path: 'pet' },
+          { path: 'pet', populate: { path: 'breed' } },
           { path: 'user', populate: { path: 'location' } },
           { path: 'organization', populate: { path: 'location' } }
         ])
@@ -72,7 +72,7 @@ export class PostRepository {
     return this.model
       .findByIdAndUpdate(id, post, options)
       .populate([
-        { path: 'pet' },
+        { path: 'pet', populate: { path: 'breed' } },
         { path: 'user', populate: { path: 'location' } },
         { path: 'organization', populate: { path: 'location' } }
       ])
