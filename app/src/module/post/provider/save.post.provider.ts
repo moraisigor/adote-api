@@ -10,22 +10,19 @@ import { PostRepository } from '../repository/post.repository'
 export class SavePostProvider {
   constructor(private readonly repository: PostRepository) {}
 
-  private build(request: SavePostRequest, user: string): { [key: string]: unknown } {
+  private build(request: SavePostRequest, user: string) {
     const { image, organization, publish } = request
 
-    if (organization) {
-      return {
-        image,
-        organization: new Types.ObjectId(organization),
-        publish
-      }
-    }
-
-    return {
+    const post = {
       image,
-      user: new Types.ObjectId(user),
       publish
     }
+
+    if (organization) {
+      return Object.assign(post, { organization: new Types.ObjectId(organization) })
+    }
+
+    return Object.assign(post, { user: new Types.ObjectId(user) })
   }
 
   async run(id: string, request: SavePostRequest, user: string): Promise<PostResponse> {
