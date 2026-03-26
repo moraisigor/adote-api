@@ -21,6 +21,8 @@ import { UserModule } from '@/module/user/user.module'
 import { encode } from '@/helper/string'
 
 export class Spec {
+  public token?: TokenResponse
+
   constructor(
     readonly module: TestingModule,
     readonly application: NestFastifyApplication,
@@ -64,7 +66,7 @@ export class Spec {
     return new Spec(module, application, repository)
   }
 
-  async token() {
+  async basic() {
     const value = encode(`${process.env.USER}:${process.env.PASS}`)
 
     await this.application
@@ -84,7 +86,7 @@ export class Spec {
       })
       .end()
 
-    return json<TokenResponse>()
+    this.token = json<TokenResponse>()
   }
 
   async start() {
