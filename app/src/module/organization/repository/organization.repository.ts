@@ -3,15 +3,13 @@ import { InjectModel } from '@nestjs/mongoose'
 
 import type { Model, ProjectionType, QueryFilter, QueryOptions, Types } from 'mongoose'
 
-import type { User } from '@/module/user/repository/user.schema'
-
 import { Organization, type OrganizationDocument } from './organization.schema'
 
 import type { OrganizationRole } from '../type/organization.role'
 
 @Injectable()
 export class OrganizationRepository {
-  constructor(@InjectModel(Organization.name) private model: Model<Organization>) {}
+  constructor(@InjectModel(Organization.name) private readonly model: Model<Organization>) {}
 
   list(
     query?: QueryFilter<Organization>,
@@ -32,7 +30,7 @@ export class OrganizationRepository {
   create(organization: {
     name: string
     member: {
-      user: User
+      user: Types.ObjectId
       role: OrganizationRole
     }[]
   }): Promise<OrganizationDocument> {
@@ -47,7 +45,7 @@ export class OrganizationRepository {
     return this.model.findByIdAndUpdate(id, organization, options).exec()
   }
 
-  async remove(query: QueryFilter<Organization>): Promise<number> {
+  async remove(query?: QueryFilter<Organization>): Promise<number> {
     const { deletedCount: amount } = await this.model.deleteOne(query).exec()
 
     return amount
