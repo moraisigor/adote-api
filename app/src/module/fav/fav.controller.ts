@@ -5,6 +5,7 @@ import type { User } from '@/type/token'
 import { UserCurrent } from '@/decorator/user.current.decorator'
 
 import { AddFavParam, RemoveFavParam } from './fav.request'
+import type { FavResponse } from './fav.response'
 import { FavProvider } from './provider'
 
 @Controller()
@@ -12,8 +13,7 @@ export class FavController {
   constructor(private readonly provider: FavProvider) {}
 
   @Post(':post')
-  @HttpCode(HttpStatus.NO_CONTENT)
-  add(@Param() param: AddFavParam, @UserCurrent() user: User): Promise<void> {
+  add(@Param() param: AddFavParam, @UserCurrent() user: User): Promise<FavResponse> {
     const { id } = user
     const { post } = param
 
@@ -21,8 +21,7 @@ export class FavController {
   }
 
   @Delete(':post')
-  @HttpCode(HttpStatus.NO_CONTENT)
-  remove(@Param() param: RemoveFavParam, @UserCurrent() user: User): Promise<void> {
+  remove(@Param() param: RemoveFavParam, @UserCurrent() user: User): Promise<FavResponse> {
     const { id } = user
     const { post } = param
 
