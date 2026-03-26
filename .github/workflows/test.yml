@@ -1,0 +1,26 @@
+name: Test App
+
+on:
+  pull_request:
+    branches: main
+
+defaults:
+  run:
+    working-directory: ./app
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: setup bun
+        uses: oven-sh/setup-bun@v2
+      - name: checkout repository
+        uses: actions/checkout@v6
+      - name: install dependency
+        run: bun install
+      - name: lint check
+        run: bun lint:check
+      - name: format check
+        run: bun format:check
+      - name: run test
+        run: bun test:coverage
