@@ -13,6 +13,8 @@ export class PetRepository {
   constructor(@InjectModel(Pet.name) private readonly model: Model<Pet>) {}
 
   list(
+    skip: number,
+    limit: number,
     query?: QueryFilter<Pet>,
     projection?: ProjectionType<Pet>,
     options?: QueryOptions<Pet>
@@ -21,6 +23,8 @@ export class PetRepository {
       .find(query)
       .projection(projection)
       .options(options)
+      .skip(skip)
+      .limit(limit)
       .populate([{ path: 'breed' }])
       .exec()
   }
