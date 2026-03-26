@@ -11,17 +11,37 @@ import { MongoMemoryServer } from 'mongodb-memory-server'
 import { AuthModule } from '@/module/auth/auth.module'
 import type { TokenResponse } from '@/module/auth/auth.response'
 import { BreedModule } from '@/module/breed/breed.module'
+import type { BreedResponse } from '@/module/breed/breed.response'
 import { ConfigurationModule } from '@/module/configuration/configuration.module'
 import { HealthModule } from '@/module/health/health.module'
 import { LocationModule } from '@/module/location/location.module'
+import type { LocationResponse } from '@/module/location/location.response'
 import { MessageModule } from '@/module/message/message.module'
 import { OrganizationModule } from '@/module/organization/organization.module'
+import { PetModule } from '@/module/pet/pet.module'
 import { UserModule } from '@/module/user/user.module'
 
 import { encode } from '@/helper/string'
 
+export type Result = {
+  breed: BreedResponse[]
+  location: LocationResponse[]
+}
+
+export type Authorization = {
+  basic: string
+  token?: TokenResponse
+}
+
 export class Spec {
-  public token?: TokenResponse
+  public result: Result = {
+    breed: [],
+    location: []
+  }
+
+  public authorization: Authorization = {
+    basic: encode(`${process.env.USER}:${process.env.PASS}`)
+  }
 
   constructor(
     readonly module: TestingModule,
@@ -41,6 +61,7 @@ export class Spec {
         LocationModule,
         MessageModule,
         OrganizationModule,
+        PetModule,
         UserModule,
         // dependency
         JwtModule,
@@ -66,13 +87,37 @@ export class Spec {
     return new Spec(module, application, repository)
   }
 
-  async basic() {
-    const value = encode(`${process.env.USER}:${process.env.PASS}`)
+  async breed() {
+    const { basic } = this.authorization
+
+    const { json } = await this.application
+      .inject()
+      .post('/configuration/breed')
+      .headers({ Authorization: `Basic ${basic}` })
+      .end()
+
+    this.result.breed = json<BreedResponse[]>()
+  }
+
+  async location() {
+    const { basic } = this.authorization
+
+    const { json } = await this.application
+      .inject()
+      .post('/configuration/location')
+      .headers({ Authorization: `Basic ${basic}` })
+      .end()
+
+    this.result.location = json<LocationResponse[]>()
+  }
+
+  async user() {
+    const { basic } = this.authorization
 
     await this.application
       .inject()
       .post('/configuration/user')
-      .headers({ Authorization: `Basic ${value}` })
+      .headers({ Authorization: `Basic ${basic}` })
       .end()
 
     await this.application.inject().post('/auth').body({ phone: '+5599999999999' }).end()
@@ -86,7 +131,7 @@ export class Spec {
       })
       .end()
 
-    this.token = json<TokenResponse>()
+    this.authorization.token = json<TokenResponse>()
   }
 
   async start() {
