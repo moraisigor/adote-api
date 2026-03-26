@@ -28,7 +28,7 @@ describe('organization module', async () => {
 
       expect(response).toMatchObject({
         id: expect.any(String),
-        name: expect.any(String)
+        name: 'Name'
       })
     })
   })

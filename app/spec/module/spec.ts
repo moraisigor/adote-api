@@ -1,5 +1,6 @@
 import { CacheModule } from '@nestjs/cache-manager'
 import { ConfigModule } from '@nestjs/config'
+import { RouterModule } from '@nestjs/core'
 import { JwtModule } from '@nestjs/jwt'
 import { MongooseModule } from '@nestjs/mongoose'
 import { PassportModule } from '@nestjs/passport'
@@ -24,6 +25,8 @@ import { PetModule } from '@/module/pet/pet.module'
 import { UserModule } from '@/module/user/user.module'
 
 import { encode } from '@/helper/string'
+
+import { RouteConfig } from '@/router.config.factory'
 
 export type Result = {
   breed: BreedResponse[]
@@ -67,6 +70,7 @@ export class Spec {
         OrganizationModule,
         PetModule,
         UserModule,
+        RouterModule.register(RouteConfig),
         // dependency
         JwtModule,
         PassportModule,
@@ -91,13 +95,12 @@ export class Spec {
     return new Spec(module, application, repository)
   }
 
-  async breed(kind: Kind) {
+  async breed() {
     const { basic } = this.authorization
 
     const { json } = await this.application
       .inject()
       .post('/configuration/breed')
-      .query({ kind })
       .headers({ Authorization: `Basic ${basic}` })
       .end()
 

@@ -20,11 +20,13 @@ describe('breed module', async () => {
 
       const response = json<BreedResponse[]>()
 
+      const breed = response.find((e) => e.name.toLowerCase() === 'sem raça definida')
+
       expect(response).toHaveLength(25)
 
-      expect(response[1]).toMatchObject({
+      expect(breed).toMatchObject({
         id: expect.any(String),
-        name: expect.any(String)
+        name: 'Sem Raça Definida'
       })
     })
 
@@ -33,11 +35,13 @@ describe('breed module', async () => {
 
       const response = json<BreedResponse[]>()
 
+      const breed = response.find((e) => e.name.toLowerCase() === 'buldogue inglês')
+
       expect(response).toHaveLength(42)
 
-      expect(response[1]).toMatchObject({
+      expect(breed).toMatchObject({
         id: expect.any(String),
-        name: expect.any(String)
+        name: 'Buldogue Inglês'
       })
     })
   })

@@ -13,7 +13,7 @@ describe('pet module', async () => {
 
     await spec.authenticate()
 
-    await spec.breed(Kind.DOG)
+    await spec.breed()
   })
 
   describe('/pet', () => {
@@ -40,10 +40,13 @@ describe('pet module', async () => {
 
       expect(response).toMatchObject({
         id: expect.any(String),
-        name: expect.any(String),
-        size: expect.any(String),
-        gender: expect.any(String),
-        breed: expect.any(Object)
+        name: 'Oreo',
+        size: Size.MEDIUM,
+        gender: Gender.MALE,
+        breed: {
+          id: expect.any(String),
+          name: 'Buldogue Inglês'
+        }
       })
     })
   })

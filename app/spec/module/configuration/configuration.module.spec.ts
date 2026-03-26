@@ -28,8 +28,8 @@ describe('configuration module', async () => {
       expect(response).toMatchObject({
         id: expect.any(String),
         key: expect.any(String),
-        name: expect.any(String),
-        phone: expect.any(String)
+        name: 'Dev',
+        phone: '+5599999999999'
       })
     })
   })
@@ -46,11 +46,13 @@ describe('configuration module', async () => {
 
       const response = json<BreedResponse[]>()
 
+      const breed = response.find((e) => e.name.toLowerCase() === 'buldogue inglês')
+
       expect(response).toHaveLength(67)
 
-      expect(response[1]).toMatchObject({
+      expect(breed).toMatchObject({
         id: expect.any(String),
-        name: expect.any(String)
+        name: 'Buldogue Inglês'
       })
     })
   })
@@ -69,12 +71,14 @@ describe('configuration module', async () => {
 
       const response = json<LocationResponse[]>()
 
+      const location = response.find((e) => e.city.toLowerCase() === 'recife')
+
       expect(response).toHaveLength(5694)
 
-      expect(response[1]).toMatchObject({
+      expect(location).toMatchObject({
         id: expect.any(String),
-        city: expect.any(String),
-        state: expect.any(String)
+        city: 'Recife',
+        state: 'Pernambuco'
       })
     })
   })

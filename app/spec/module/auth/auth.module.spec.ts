@@ -26,7 +26,7 @@ describe('auth module', async () => {
       expect(response).toMatchObject({
         id: expect.any(String),
         key: expect.any(String),
-        phone: expect.any(String)
+        phone: '+5599999999999'
       })
     })
   })
@@ -47,11 +47,11 @@ describe('auth module', async () => {
       expect(response).toMatchObject({
         token: {
           hash: expect.any(String),
-          expire: expect.any(Number)
+          expire: Number(process.env.TOKEN_EXPIRE)
         },
         renew: {
           hash: expect.any(String),
-          expire: expect.any(Number)
+          expire: Number(process.env.TOKEN_RENEW_EXPIRE)
         }
       })
     })
