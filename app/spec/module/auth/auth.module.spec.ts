@@ -21,9 +21,9 @@ describe('auth module', async () => {
         })
         .end()
 
-      const result = json<AuthResponse>()
+      const response = json<AuthResponse>()
 
-      expect(result).toMatchObject({
+      expect(response).toMatchObject({
         id: expect.any(String),
         key: expect.any(String),
         phone: expect.any(String)
@@ -42,9 +42,9 @@ describe('auth module', async () => {
         })
         .end()
 
-      const result = json<TokenResponse>()
+      const response = json<TokenResponse>()
 
-      expect(result).toMatchObject({
+      expect(response).toMatchObject({
         token: {
           hash: expect.any(String),
           expire: expect.any(Number)
