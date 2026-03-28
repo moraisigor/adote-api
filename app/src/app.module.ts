@@ -1,8 +1,10 @@
 import { Module } from '@nestjs/common'
 import { ConfigModule } from '@nestjs/config'
-import { APP_GUARD, RouterModule } from '@nestjs/core'
+import { APP_FILTER, APP_GUARD, RouterModule } from '@nestjs/core'
 import { MongooseModule } from '@nestjs/mongoose'
 import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler'
+
+import { SentryGlobalFilter, SentryModule } from '@sentry/nestjs/setup'
 
 import { AuthModule } from '@/module/auth/auth.module'
 import { BreedModule } from '@/module/breed/breed.module'
@@ -39,18 +41,22 @@ import { RouteConfig } from './router.config.factory'
     UserModule,
     RouterModule.register(RouteConfig),
     // dependency
+    SentryModule.forRoot(),
     ConfigModule.forRoot({
       isGlobal: true,
       envFilePath: `.env.${process.env.ENV}`,
       ignoreEnvFile: isProduction
     }),
-    MongooseModule.forRootAsync({
-      useClass: RepositoryConfigFactory
-    }),
     ThrottlerModule.forRootAsync({
       useClass: RequestConfigFactory
+    }),
+    MongooseModule.forRootAsync({
+      useClass: RepositoryConfigFactory
     })
   ],
-  providers: [{ provide: APP_GUARD, useClass: ThrottlerGuard }]
+  providers: [
+    { provide: APP_GUARD, useClass: ThrottlerGuard },
+    { provide: APP_FILTER, useClass: SentryGlobalFilter }
+  ]
 })
 export class AppModule {}
