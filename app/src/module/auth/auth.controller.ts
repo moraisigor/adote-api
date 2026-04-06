@@ -46,8 +46,8 @@ export class AuthController {
   @HttpCode(HttpStatus.OK)
   @UseGuards(TokenRenewGuard)
   renew(@UserCurrent() user: User): Promise<TokenResponse> {
-    const { mail } = user
+    const { phone } = user
 
-    return this.provider.renew.run(mail)
+    return this.provider.renew.run(phone)
   }
 }

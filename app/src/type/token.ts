@@ -2,7 +2,7 @@ import { Role } from '@/module/user/type/role'
 
 export type User = {
   readonly id: string
-  readonly mail: string
+  readonly phone: string
   readonly role: Role
 }
 
