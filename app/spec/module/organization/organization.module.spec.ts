@@ -8,28 +8,29 @@ describe('organization module', async () => {
   beforeAll(async () => {
     await spec.start()
 
-    await spec.authenticate()
+    await spec.scenario.authenticate()
   })
 
-  describe('/organization', () => {
-    test('should create organization', async () => {
-      const { token } = spec.authorization
+  // /organization
+  test('should create organization', async () => {
+    const {
+      authorization: { token: { hash } = { hash: '' } }
+    } = spec.scenario
 
-      const { json } = await spec.application
-        .inject()
-        .post('/organization')
-        .headers({ Authorization: `Bearer ${token?.hash}` })
-        .body({
-          name: 'Name'
-        })
-        .end()
-
-      const response = json<OrganizationResponse[]>()
-
-      expect(response).toMatchObject({
-        id: expect.any(String),
+    const { json } = await spec.application
+      .inject()
+      .post('/organization')
+      .headers({ Authorization: `Bearer ${hash}` })
+      .body({
         name: 'Name'
       })
+      .end()
+
+    const response = json<OrganizationResponse>()
+
+    expect(response).toMatchObject({
+      id: expect.any(String),
+      name: 'Name'
     })
   })
 
