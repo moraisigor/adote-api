@@ -8,6 +8,7 @@ import type { LocationResponse } from '@/module/location/location.response'
 import type { PetResponse } from '@/module/pet/pet.response'
 import { Gender } from '@/module/pet/type/gender'
 import { Size } from '@/module/pet/type/size'
+import type { PostResponse } from '@/module/post/post.response'
 
 import { encode } from '@/helper/string'
 
@@ -80,6 +81,26 @@ export class Scenario {
 
         return json<PetResponse>()
       }
+    },
+    post: {
+      create: async () => {
+        const { token: { hash } = { hash: '' } } = this.authorization
+
+        const { id: pet } = await this.build.pet.create()
+
+        const { json } = await this.application
+          .inject()
+          .post('/post')
+          .headers({ Authorization: `Bearer ${hash}` })
+          .body({
+            image: ['image.jpg'],
+            pet: pet,
+            publish: true
+          })
+          .end()
+
+        return json<PostResponse>()
+      }
     }
   }
 
@@ -103,6 +124,13 @@ export class Scenario {
 
   async breed() {
     await this.build.configuration.breed()
+  }
+
+  async fav() {
+    await this.authenticate()
+
+    await this.build.configuration.breed()
+    await this.build.configuration.location()
   }
 
   async location() {

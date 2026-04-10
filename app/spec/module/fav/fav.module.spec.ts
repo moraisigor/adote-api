@@ -1,62 +1,64 @@
 import type { FavResponse } from '@/module/fav/fav.response'
+import type { PostResponse } from '@/module/post/post.response'
 
 import { Spec } from '../spec'
+
+type Result = {
+  post?: PostResponse
+}
 
 describe('fav module', async () => {
   const spec = await Spec.build()
 
+  const result: Result = {}
+
   beforeAll(async () => {
     await spec.start()
 
-    // support
-    await spec.breed()
-    await spec.location()
+    await spec.scenario.fav()
 
-    // authenticate
-    await spec.authenticate()
-
-    // user
-    await spec.user()
-
-    await spec.pet()
-    await spec.post()
+    result.post = await spec.scenario.build.post.create()
   })
 
-  describe('/fav', () => {
-    test('should add fav', async () => {
-      const { token } = spec.authorization
+  // /fav/:post
+  test('should add fav', async () => {
+    const {
+      authorization: { token: { hash } = { hash: '' } }
+    } = spec.scenario
 
-      const { post: { id: post } = { id: '' } } = spec.result
+    const { id: post } = result.post ?? { id: null }
 
-      const { json } = await spec.application
-        .inject()
-        .post(`/user/fav/${post}`)
-        .headers({ Authorization: `Bearer ${token?.hash}` })
-        .end()
+    const { json } = await spec.application
+      .inject()
+      .post(`/user/fav/${post}`)
+      .headers({ Authorization: `Bearer ${hash}` })
+      .end()
 
-      const response = json<FavResponse>()
+    const response = json<FavResponse>()
 
-      expect(response).toMatchObject({
-        id: expect.any(String)
-      })
+    expect(response).toMatchObject({
+      id: post
     })
+  })
 
-    test('should remove fav', async () => {
-      const { token } = spec.authorization
+  // /fav/:post
+  test('should remove fav', async () => {
+    const {
+      authorization: { token: { hash } = { hash: '' } }
+    } = spec.scenario
 
-      const { post: { id: post } = { id: '' } } = spec.result
+    const { id: post } = result.post ?? { id: null }
 
-      const { json } = await spec.application
-        .inject()
-        .delete(`/user/fav/${post}`)
-        .headers({ Authorization: `Bearer ${token?.hash}` })
-        .end()
+    const { json } = await spec.application
+      .inject()
+      .delete(`/user/fav/${post}`)
+      .headers({ Authorization: `Bearer ${hash}` })
+      .end()
 
-      const response = json<FavResponse>()
+    const response = json<FavResponse>()
 
-      expect(response).toMatchObject({
-        id: expect.any(String)
-      })
+    expect(response).toMatchObject({
+      id: post
     })
   })
 
