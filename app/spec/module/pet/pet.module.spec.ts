@@ -1,27 +1,16 @@
-import type { BreedResponse } from '@/module/breed/breed.response'
-import { Kind } from '@/module/breed/type/kind.enum'
 import type { PetResponse } from '@/module/pet/pet.response'
 import { Gender } from '@/module/pet/type/gender'
 import { Size } from '@/module/pet/type/size'
 
 import { Spec } from '../spec'
 
-type Result = {
-  // breed list
-  breed?: BreedResponse[]
-}
-
 describe('pet module', async () => {
   const spec = await Spec.build()
-
-  const result: Result = {}
 
   beforeAll(async () => {
     await spec.start()
 
     await spec.scenario.pet()
-
-    result.breed = await spec.scenario.build.breed.list(Kind.DOG)
   })
 
   // /pet
@@ -30,7 +19,9 @@ describe('pet module', async () => {
       authorization: { token: { hash } = { hash: '' } }
     } = spec.scenario
 
-    const { id: breed } = result.breed?.find((e) => e.name === 'Buldogue Inglês') ?? { id: null }
+    const list = await spec.scenario.build.breed.list()
+
+    const { id: breed } = list.find((e) => e.name === 'Buldogue Inglês') ?? { id: null }
 
     const { json } = await spec.application
       .inject()
