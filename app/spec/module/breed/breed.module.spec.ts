@@ -11,38 +11,38 @@ describe('breed module', async () => {
   beforeAll(async () => {
     await spec.start()
 
-    await spec.breed()
+    await spec.scenario.breed()
   })
 
-  describe('/breed', () => {
-    test('should list cat', async () => {
-      const { json } = await spec.application.inject().get('/breed').query({ kind: Kind.CAT }).end()
+  // /breed?kind=cat
+  test('should list breed with kind cat', async () => {
+    const { json } = await spec.application.inject().get('/breed').query({ kind: Kind.CAT }).end()
 
-      const response = json<BreedResponse[]>()
+    const response = json<BreedResponse[]>()
 
-      const breed = response.find((e) => e.name.toLowerCase() === 'sem raça definida')
+    const breed = response.find((e) => e.name === 'Sem Raça Definida')
 
-      expect(response).toHaveLength(25)
+    expect(response).toHaveLength(25)
 
-      expect(breed).toMatchObject({
-        id: expect.any(String),
-        name: 'Sem Raça Definida'
-      })
+    expect(breed).toMatchObject({
+      id: expect.any(String),
+      name: 'Sem Raça Definida'
     })
+  })
 
-    test('should list dog', async () => {
-      const { json } = await spec.application.inject().get('/breed').query({ kind: Kind.DOG }).end()
+  // /breed?kind=dog
+  test('should list breed with kind dog', async () => {
+    const { json } = await spec.application.inject().get('/breed').query({ kind: Kind.DOG }).end()
 
-      const response = json<BreedResponse[]>()
+    const response = json<BreedResponse[]>()
 
-      const breed = response.find((e) => e.name.toLowerCase() === 'buldogue inglês')
+    const breed = response.find((e) => e.name === 'Buldogue Inglês')
 
-      expect(response).toHaveLength(42)
+    expect(response).toHaveLength(42)
 
-      expect(breed).toMatchObject({
-        id: expect.any(String),
-        name: 'Buldogue Inglês'
-      })
+    expect(breed).toMatchObject({
+      id: expect.any(String),
+      name: 'Buldogue Inglês'
     })
   })
 
