@@ -13,12 +13,12 @@ describe('configuration module', async () => {
 
   // /configuration/breed
   test('should set breed', async () => {
-    const { BASIC } = spec.scenario
+    const { BASIC_AUTHORIZATION } = spec.scenario
 
     const { json } = await spec.application
       .inject()
       .post('/configuration/breed')
-      .headers({ Authorization: `Basic ${BASIC}` })
+      .headers({ Authorization: `Basic ${BASIC_AUTHORIZATION}` })
       .end()
 
     const response = json<BreedResponse[]>()
@@ -28,12 +28,12 @@ describe('configuration module', async () => {
 
   // /configuration/location
   test('should set location', async () => {
-    const { BASIC } = spec.scenario
+    const { BASIC_AUTHORIZATION } = spec.scenario
 
     const { json } = await spec.application
       .inject()
       .post('/configuration/location')
-      .headers({ Authorization: `Basic ${BASIC}` })
+      .headers({ Authorization: `Basic ${BASIC_AUTHORIZATION}` })
       .end()
 
     const response = json<LocationResponse[]>()
@@ -43,12 +43,12 @@ describe('configuration module', async () => {
 
   // /configuration/user
   test('should set user', async () => {
-    const { BASIC } = spec.scenario
+    const { BASIC_AUTHORIZATION } = spec.scenario
 
     const { json } = await spec.application
       .inject()
       .post('/configuration/user')
-      .headers({ Authorization: `Basic ${BASIC}` })
+      .headers({ Authorization: `Basic ${BASIC_AUTHORIZATION}` })
       .end()
 
     const response = json<UserResponse>()
