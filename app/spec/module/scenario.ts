@@ -2,6 +2,9 @@ import type { NestFastifyApplication } from '@nestjs/platform-fastify'
 
 import type { TokenResponse } from '@/module/auth/auth.response'
 import type { Token } from '@/module/auth/type/token'
+import type { BreedResponse } from '@/module/breed/breed.response'
+import type { Kind } from '@/module/breed/type/kind.enum'
+import type { LocationResponse } from '@/module/location/location.response'
 
 import { encode } from '@/helper/string'
 
@@ -16,6 +19,36 @@ export class Scenario {
   public readonly authorization: Authorization = {}
 
   constructor(private readonly application: NestFastifyApplication) {}
+
+  build = {
+    breed: {
+      list: async (kind: Kind) => {
+        const { json } = await this.application.inject().get('/breed').query({ kind }).end()
+
+        return json<BreedResponse[]>()
+      }
+    },
+    configuration: {
+      breed: async () => {
+        const { json } = await this.application
+          .inject()
+          .post('/configuration/breed')
+          .headers({ Authorization: `Basic ${this.BASIC_AUTHORIZATION}` })
+          .end()
+
+        return json<BreedResponse[]>()
+      },
+      location: async () => {
+        const { json } = await this.application
+          .inject()
+          .post('/configuration/location')
+          .headers({ Authorization: `Basic ${this.BASIC_AUTHORIZATION}` })
+          .end()
+
+        return json<LocationResponse[]>()
+      }
+    }
+  }
 
   async authenticate() {
     await this.application.inject().post('/auth').body({ phone: '+5599999999999' }).end()
@@ -36,31 +69,22 @@ export class Scenario {
   }
 
   async breed() {
-    // load breed list
-    await this.application
-      .inject()
-      .post('/configuration/breed')
-      .headers({ Authorization: `Basic ${this.BASIC_AUTHORIZATION}` })
-      .end()
+    await this.build.configuration.breed()
   }
 
   async location() {
-    // load location list
-    await this.application
-      .inject()
-      .post('/configuration/location')
-      .headers({ Authorization: `Basic ${this.BASIC_AUTHORIZATION}` })
-      .end()
+    await this.build.configuration.location()
   }
 
   async pet() {
     await this.authenticate()
 
-    // load breed list
-    await this.application
-      .inject()
-      .post('/configuration/breed')
-      .headers({ Authorization: `Basic ${this.BASIC_AUTHORIZATION}` })
-      .end()
+    await this.build.configuration.breed()
+  }
+
+  async post() {
+    await this.authenticate()
+
+    await this.build.configuration.breed()
   }
 }

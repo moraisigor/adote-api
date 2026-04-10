@@ -7,6 +7,7 @@ import { Size } from '@/module/pet/type/size'
 import { Spec } from '../spec'
 
 type Result = {
+  // breed list
   breed?: BreedResponse[]
 }
 
@@ -20,9 +21,7 @@ describe('pet module', async () => {
 
     await spec.scenario.pet()
 
-    const { json } = await spec.application.inject().get('/breed').query({ kind: Kind.DOG }).end()
-
-    result.breed = json<BreedResponse[]>()
+    result.breed = await spec.scenario.build.breed.list(Kind.DOG)
   })
 
   // /pet
