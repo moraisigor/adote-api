@@ -3,8 +3,11 @@ import type { NestFastifyApplication } from '@nestjs/platform-fastify'
 import type { TokenResponse } from '@/module/auth/auth.response'
 import type { Token } from '@/module/auth/type/token'
 import type { BreedResponse } from '@/module/breed/breed.response'
-import type { Kind } from '@/module/breed/type/kind.enum'
+import { Kind } from '@/module/breed/type/kind.enum'
 import type { LocationResponse } from '@/module/location/location.response'
+import type { PetResponse } from '@/module/pet/pet.response'
+import { Gender } from '@/module/pet/type/gender'
+import { Size } from '@/module/pet/type/size'
 
 import { encode } from '@/helper/string'
 
@@ -22,8 +25,8 @@ export class Scenario {
 
   build = {
     breed: {
-      list: async (kind: Kind) => {
-        const { json } = await this.application.inject().get('/breed').query({ kind }).end()
+      list: async () => {
+        const { json } = await this.application.inject().get('/breed').query({ kind: Kind.DOG }).end()
 
         return json<BreedResponse[]>()
       }
@@ -46,6 +49,29 @@ export class Scenario {
           .end()
 
         return json<LocationResponse[]>()
+      }
+    },
+    pet: {
+      create: async () => {
+        const { token: { hash } = { hash: '' } } = this.authorization
+
+        const list = await this.build.breed.list()
+
+        const { id: breed } = list.find((e) => e.name === 'Buldogue Inglês') ?? { id: null }
+
+        const { json } = await this.application
+          .inject()
+          .post('/pet')
+          .headers({ Authorization: `Bearer ${hash}` })
+          .body({
+            name: 'Oreo',
+            size: Size.MEDIUM,
+            gender: Gender.MALE,
+            breed: breed
+          })
+          .end()
+
+        return json<PetResponse>()
       }
     }
   }

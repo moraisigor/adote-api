@@ -10,63 +10,57 @@ describe('post module', async () => {
   beforeAll(async () => {
     await spec.start()
 
-    // support
-    await spec.breed()
-    await spec.location()
-
-    await spec.authenticate()
-
-    await spec.pet()
-    await spec.user()
+    await spec.scenario.post()
   })
 
-  describe('/post', () => {
-    test('should create post', async () => {
-      const { token } = spec.authorization
+  // /post
+  test('should create post', async () => {
+    const {
+      authorization: { token: { hash } = { hash: '' } }
+    } = spec.scenario
 
-      const { pet: { id: pet } = { id: '' } } = spec.result
+    const { id: pet } = await spec.scenario.build.pet.create()
 
-      const { json } = await spec.application
-        .inject()
-        .post('/post')
-        .headers({ Authorization: `Bearer ${token?.hash}` })
-        .body({
-          image: ['image.jpg'],
-          pet: pet,
-          publish: true
-        })
-        .end()
-
-      const response = json<PostResponse>()
-
-      expect(response).toMatchObject({
-        id: expect.any(String),
+    const { json } = await spec.application
+      .inject()
+      .post('/post')
+      .headers({ Authorization: `Bearer ${hash}` })
+      .body({
         image: ['image.jpg'],
-        pet: {
-          id: expect.any(String),
-          name: 'Oreo',
-          size: Size.MEDIUM,
-          gender: Gender.MALE,
-          breed: {
-            id: expect.any(String),
-            name: 'Buldogue Inglês'
-          }
-        },
-        user: {
-          id: expect.any(String),
-          name: 'Name',
-          contact: {
-            mail: 'mail@example.com',
-            phone: '+5599999999999',
-            social: 'https://example.com/name'
-          },
-          location: {
-            id: expect.any(String),
-            city: 'Recife',
-            state: 'Pernambuco'
-          }
-        }
+        pet: pet,
+        publish: true
       })
+      .end()
+
+    const response = json<PostResponse>()
+
+    expect(response).toMatchObject({
+      id: expect.any(String),
+      image: ['image.jpg'],
+      pet: {
+        id: expect.any(String),
+        name: 'Oreo',
+        size: Size.MEDIUM,
+        gender: Gender.MALE,
+        breed: {
+          id: expect.any(String),
+          name: 'Buldogue Inglês'
+        }
+      },
+      user: {
+        id: expect.any(String),
+        name: 'Name',
+        contact: {
+          mail: 'mail@example.com',
+          phone: '+5599999999999',
+          social: 'https://example.com/name'
+        },
+        location: {
+          id: expect.any(String),
+          city: 'Recife',
+          state: 'Pernambuco'
+        }
+      }
     })
   })
 
