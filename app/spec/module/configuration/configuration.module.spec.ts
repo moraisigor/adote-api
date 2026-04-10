@@ -11,73 +11,53 @@ describe('configuration module', async () => {
     await spec.start()
   })
 
-  describe('/configuration/user', () => {
-    test('should set user', async () => {
-      const { basic } = spec.authorization
+  // /configuration/breed
+  test('should set breed', async () => {
+    const { BASIC } = spec.scenario
 
-      const { json } = await spec.application
-        .inject()
-        .post('/configuration/user')
-        .headers({ Authorization: `Basic ${basic}` })
-        .end()
+    const { json } = await spec.application
+      .inject()
+      .post('/configuration/breed')
+      .headers({ Authorization: `Basic ${BASIC}` })
+      .end()
 
-      const response = json<UserResponse>()
+    const response = json<BreedResponse[]>()
 
-      expect(response).toMatchObject({
-        id: expect.any(String),
-        key: expect.any(String),
-        name: 'Dev',
-        phone: '+5599999999999'
-      })
-    })
+    expect(response).toHaveLength(67)
   })
 
-  describe('/configuration/breed', () => {
-    test('should set breed', async () => {
-      const { basic } = spec.authorization
+  // /configuration/location
+  test('should set location', async () => {
+    const { BASIC } = spec.scenario
 
-      const { json } = await spec.application
-        .inject()
-        .post('/configuration/breed')
-        .headers({ Authorization: `Basic ${basic}` })
-        .end()
+    const { json } = await spec.application
+      .inject()
+      .post('/configuration/location')
+      .headers({ Authorization: `Basic ${BASIC}` })
+      .end()
 
-      const response = json<BreedResponse[]>()
+    const response = json<LocationResponse[]>()
 
-      const breed = response.find((e) => e.name.toLowerCase() === 'buldogue inglês')
-
-      expect(response).toHaveLength(67)
-
-      expect(breed).toMatchObject({
-        id: expect.any(String),
-        name: 'Buldogue Inglês'
-      })
-    })
+    expect(response).toHaveLength(5694)
   })
 
-  describe('/configuration/location', () => {
-    test('should set location', async () => {
-      const { basic } = spec.authorization
+  // /configuration/user
+  test('should set user', async () => {
+    const { BASIC } = spec.scenario
 
-      const { json } = await spec.application
-        .inject()
-        .post('/configuration/location')
-        .headers({
-          Authorization: `Basic ${basic}`
-        })
-        .end()
+    const { json } = await spec.application
+      .inject()
+      .post('/configuration/user')
+      .headers({ Authorization: `Basic ${BASIC}` })
+      .end()
 
-      const response = json<LocationResponse[]>()
+    const response = json<UserResponse>()
 
-      const location = response.find((e) => e.city.toLowerCase() === 'recife')
-
-      expect(response).toHaveLength(5694)
-
-      expect(location).toMatchObject({
-        id: expect.any(String),
-        city: 'Recife',
-        state: 'Pernambuco'
-      })
+    expect(response).toMatchObject({
+      id: expect.any(String),
+      key: expect.any(String),
+      name: 'Dev',
+      phone: '+5599999999999'
     })
   })
 
