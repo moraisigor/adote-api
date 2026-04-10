@@ -51,6 +51,13 @@ export class Scenario {
         return json<LocationResponse[]>()
       }
     },
+    location: {
+      search: async () => {
+        const { json } = await this.application.inject().get('/location').query({ search: 'recife' }).end()
+
+        return json<LocationResponse[]>()
+      }
+    },
     pet: {
       create: async () => {
         const { token: { hash } = { hash: '' } } = this.authorization
@@ -112,5 +119,11 @@ export class Scenario {
     await this.authenticate()
 
     await this.build.configuration.breed()
+  }
+
+  async user() {
+    await this.authenticate()
+
+    await this.build.configuration.location()
   }
 }

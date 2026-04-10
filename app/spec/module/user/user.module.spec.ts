@@ -8,53 +8,49 @@ describe('user module', async () => {
   beforeAll(async () => {
     await spec.start()
 
-    // support
-    await spec.location()
-
-    await spec.authenticate()
+    await spec.scenario.user()
   })
 
-  describe('/user', () => {
-    test('should save user', async () => {
-      const { token } = spec.authorization
+  // /user
+  test('should save user', async () => {
+    const {
+      authorization: { token: { hash } = { hash: '' } }
+    } = spec.scenario
 
-      const { id: location } = spec.result.location.find((e) => e.city.toLowerCase() === 'recife') ?? {
-        location: ''
-      }
+    const [{ id: location }] = await spec.scenario.build.location.search()
 
-      const { json } = await spec.application
-        .inject()
-        .put('/user')
-        .headers({ Authorization: `Bearer ${token?.hash}` })
-        .body({
-          name: 'Name',
-          contact: {
-            mail: 'mail@example.com',
-            phone: '+5599999999999',
-            social: 'https://example.com/name'
-          },
-          location: location
-        })
-        .end()
-
-      const response = json<UserResponse>()
-
-      expect(response).toMatchObject({
-        id: expect.any(String),
-        key: expect.any(String),
-        phone: '+5599999999999',
+    const { json } = await spec.application
+      .inject()
+      .put('/user')
+      .headers({ Authorization: `Bearer ${hash}` })
+      .body({
         name: 'Name',
         contact: {
           mail: 'mail@example.com',
           phone: '+5599999999999',
           social: 'https://example.com/name'
         },
-        location: {
-          id: expect.any(String),
-          city: 'Recife',
-          state: 'Pernambuco'
-        }
+        location: location
       })
+      .end()
+
+    const response = json<UserResponse>()
+
+    expect(response).toMatchObject({
+      id: expect.any(String),
+      key: expect.any(String),
+      phone: '+5599999999999',
+      name: 'Name',
+      contact: {
+        mail: 'mail@example.com',
+        phone: '+5599999999999',
+        social: 'https://example.com/name'
+      },
+      location: {
+        id: expect.any(String),
+        city: 'Recife',
+        state: 'Pernambuco'
+      }
     })
   })
 
