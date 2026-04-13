@@ -11,7 +11,7 @@ describe('configuration module', async () => {
     await spec.start()
   })
 
-  // /configuration/breed
+  // post /configuration/breed
   describe('/configuration/breed', () => {
     test('should load breed list', async () => {
       const { BASIC_AUTHORIZATION } = spec.scenario
@@ -28,7 +28,7 @@ describe('configuration module', async () => {
     })
   })
 
-  // /configuration/location
+  // post /configuration/location
   describe('/configuration/location', () => {
     test('should load location list', async () => {
       const { BASIC_AUTHORIZATION } = spec.scenario
@@ -45,7 +45,7 @@ describe('configuration module', async () => {
     })
   })
 
-  // /configuration/user
+  // post /configuration/user
   describe('/configuration/user', () => {
     test('should load user', async () => {
       const { BASIC_AUTHORIZATION } = spec.scenario
