@@ -133,3 +133,11 @@ export class PostResponse {
     }
   }
 }
+
+export class RemovePostResponse {
+  readonly id: string
+
+  constructor(id: string) {
+    this.id = id
+  }
+}

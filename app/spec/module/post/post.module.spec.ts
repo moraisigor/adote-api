@@ -1,6 +1,6 @@
 import { Gender } from '@/module/pet/type/gender'
 import { Size } from '@/module/pet/type/size'
-import type { PostResponse } from '@/module/post/post.response'
+import type { PostResponse, RemovePostResponse } from '@/module/post/post.response'
 
 import { Spec } from '../spec'
 
@@ -62,6 +62,29 @@ describe('post module', async () => {
             state: 'Pernambuco'
           }
         }
+      })
+    })
+  })
+
+  // delete /post/id
+  describe('/post/id', () => {
+    test('should remove post', async () => {
+      const {
+        authorization: { token: { hash } = { hash: '' } }
+      } = spec.scenario
+
+      const { id: post } = await spec.scenario.build.post.create()
+
+      const { json } = await spec.application
+        .inject()
+        .delete(`/post/${post}`)
+        .headers({ Authorization: `Bearer ${hash}` })
+        .end()
+
+      const response = json<RemovePostResponse>()
+
+      expect(response).toMatchObject({
+        id: post
       })
     })
   })

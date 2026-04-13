@@ -15,7 +15,7 @@ import type {
   SavePostParam,
   SavePostRequest
 } from './post.request'
-import type { PostResponse } from './post.response'
+import type { PostResponse, RemovePostResponse } from './post.response'
 import { PostProvider } from './provider'
 
 @Controller('post')
@@ -69,7 +69,7 @@ export class PostController {
   }
 
   @Delete(':id')
-  remove(@Param() param: RemovePostParam, @UserCurrent() user: User): Promise<void> {
+  remove(@Param() param: RemovePostParam, @UserCurrent() user: User): Promise<RemovePostResponse> {
     const { id } = param
     const { id: current } = user
 
