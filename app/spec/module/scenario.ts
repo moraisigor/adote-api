@@ -1,14 +1,16 @@
 import type { NestFastifyApplication } from '@nestjs/platform-fastify'
 
-import type { TokenResponse } from '@/module/auth/auth.response'
+import type { AuthResponse, TokenResponse } from '@/module/auth/auth.response'
 import type { Token } from '@/module/auth/type/token'
 import type { BreedResponse } from '@/module/breed/breed.response'
 import { Kind } from '@/module/breed/type/kind.enum'
+import type { FavResponse } from '@/module/fav/fav.response'
 import type { LocationResponse } from '@/module/location/location.response'
 import type { PetResponse } from '@/module/pet/pet.response'
 import { Gender } from '@/module/pet/type/gender'
 import { Size } from '@/module/pet/type/size'
 import type { PostResponse } from '@/module/post/post.response'
+import type { UserResponse } from '@/module/user/user.response'
 
 import { encode } from '@/helper/string'
 
@@ -25,6 +27,20 @@ export class Scenario {
   constructor(private readonly application: NestFastifyApplication) {}
 
   build = {
+    auth: {
+      auth: async () => {
+        const { json } = await this.application.inject().post('/auth').body({ phone: '+5599999999999' }).end()
+
+        return json<AuthResponse>()
+      },
+      key: async () => {
+        const { key } = await this.build.auth.auth()
+
+        const { json } = await this.application.inject().post('/auth/key').headers({ Key: key }).end()
+
+        return json<TokenResponse>()
+      }
+    },
     breed: {
       list: async () => {
         const { json } = await this.application.inject().get('/breed').query({ kind: Kind.DOG }).end()
@@ -50,6 +66,21 @@ export class Scenario {
           .end()
 
         return json<LocationResponse[]>()
+      }
+    },
+    fav: {
+      add: async () => {
+        const { token: { hash } = { hash: '' } } = this.authorization
+
+        const { id: post } = await this.build.post.create()
+
+        const { json } = await this.application
+          .inject()
+          .post(`/user/fav/${post}`)
+          .headers({ Authorization: `Bearer ${hash}` })
+          .end()
+
+        return json<FavResponse>()
       }
     },
     location: {
@@ -101,6 +132,30 @@ export class Scenario {
 
         return json<PostResponse>()
       }
+    },
+    user: {
+      save: async () => {
+        const { token: { hash } = { hash: '' } } = this.authorization
+
+        const [{ id: location }] = await this.build.location.search()
+
+        const { json } = await this.application
+          .inject()
+          .put('/user')
+          .headers({ Authorization: `Bearer ${hash}` })
+          .body({
+            name: 'Name',
+            contact: {
+              mail: 'mail@example.com',
+              phone: '+5599999999999',
+              social: 'https://example.com/name'
+            },
+            location: location
+          })
+          .end()
+
+        return json<UserResponse>()
+      }
     }
   }
 
@@ -131,6 +186,8 @@ export class Scenario {
 
     await this.build.configuration.breed()
     await this.build.configuration.location()
+
+    await this.build.user.save()
   }
 
   async location() {
@@ -147,6 +204,9 @@ export class Scenario {
     await this.authenticate()
 
     await this.build.configuration.breed()
+    await this.build.configuration.location()
+
+    await this.build.user.save()
   }
 
   async user() {

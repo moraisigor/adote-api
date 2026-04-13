@@ -13,54 +13,56 @@ describe('post module', async () => {
     await spec.scenario.post()
   })
 
-  // /post
-  test('should create post', async () => {
-    const {
-      authorization: { token: { hash } = { hash: '' } }
-    } = spec.scenario
+  // post /post
+  describe('/post', () => {
+    test('should create post', async () => {
+      const {
+        authorization: { token: { hash } = { hash: '' } }
+      } = spec.scenario
 
-    const { id: pet } = await spec.scenario.build.pet.create()
+      const { id: pet } = await spec.scenario.build.pet.create()
 
-    const { json } = await spec.application
-      .inject()
-      .post('/post')
-      .headers({ Authorization: `Bearer ${hash}` })
-      .body({
+      const { json } = await spec.application
+        .inject()
+        .post('/post')
+        .headers({ Authorization: `Bearer ${hash}` })
+        .body({
+          image: ['image.jpg'],
+          pet: pet,
+          publish: true
+        })
+        .end()
+
+      const response = json<PostResponse>()
+
+      expect(response).toMatchObject({
+        id: expect.any(String),
         image: ['image.jpg'],
-        pet: pet,
-        publish: true
-      })
-      .end()
-
-    const response = json<PostResponse>()
-
-    expect(response).toMatchObject({
-      id: expect.any(String),
-      image: ['image.jpg'],
-      pet: {
-        id: expect.any(String),
-        name: 'Oreo',
-        size: Size.MEDIUM,
-        gender: Gender.MALE,
-        breed: {
+        pet: {
           id: expect.any(String),
-          name: 'Buldogue Inglês'
-        }
-      },
-      user: {
-        id: expect.any(String),
-        name: 'Name',
-        contact: {
-          mail: 'mail@example.com',
-          phone: '+5599999999999',
-          social: 'https://example.com/name'
+          name: 'Oreo',
+          size: Size.MEDIUM,
+          gender: Gender.MALE,
+          breed: {
+            id: expect.any(String),
+            name: 'Buldogue Inglês'
+          }
         },
-        location: {
+        user: {
           id: expect.any(String),
-          city: 'Recife',
-          state: 'Pernambuco'
+          name: 'Name',
+          contact: {
+            mail: 'mail@example.com',
+            phone: '+5599999999999',
+            social: 'https://example.com/name'
+          },
+          location: {
+            id: expect.any(String),
+            city: 'Recife',
+            state: 'Pernambuco'
+          }
         }
-      }
+      })
     })
   })
 
