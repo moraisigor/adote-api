@@ -12,52 +12,58 @@ describe('configuration module', async () => {
   })
 
   // /configuration/breed
-  test('should set breed', async () => {
-    const { BASIC_AUTHORIZATION } = spec.scenario
+  describe('/configuration/breed', () => {
+    test('should load breed list', async () => {
+      const { BASIC_AUTHORIZATION } = spec.scenario
 
-    const { json } = await spec.application
-      .inject()
-      .post('/configuration/breed')
-      .headers({ Authorization: `Basic ${BASIC_AUTHORIZATION}` })
-      .end()
+      const { json } = await spec.application
+        .inject()
+        .post('/configuration/breed')
+        .headers({ Authorization: `Basic ${BASIC_AUTHORIZATION}` })
+        .end()
 
-    const response = json<BreedResponse[]>()
+      const response = json<BreedResponse[]>()
 
-    expect(response).toHaveLength(67)
+      expect(response).toHaveLength(67)
+    })
   })
 
   // /configuration/location
-  test('should set location', async () => {
-    const { BASIC_AUTHORIZATION } = spec.scenario
+  describe('/configuration/location', () => {
+    test('should load location list', async () => {
+      const { BASIC_AUTHORIZATION } = spec.scenario
 
-    const { json } = await spec.application
-      .inject()
-      .post('/configuration/location')
-      .headers({ Authorization: `Basic ${BASIC_AUTHORIZATION}` })
-      .end()
+      const { json } = await spec.application
+        .inject()
+        .post('/configuration/location')
+        .headers({ Authorization: `Basic ${BASIC_AUTHORIZATION}` })
+        .end()
 
-    const response = json<LocationResponse[]>()
+      const response = json<LocationResponse[]>()
 
-    expect(response).toHaveLength(5694)
+      expect(response).toHaveLength(5694)
+    })
   })
 
   // /configuration/user
-  test('should set user', async () => {
-    const { BASIC_AUTHORIZATION } = spec.scenario
+  describe('/configuration/user', () => {
+    test('should load user', async () => {
+      const { BASIC_AUTHORIZATION } = spec.scenario
 
-    const { json } = await spec.application
-      .inject()
-      .post('/configuration/user')
-      .headers({ Authorization: `Basic ${BASIC_AUTHORIZATION}` })
-      .end()
+      const { json } = await spec.application
+        .inject()
+        .post('/configuration/user')
+        .headers({ Authorization: `Basic ${BASIC_AUTHORIZATION}` })
+        .end()
 
-    const response = json<UserResponse>()
+      const response = json<UserResponse>()
 
-    expect(response).toMatchObject({
-      id: expect.any(String),
-      key: expect.any(String),
-      name: 'Dev',
-      phone: '+5599999999999'
+      expect(response).toMatchObject({
+        id: expect.any(String),
+        key: expect.any(String),
+        name: 'Dev',
+        phone: '+5599999999999'
+      })
     })
   })
 
