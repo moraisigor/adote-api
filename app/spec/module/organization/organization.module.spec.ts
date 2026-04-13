@@ -8,7 +8,7 @@ describe('organization module', async () => {
   beforeAll(async () => {
     await spec.start()
 
-    await spec.scenario.authenticate()
+    await spec.scenario.organization()
   })
 
   // post /organization
@@ -23,7 +23,7 @@ describe('organization module', async () => {
         .post('/organization')
         .headers({ Authorization: `Bearer ${hash}` })
         .body({
-          name: 'Name'
+          name: 'Create'
         })
         .end()
 
@@ -31,7 +31,42 @@ describe('organization module', async () => {
 
       expect(response).toMatchObject({
         id: expect.any(String),
-        name: 'Name'
+        name: 'Create'
+      })
+    })
+  })
+
+  // put /organization
+  describe('/organization', () => {
+    test('should save organization', async () => {
+      const {
+        authorization: { token: { hash } = { hash: '' } }
+      } = spec.scenario
+
+      const { id: organization } = await spec.scenario.build.organization.create()
+
+      const { json } = await spec.application
+        .inject()
+        .put(`/organization/${organization}`)
+        .headers({ Authorization: `Bearer ${hash}` })
+        .body({
+          name: 'Save',
+          contact: {
+            mail: 'mail@example.com',
+            phone: '+5599999999999'
+          }
+        })
+        .end()
+
+      const response = json<OrganizationResponse>()
+
+      expect(response).toMatchObject({
+        id: expect.any(String),
+        name: 'Save',
+        contact: {
+          mail: 'mail@example.com',
+          phone: '+5599999999999'
+        }
       })
     })
   })

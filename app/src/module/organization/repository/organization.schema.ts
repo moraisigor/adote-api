@@ -33,7 +33,7 @@ export class Organization {
   @Prop({ type: String })
   image?: string
 
-  @Prop({ type: String, unique: true })
+  @Prop({ type: String, unique: true, sparse: true })
   document?: string
 
   @Prop({ type: Contact })

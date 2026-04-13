@@ -6,6 +6,7 @@ import type { BreedResponse } from '@/module/breed/breed.response'
 import { Kind } from '@/module/breed/type/kind.enum'
 import type { FavResponse } from '@/module/fav/fav.response'
 import type { LocationResponse } from '@/module/location/location.response'
+import type { OrganizationResponse } from '@/module/organization/organization.response'
 import type { PetResponse } from '@/module/pet/pet.response'
 import { Gender } from '@/module/pet/type/gender'
 import { Size } from '@/module/pet/type/size'
@@ -88,6 +89,22 @@ export class Scenario {
         const { json } = await this.application.inject().get('/location').query({ search: 'recife' }).end()
 
         return json<LocationResponse[]>()
+      }
+    },
+    organization: {
+      create: async () => {
+        const { token: { hash } = { hash: '' } } = this.authorization
+
+        const { json } = await this.application
+          .inject()
+          .post('/organization')
+          .headers({ Authorization: `Bearer ${hash}` })
+          .body({
+            name: 'Name'
+          })
+          .end()
+
+        return json<OrganizationResponse>()
       }
     },
     pet: {
@@ -198,6 +215,10 @@ export class Scenario {
     await this.authenticate()
 
     await this.build.configuration.breed()
+  }
+
+  async organization() {
+    await this.authenticate()
   }
 
   async post() {

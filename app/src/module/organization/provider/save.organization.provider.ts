@@ -20,7 +20,7 @@ export class SaveOrganizationProvider {
       'contact.phone': contact?.phone
     }
 
-    const organization = await this.repository.save(new Types.ObjectId(id), map, { new: true })
+    const organization = await this.repository.save(new Types.ObjectId(id), map, { returnDocument: 'after' })
 
     if (isNil(organization)) {
       throw new BadRequestException()
