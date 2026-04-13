@@ -11,46 +11,48 @@ describe('user module', async () => {
     await spec.scenario.user()
   })
 
-  // /user
-  test('should save user', async () => {
-    const {
-      authorization: { token: { hash } = { hash: '' } }
-    } = spec.scenario
+  // put /user
+  describe('/user', () => {
+    test('should save user', async () => {
+      const {
+        authorization: { token: { hash } = { hash: '' } }
+      } = spec.scenario
 
-    const [{ id: location }] = await spec.scenario.build.location.search()
+      const [{ id: location }] = await spec.scenario.build.location.search()
 
-    const { json } = await spec.application
-      .inject()
-      .put('/user')
-      .headers({ Authorization: `Bearer ${hash}` })
-      .body({
+      const { json } = await spec.application
+        .inject()
+        .put('/user')
+        .headers({ Authorization: `Bearer ${hash}` })
+        .body({
+          name: 'Name',
+          contact: {
+            mail: 'mail@example.com',
+            phone: '+5599999999999',
+            social: 'https://example.com/name'
+          },
+          location: location
+        })
+        .end()
+
+      const response = json<UserResponse>()
+
+      expect(response).toMatchObject({
+        id: expect.any(String),
+        key: expect.any(String),
+        phone: '+5599999999999',
         name: 'Name',
         contact: {
           mail: 'mail@example.com',
           phone: '+5599999999999',
           social: 'https://example.com/name'
         },
-        location: location
+        location: {
+          id: expect.any(String),
+          city: 'Recife',
+          state: 'Pernambuco'
+        }
       })
-      .end()
-
-    const response = json<UserResponse>()
-
-    expect(response).toMatchObject({
-      id: expect.any(String),
-      key: expect.any(String),
-      phone: '+5599999999999',
-      name: 'Name',
-      contact: {
-        mail: 'mail@example.com',
-        phone: '+5599999999999',
-        social: 'https://example.com/name'
-      },
-      location: {
-        id: expect.any(String),
-        city: 'Recife',
-        state: 'Pernambuco'
-      }
     })
   })
 
