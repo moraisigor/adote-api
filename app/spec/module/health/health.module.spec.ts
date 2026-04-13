@@ -9,14 +9,16 @@ describe('health module', async () => {
     await spec.start()
   })
 
-  // /health
-  test('should verify health', async () => {
-    const { json } = await spec.application.inject().get('/health').end()
+  // get /health
+  describe('/health', () => {
+    test('should verify health', async () => {
+      const { json } = await spec.application.inject().get('/health').end()
 
-    const response = json<{ state: boolean }>()
+      const response = json<{ state: boolean }>()
 
-    expect(response).toMatchObject({
-      state: true
+      expect(response).toMatchObject({
+        state: true
+      })
     })
   })
 
