@@ -11,7 +11,7 @@ describe('auth module', async () => {
     await spec.start()
   })
 
-  // /auth
+  // post /auth
   describe('/auth', () => {
     test('should start auth', async () => {
       const { json } = await spec.application
@@ -32,7 +32,7 @@ describe('auth module', async () => {
     })
   })
 
-  // /auth/key
+  // post /auth/key
   describe('/auth/key', () => {
     test('should auth user with key', async () => {
       const { key } = await spec.scenario.build.auth.auth()
@@ -54,7 +54,7 @@ describe('auth module', async () => {
     })
   })
 
-  // /auth/verify
+  // post /auth/verify
   describe('/auth/verify', () => {
     test('should auth user with code', async () => {
       const { phone } = await spec.scenario.build.auth.auth()
@@ -83,7 +83,7 @@ describe('auth module', async () => {
     })
   })
 
-  // /auth/renew
+  // post /auth/renew
   describe('/auth/renew', () => {
     test('should renew auth', async () => {
       const {
