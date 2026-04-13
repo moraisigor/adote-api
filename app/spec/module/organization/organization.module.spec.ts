@@ -11,26 +11,28 @@ describe('organization module', async () => {
     await spec.scenario.authenticate()
   })
 
-  // /organization
-  test('should create organization', async () => {
-    const {
-      authorization: { token: { hash } = { hash: '' } }
-    } = spec.scenario
+  // post /organization
+  describe('/organization', () => {
+    test('should create organization', async () => {
+      const {
+        authorization: { token: { hash } = { hash: '' } }
+      } = spec.scenario
 
-    const { json } = await spec.application
-      .inject()
-      .post('/organization')
-      .headers({ Authorization: `Bearer ${hash}` })
-      .body({
+      const { json } = await spec.application
+        .inject()
+        .post('/organization')
+        .headers({ Authorization: `Bearer ${hash}` })
+        .body({
+          name: 'Name'
+        })
+        .end()
+
+      const response = json<OrganizationResponse>()
+
+      expect(response).toMatchObject({
+        id: expect.any(String),
         name: 'Name'
       })
-      .end()
-
-    const response = json<OrganizationResponse>()
-
-    expect(response).toMatchObject({
-      id: expect.any(String),
-      name: 'Name'
     })
   })
 
