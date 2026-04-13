@@ -13,21 +13,24 @@ describe('location module', async () => {
     await spec.scenario.location()
   })
 
-  // /location?search=recife
-  test('', async () => {
-    const { json } = await spec.application.inject().get('/location').query({ search: 'recife' }).end()
+  // get /location
+  describe('/location', () => {
+    // /location?search=recife
+    test('should search location', async () => {
+      const { json } = await spec.application.inject().get('/location').query({ search: 'recife' }).end()
 
-    const response = json<LocationResponse[]>()
+      const response = json<LocationResponse[]>()
 
-    expect(response).toHaveLength(1)
+      expect(response).toHaveLength(1)
 
-    expect(response).toMatchObject([
-      {
-        id: expect.any(String),
-        city: 'Recife',
-        state: 'Pernambuco'
-      }
-    ])
+      expect(response).toMatchObject([
+        {
+          id: expect.any(String),
+          city: 'Recife',
+          state: 'Pernambuco'
+        }
+      ])
+    })
   })
 
   afterAll(async () => {
