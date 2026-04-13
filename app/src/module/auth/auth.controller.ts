@@ -15,14 +15,6 @@ import { AuthProvider } from './provider'
 export class AuthController {
   constructor(private readonly provider: AuthProvider) {}
 
-  @Post('key')
-  @Public()
-  @HttpCode(HttpStatus.OK)
-  @UseGuards(KeyGuard)
-  key(@Headers() header: Record<string, string>): Promise<TokenResponse> {
-    return this.provider.key.run(header['key'])
-  }
-
   @Post()
   @Public()
   @HttpCode(HttpStatus.OK)
@@ -30,6 +22,14 @@ export class AuthController {
     const { phone } = request
 
     return this.provider.phone.run(phone)
+  }
+
+  @Post('key')
+  @Public()
+  @HttpCode(HttpStatus.OK)
+  @UseGuards(KeyGuard)
+  key(@Headers() header: Record<string, string>): Promise<TokenResponse> {
+    return this.provider.key.run(header['key'])
   }
 
   @Post('verify')
