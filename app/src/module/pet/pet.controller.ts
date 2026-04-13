@@ -12,7 +12,7 @@ import type {
   SavePetParam,
   SavePetRequest
 } from './pet.request'
-import type { PetResponse } from './pet.response'
+import type { PetResponse, RemovePetResponse } from './pet.response'
 import { PetProvider } from './provider'
 
 @Controller('pet')
@@ -51,7 +51,7 @@ export class PetController {
   }
 
   @Delete(':id')
-  remove(@Param() param: RemovePetParam, @UserCurrent() user: User): Promise<void> {
+  remove(@Param() param: RemovePetParam, @UserCurrent() user: User): Promise<RemovePetResponse> {
     const { id } = param
     const { id: current } = user
 

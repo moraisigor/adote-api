@@ -31,3 +31,11 @@ export class PetResponse {
     this.breed = new BreedResponse(pet.breed as BreedDocument)
   }
 }
+
+export class RemovePetResponse {
+  readonly id: string
+
+  constructor(id: string) {
+    this.id = id
+  }
+}

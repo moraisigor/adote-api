@@ -1,4 +1,4 @@
-import type { PetResponse } from '@/module/pet/pet.response'
+import type { PetResponse, RemovePetResponse } from '@/module/pet/pet.response'
 import { Gender } from '@/module/pet/type/gender'
 import { Size } from '@/module/pet/type/size'
 
@@ -47,6 +47,29 @@ describe('pet module', async () => {
           id: expect.any(String),
           name: 'Buldogue Inglês'
         }
+      })
+    })
+  })
+
+  // delete /pet/id
+  describe('/pet/id', () => {
+    test('should remove pet', async () => {
+      const {
+        authorization: { token: { hash } = { hash: '' } }
+      } = spec.scenario
+
+      const { id: pet } = await spec.scenario.build.pet.create()
+
+      const { json } = await spec.application
+        .inject()
+        .delete(`/pet/${pet}`)
+        .headers({ Authorization: `Bearer ${hash}` })
+        .end()
+
+      const response = json<RemovePetResponse>()
+
+      expect(response).toMatchObject({
+        id: pet
       })
     })
   })
