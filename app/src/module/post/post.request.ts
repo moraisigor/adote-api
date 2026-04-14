@@ -84,10 +84,6 @@ export class SavePostRequest {
   @IsMongoId({ message: 'the location is invalid' })
   readonly location: string
 
-  @IsMongoId({ message: 'the organization is invalid' })
-  @IsOptional()
-  readonly organization?: string
-
   @IsBoolean()
   @Type(() => Boolean)
   readonly publish: boolean

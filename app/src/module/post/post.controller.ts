@@ -44,15 +44,10 @@ export class PostController {
   }
 
   @Put(':id')
-  save(
-    @Param() param: SavePostParam,
-    @Body() request: SavePostRequest,
-    @UserCurrent() user: User
-  ): Promise<PostResponse> {
+  save(@Param() param: SavePostParam, @Body() request: SavePostRequest): Promise<PostResponse> {
     const { id } = param
-    const { id: current } = user
 
-    return this.provider.save.run(id, request, current)
+    return this.provider.save.run(id, request)
   }
 
   @Put(':id/publish')
