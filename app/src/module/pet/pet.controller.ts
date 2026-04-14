@@ -20,8 +20,10 @@ export class PetController {
   constructor(private readonly provider: PetProvider) {}
 
   @Get()
-  list(@Query() request: ListPetRequest): Promise<PetResponse[]> {
-    return this.provider.list.run(request)
+  list(@Query() request: ListPetRequest, @UserCurrent() user: User): Promise<PetResponse[]> {
+    const { id } = user
+
+    return this.provider.list.run(request, id)
   }
 
   @Get(':id')
@@ -39,15 +41,10 @@ export class PetController {
   }
 
   @Put(':id')
-  save(
-    @Param() param: SavePetParam,
-    @Body() request: SavePetRequest,
-    @UserCurrent() user: User
-  ): Promise<PetResponse> {
+  save(@Param() param: SavePetParam, @Body() request: SavePetRequest): Promise<PetResponse> {
     const { id } = param
-    const { id: current } = user
 
-    return this.provider.save.run(id, request, current)
+    return this.provider.save.run(id, request)
   }
 
   @Delete(':id')

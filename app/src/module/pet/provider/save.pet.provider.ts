@@ -10,25 +10,17 @@ import { PetRepository } from '../repository/pet.repository'
 export class SavePetProvider {
   constructor(private readonly repository: PetRepository) {}
 
-  private build(request: SavePetRequest, user: string) {
-    const { name, size, gender, breed, organization } = request
+  async run(id: string, request: SavePetRequest): Promise<PetResponse> {
+    const { name, size, gender, breed } = request
 
-    const pet = {
+    const map: { [key: string]: unknown } = {
       name,
       size,
       gender,
       breed: new Types.ObjectId(breed)
     }
 
-    if (organization) {
-      return Object.assign(pet, { organization: new Types.ObjectId(organization) })
-    }
-
-    return Object.assign(pet, { user: new Types.ObjectId(user) })
-  }
-
-  async run(id: string, request: SavePetRequest, user: string): Promise<PetResponse> {
-    const pet = await this.repository.save(new Types.ObjectId(id), this.build(request, user), { new: true })
+    const pet = await this.repository.save(new Types.ObjectId(id), map, { returnDocument: 'after' })
 
     if (isNil(pet)) {
       throw new BadRequestException()

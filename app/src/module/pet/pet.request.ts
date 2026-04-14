@@ -29,6 +29,10 @@ export class ListPetRequest {
   @Min(1)
   @Type(() => Number)
   readonly amount: number
+
+  @IsMongoId({ message: 'the organization is invalid' })
+  @IsOptional()
+  readonly organization?: string
 }
 
 export class CreatePetRequest {
@@ -65,8 +69,4 @@ export class SavePetRequest {
 
   @IsMongoId({ message: 'the breed is invalid' })
   readonly breed: string
-
-  @IsMongoId({ message: 'the organization is invalid' })
-  @IsOptional()
-  readonly organization?: string
 }
