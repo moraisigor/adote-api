@@ -13,6 +13,41 @@ describe('pet module', async () => {
     await spec.scenario.pet()
   })
 
+  // list /pet
+  describe('/pet', () => {
+    test('should list pet', async () => {
+      const {
+        authorization: { token: { hash } = { hash: '' } }
+      } = spec.scenario
+
+      await spec.scenario.build.pet.create()
+
+      const { json } = await spec.application
+        .inject()
+        .get('/pet')
+        .headers({ Authorization: `Bearer ${hash}` })
+        .query({ page: '1', amount: '10' })
+        .end()
+
+      const response = json<PetResponse[]>()
+
+      expect(response).toHaveLength(1)
+
+      expect(response).toMatchObject([
+        {
+          id: expect.any(String),
+          name: 'Oreo',
+          size: Size.MEDIUM,
+          gender: Gender.MALE,
+          breed: {
+            id: expect.any(String),
+            name: 'Buldogue Inglês'
+          }
+        }
+      ])
+    })
+  })
+
   // post /pet
   describe('/pet', () => {
     test('should create pet', async () => {
