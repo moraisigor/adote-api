@@ -166,6 +166,61 @@ describe('post module', async () => {
     })
   })
 
+  // put /post/id
+  describe('/post/id', () => {
+    test('should save post', async () => {
+      const {
+        authorization: { token: { hash } = { hash: '' } }
+      } = spec.scenario
+
+      const { id } = await spec.scenario.build.post.create()
+
+      const [{ id: location }] = await spec.scenario.build.location.search()
+
+      const { json } = await spec.application
+        .inject()
+        .put(`/post/${id}`)
+        .headers({ Authorization: `Bearer ${hash}` })
+        .body({
+          image: ['image.jpg', 'image.jpg'],
+          location: location,
+          publish: true
+        })
+        .end()
+
+      const response = json<PostResponse>()
+
+      expect(response).toMatchObject({
+        id: expect.any(String),
+        image: ['image.jpg', 'image.jpg'],
+        pet: {
+          id: expect.any(String),
+          name: 'Oreo',
+          size: Size.MEDIUM,
+          gender: Gender.MALE,
+          breed: {
+            id: expect.any(String),
+            name: 'Buldogue Inglês'
+          }
+        },
+        location: {
+          id: expect.any(String),
+          city: 'Recife',
+          state: 'Pernambuco'
+        },
+        user: {
+          id: expect.any(String),
+          name: 'Name',
+          contact: {
+            mail: 'mail@example.com',
+            phone: '+5599999999999',
+            social: 'https://example.com/name'
+          }
+        }
+      })
+    })
+  })
+
   // delete /post/id
   describe('/post/id', () => {
     test('should remove post', async () => {
