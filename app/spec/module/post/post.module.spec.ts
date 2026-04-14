@@ -13,6 +13,56 @@ describe('post module', async () => {
     await spec.scenario.post()
   })
 
+  // get /post
+  describe('/post', () => {
+    test('should list post', async () => {
+      await spec.scenario.build.post.create()
+
+      const [{ id: location }] = await spec.scenario.build.location.search()
+
+      const { json } = await spec.application
+        .inject()
+        .get('/post')
+        .query({ page: '1', amount: '10', location: [location] })
+        .end()
+
+      const response = json<PostResponse[]>()
+
+      expect(response).toHaveLength(1)
+
+      expect(response).toMatchObject([
+        {
+          id: expect.any(String),
+          image: ['image.jpg'],
+          pet: {
+            id: expect.any(String),
+            name: 'Oreo',
+            size: Size.MEDIUM,
+            gender: Gender.MALE,
+            breed: {
+              id: expect.any(String),
+              name: 'Buldogue Inglês'
+            }
+          },
+          location: {
+            id: expect.any(String),
+            city: 'Recife',
+            state: 'Pernambuco'
+          },
+          user: {
+            id: expect.any(String),
+            name: 'Name',
+            contact: {
+              mail: 'mail@example.com',
+              phone: '+5599999999999',
+              social: 'https://example.com/name'
+            }
+          }
+        }
+      ])
+    })
+  })
+
   // post /post
   describe('/post', () => {
     test('should create post', async () => {
@@ -21,6 +71,7 @@ describe('post module', async () => {
       } = spec.scenario
 
       const { id: pet } = await spec.scenario.build.pet.create()
+      const [{ id: location }] = await spec.scenario.build.location.search()
 
       const { json } = await spec.application
         .inject()
@@ -29,6 +80,7 @@ describe('post module', async () => {
         .body({
           image: ['image.jpg'],
           pet: pet,
+          location: location,
           publish: true
         })
         .end()
@@ -48,6 +100,11 @@ describe('post module', async () => {
             name: 'Buldogue Inglês'
           }
         },
+        location: {
+          id: expect.any(String),
+          city: 'Recife',
+          state: 'Pernambuco'
+        },
         user: {
           id: expect.any(String),
           name: 'Name',
@@ -55,11 +112,6 @@ describe('post module', async () => {
             mail: 'mail@example.com',
             phone: '+5599999999999',
             social: 'https://example.com/name'
-          },
-          location: {
-            id: expect.any(String),
-            city: 'Recife',
-            state: 'Pernambuco'
           }
         }
       })
