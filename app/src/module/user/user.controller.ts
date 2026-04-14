@@ -3,6 +3,7 @@ import { Body, Controller, Delete, Get, HttpCode, HttpStatus, Param, Post, Put, 
 import type { User } from '@/type/token'
 
 import { Permission } from '@/decorator/permission.decorator'
+import { Public } from '@/decorator/public.decorator'
 import { UserCurrent } from '@/decorator/user.current.decorator'
 
 import { UserProvider } from './provider'
@@ -21,6 +22,7 @@ export class UserController {
   }
 
   @Get(':id')
+  @Public()
   get(@Param() param: GetUserParam): Promise<UserResponse> {
     const { id } = param
 
