@@ -34,15 +34,26 @@ export class PetResponse {
   }
 }
 
+class LocationResponse {
+  readonly id: string
+  readonly city: string
+  readonly state: string
+
+  constructor(location: LocationDocument) {
+    this.id = location.id
+    this.city = location.city
+    this.state = location.state
+  }
+}
+
 class UserResponse {
   readonly id: string
   readonly name?: string
   readonly image?: string
   readonly contact?: ContactResponse
-  readonly location?: LocationResponse
 
   constructor(user: UserDocument) {
-    const { contact, location } = user
+    const { contact } = user
 
     this.id = user.id
     this.name = user.name
@@ -53,10 +64,6 @@ class UserResponse {
 
       this.contact = new ContactResponse(mail, phone, social)
     }
-
-    if (location) {
-      this.location = new LocationResponse(location as LocationDocument)
-    }
   }
 }
 
@@ -65,10 +72,9 @@ class OrganizationResponse {
   readonly name: string
   readonly image?: string
   readonly contact?: ContactResponse
-  readonly location?: LocationResponse
 
   constructor(organization: OrganizationDocument) {
-    const { contact, location } = organization
+    const { contact } = organization
 
     this.id = organization.id
     this.name = organization.name
@@ -78,10 +84,6 @@ class OrganizationResponse {
       const { mail, phone, social } = contact
 
       this.contact = new ContactResponse(mail, phone, social)
-    }
-
-    if (location) {
-      this.location = new LocationResponse(location as LocationDocument)
     }
   }
 }
@@ -98,31 +100,21 @@ class ContactResponse {
   }
 }
 
-class LocationResponse {
-  readonly id: string
-  readonly city: string
-  readonly state: string
-
-  constructor(location: LocationDocument) {
-    this.id = location.id
-    this.city = location.city
-    this.state = location.state
-  }
-}
-
 export class PostResponse {
   readonly id: string
   readonly image: string[]
   readonly pet: PetResponse
+  readonly location: LocationResponse
   readonly user?: UserResponse
   readonly organization?: OrganizationResponse
 
   constructor(post: PostDocument) {
-    const { pet, user, organization } = post
+    const { pet, location, user, organization } = post
 
     this.id = post.id
     this.image = post.image
     this.pet = new PetResponse(pet as PetDocument)
+    this.location = new LocationResponse(location as LocationDocument)
 
     if (user) {
       this.user = new UserResponse(user as UserDocument)

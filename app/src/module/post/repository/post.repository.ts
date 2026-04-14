@@ -16,18 +16,21 @@ export class PostRepository {
     projection?: ProjectionType<Post>,
     options?: QueryOptions<Post>
   ): Promise<PostDocument[]> {
-    return this.model
-      .find(query)
-      .projection(projection)
-      .options(options)
-      .skip(skip)
-      .limit(limit)
-      .populate([
-        { path: 'pet', populate: { path: 'breed' } },
-        { path: 'user', populate: { path: 'location' } },
-        { path: 'organization', populate: { path: 'location' } }
-      ])
-      .exec()
+    return (
+      this.model
+        .find(query)
+        // .projection(projection)
+        // .options(options)
+        .skip(skip)
+        .limit(limit)
+        .populate([
+          { path: 'pet', populate: { path: 'breed' } },
+          { path: 'location' },
+          { path: 'user', populate: { path: 'contact' } },
+          { path: 'organization', populate: { path: 'contact' } }
+        ])
+        .exec()
+    )
   }
 
   find(
@@ -39,8 +42,9 @@ export class PostRepository {
       .findOne(query, projection, options)
       .populate([
         { path: 'pet', populate: { path: 'breed' } },
-        { path: 'user', populate: { path: 'location' } },
-        { path: 'organization', populate: { path: 'location' } }
+        { path: 'location' },
+        { path: 'user', populate: { path: 'contact' } },
+        { path: 'organization', populate: { path: 'contact' } }
       ])
       .exec()
   }
@@ -58,8 +62,9 @@ export class PostRepository {
       .then((model) =>
         model.populate([
           { path: 'pet', populate: { path: 'breed' } },
-          { path: 'user', populate: { path: 'location' } },
-          { path: 'organization', populate: { path: 'location' } }
+          { path: 'location' },
+          { path: 'user', populate: { path: 'contact' } },
+          { path: 'organization', populate: { path: 'contact' } }
         ])
       )
   }
@@ -73,8 +78,9 @@ export class PostRepository {
       .findByIdAndUpdate(id, post, options)
       .populate([
         { path: 'pet', populate: { path: 'breed' } },
-        { path: 'user', populate: { path: 'location' } },
-        { path: 'organization', populate: { path: 'location' } }
+        { path: 'location' },
+        { path: 'user', populate: { path: 'contact' } },
+        { path: 'organization', populate: { path: 'contact' } }
       ])
       .exec()
   }

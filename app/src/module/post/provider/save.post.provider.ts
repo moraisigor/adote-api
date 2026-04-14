@@ -3,7 +3,7 @@ import { NotFoundException } from '@nestjs/common'
 import { isNil } from 'lodash'
 import { Types } from 'mongoose'
 
-import type { SavePostRequest } from '../post.request'
+import { SavePostRequest } from '../post.request'
 import { PostResponse } from '../post.response'
 import { PostRepository } from '../repository/post.repository'
 
@@ -11,10 +11,11 @@ export class SavePostProvider {
   constructor(private readonly repository: PostRepository) {}
 
   private build(request: SavePostRequest, user: string) {
-    const { image, organization, publish } = request
+    const { image, location, organization, publish } = request
 
     const post = {
       image,
+      location: new Types.ObjectId(location),
       publish
     }
 

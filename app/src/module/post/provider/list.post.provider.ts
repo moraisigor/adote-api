@@ -1,4 +1,6 @@
-import type { ListPostRequest } from '../post.request'
+import { Types } from 'mongoose'
+
+import { ListPostRequest } from '../post.request'
 import { PostResponse } from '../post.response'
 import { PostRepository } from '../repository/post.repository'
 
@@ -10,7 +12,9 @@ export class ListPostProvider {
 
     const skip = (page - 1) * amount
 
-    const list = await this.repository.list(skip, amount, { location })
+    const list = await this.repository.list(skip, amount, {
+      location: { $in: location.map((e) => new Types.ObjectId(e)) }
+    })
 
     return list.map((e) => new PostResponse(e))
   }

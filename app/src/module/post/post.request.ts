@@ -1,5 +1,6 @@
-import { Type } from 'class-transformer'
+import { Transform, Type, type TransformFnParams } from 'class-transformer'
 import {
+  isArray,
   IsArray,
   IsBoolean,
   IsMongoId,
@@ -41,8 +42,16 @@ export class ListPostRequest {
   @Type(() => Number)
   readonly amount: number
 
-  @IsMongoId({ message: 'the location is invalid' })
-  readonly location: string
+  @IsArray()
+  @IsMongoId({ each: true, message: 'the location is invalid' })
+  @Transform(({ value }: TransformFnParams) => {
+    if (isArray(value)) {
+      return value
+    }
+
+    return [value]
+  })
+  readonly location: string[]
 }
 
 export class CreatePostRequest {
@@ -53,6 +62,9 @@ export class CreatePostRequest {
 
   @IsMongoId({ message: 'the pet is invalid' })
   readonly pet: string
+
+  @IsMongoId({ message: 'the location is invalid' })
+  readonly location: string
 
   @IsMongoId({ message: 'the organization is invalid' })
   @IsOptional()
@@ -68,6 +80,9 @@ export class SavePostRequest {
   @IsString({ each: true })
   @IsNotEmpty({ each: true })
   readonly image: string[]
+
+  @IsMongoId({ message: 'the location is invalid' })
+  readonly location: string
 
   @IsMongoId({ message: 'the organization is invalid' })
   @IsOptional()

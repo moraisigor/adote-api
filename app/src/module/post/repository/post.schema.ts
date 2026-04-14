@@ -2,6 +2,7 @@ import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose'
 
 import { Types, type HydratedDocument } from 'mongoose'
 
+import type { LocationDocument } from '@/module/location/repository/location.schema'
 import type { OrganizationDocument } from '@/module/organization/repository/organization.schema'
 import type { PetDocument } from '@/module/pet/repository/pet.schema'
 import type { UserDocument } from '@/module/user/repository/user.schema'
@@ -19,6 +20,9 @@ export class Post {
 
   @Prop({ type: Types.ObjectId, ref: 'Pet', required: true })
   pet: Types.ObjectId | PetDocument
+
+  @Prop({ type: Types.ObjectId, ref: 'Location' })
+  location: Types.ObjectId | LocationDocument
 
   @Prop({ type: Types.ObjectId, ref: 'User' })
   user?: Types.ObjectId | UserDocument

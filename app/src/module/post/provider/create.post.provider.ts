@@ -1,6 +1,6 @@
 import { Types } from 'mongoose'
 
-import type { CreatePostRequest } from '../post.request'
+import { CreatePostRequest } from '../post.request'
 import { PostResponse } from '../post.response'
 import { PostRepository } from '../repository/post.repository'
 
@@ -8,11 +8,12 @@ export class CreatePostProvider {
   constructor(private readonly repository: PostRepository) {}
 
   private build(request: CreatePostRequest, user: string) {
-    const { image, pet, organization, publish } = request
+    const { image, pet, location, organization, publish } = request
 
     const post = {
       image,
       pet: new Types.ObjectId(pet),
+      location: new Types.ObjectId(location),
       publish
     }
 
