@@ -1,4 +1,5 @@
 import { CacheModule } from '@nestjs/cache-manager'
+import { ValidationPipe } from '@nestjs/common'
 import { ConfigModule } from '@nestjs/config'
 import { RouterModule } from '@nestjs/core'
 import { JwtModule } from '@nestjs/jwt'
@@ -67,6 +68,8 @@ export class Spec {
     }).compile()
 
     const application = module.createNestApplication<NestFastifyApplication>(new FastifyAdapter())
+
+    application.useGlobalPipes(new ValidationPipe({ transform: true }))
 
     const scenario = new Scenario(application)
 

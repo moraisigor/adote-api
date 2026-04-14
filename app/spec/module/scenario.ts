@@ -136,6 +136,8 @@ export class Scenario {
 
         const { id: pet } = await this.build.pet.create()
 
+        const [{ id: location }] = await this.build.location.search()
+
         const { json } = await this.application
           .inject()
           .post('/post')
@@ -143,6 +145,7 @@ export class Scenario {
           .body({
             image: ['image.jpg'],
             pet: pet,
+            location: location,
             publish: true
           })
           .end()
@@ -211,14 +214,14 @@ export class Scenario {
     await this.build.configuration.location()
   }
 
+  async organization() {
+    await this.authenticate()
+  }
+
   async pet() {
     await this.authenticate()
 
     await this.build.configuration.breed()
-  }
-
-  async organization() {
-    await this.authenticate()
   }
 
   async post() {
