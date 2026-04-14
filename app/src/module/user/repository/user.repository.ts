@@ -16,7 +16,12 @@ export class UserRepository {
     projection?: ProjectionType<User>,
     options?: QueryOptions<User>
   ): Promise<UserDocument[]> {
-    return this.model.find(query).projection(projection).options(options).exec()
+    return this.model
+      .find(query)
+      .projection(projection)
+      .options(options)
+      .populate([{ path: 'contact' }, { path: 'location' }])
+      .exec()
   }
 
   find(
@@ -24,7 +29,10 @@ export class UserRepository {
     projection?: ProjectionType<User>,
     options?: QueryOptions<User>
   ): Promise<UserDocument | null> {
-    return this.model.findOne(query, projection, options).exec()
+    return this.model
+      .findOne(query, projection, options)
+      .populate([{ path: 'contact' }, { path: 'location' }])
+      .exec()
   }
 
   // prettier-ignore
@@ -44,7 +52,7 @@ export class UserRepository {
   ): Promise<UserDocument | null> {
     return this.model
       .findByIdAndUpdate(id, user, options)
-      .populate([{ path: 'location' }])
+      .populate([{ path: 'contact' }, { path: 'location' }])
       .exec()
   }
 
