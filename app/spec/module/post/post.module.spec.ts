@@ -63,6 +63,54 @@ describe('post module', async () => {
     })
   })
 
+  // get /post/id
+  describe('/post/id', () => {
+    test('should get post', async () => {
+      const {
+        authorization: { token: { hash } = { hash: '' } }
+      } = spec.scenario
+
+      const { id: post } = await spec.scenario.build.post.create()
+
+      const { json } = await spec.application
+        .inject()
+        .get(`/post/${post}`)
+        .headers({ Authorization: `Bearer ${hash}` })
+        .end()
+
+      const response = json<PostResponse>()
+
+      expect(response).toMatchObject({
+        id: post,
+        image: ['image.jpg'],
+        pet: {
+          id: expect.any(String),
+          name: 'Oreo',
+          size: Size.MEDIUM,
+          gender: Gender.MALE,
+          breed: {
+            id: expect.any(String),
+            name: 'Buldogue Inglês'
+          }
+        },
+        location: {
+          id: expect.any(String),
+          city: 'Recife',
+          state: 'Pernambuco'
+        },
+        user: {
+          id: expect.any(String),
+          name: 'Name',
+          contact: {
+            mail: 'mail@example.com',
+            phone: '+5599999999999',
+            social: 'https://example.com/name'
+          }
+        }
+      })
+    })
+  })
+
   // post /post
   describe('/post', () => {
     test('should create post', async () => {
