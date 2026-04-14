@@ -1,3 +1,4 @@
+import { Kind } from '@/module/breed/type/kind'
 import type { PetResponse, RemovePetResponse } from '@/module/pet/pet.response'
 import { Gender } from '@/module/pet/type/gender'
 import { Size } from '@/module/pet/type/size'
@@ -37,6 +38,7 @@ describe('pet module', async () => {
         {
           id: expect.any(String),
           name: 'Oreo',
+          kind: Kind.DOG,
           size: Size.MEDIUM,
           gender: Gender.MALE,
           breed: {
@@ -68,6 +70,7 @@ describe('pet module', async () => {
       expect(response).toMatchObject({
         id: pet,
         name: 'Oreo',
+        kind: Kind.DOG,
         size: Size.MEDIUM,
         gender: Gender.MALE,
         breed: {
@@ -95,6 +98,7 @@ describe('pet module', async () => {
         .headers({ Authorization: `Bearer ${hash}` })
         .body({
           name: 'Oreo',
+          kind: Kind.DOG,
           size: Size.MEDIUM,
           gender: Gender.MALE,
           breed: breed
@@ -106,6 +110,7 @@ describe('pet module', async () => {
       expect(response).toMatchObject({
         id: expect.any(String),
         name: 'Oreo',
+        kind: Kind.DOG,
         size: Size.MEDIUM,
         gender: Gender.MALE,
         breed: {
@@ -135,6 +140,7 @@ describe('pet module', async () => {
         .headers({ Authorization: `Bearer ${hash}` })
         .body({
           name: 'Estopinha',
+          kind: Kind.DOG,
           size: Size.MEDIUM,
           gender: Gender.FEMALE,
           breed: breed
@@ -145,6 +151,7 @@ describe('pet module', async () => {
 
       expect(response).toMatchObject({
         name: 'Estopinha',
+        kind: Kind.DOG,
         size: Size.MEDIUM,
         gender: Gender.FEMALE,
         breed: {

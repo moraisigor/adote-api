@@ -3,6 +3,7 @@ import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose'
 import { Types, type HydratedDocument } from 'mongoose'
 
 import type { BreedDocument } from '@/module/breed/repository/breed.schema'
+import { Kind } from '@/module/breed/type/kind'
 import type { OrganizationDocument } from '@/module/organization/repository/organization.schema'
 import type { UserDocument } from '@/module/user/repository/user.schema'
 
@@ -19,6 +20,9 @@ export type PetDocument = HydratedDocument<Pet>
 export class Pet {
   @Prop({ type: String, required: true })
   name: string
+
+  @Prop({ type: String, enum: Kind, required: true })
+  kind: Kind
 
   @Prop({ type: String, enum: Size, required: true })
   size: Size

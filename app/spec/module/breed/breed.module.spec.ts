@@ -1,7 +1,7 @@
 import { afterAll, beforeAll, describe, expect, test } from 'bun:test'
 
 import type { BreedResponse } from '@/module/breed/breed.response'
-import { Kind } from '@/module/breed/type/kind.enum'
+import { Kind } from '@/module/breed/type/kind'
 
 import { Spec } from '../spec'
 

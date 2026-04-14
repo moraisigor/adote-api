@@ -4,6 +4,8 @@ import { IsEnum, IsMongoId, IsNumber, IsOptional, IsString, Length, Min } from '
 import { Gender } from './type/gender'
 import { Size } from './type/size'
 
+import { Kind } from '../breed/type/kind'
+
 export class GetPetParam {
   @IsMongoId({ message: 'the id is invalid' })
   readonly id: string
@@ -41,6 +43,9 @@ export class CreatePetRequest {
   @Transform(({ value }: TransformFnParams) => value?.trim())
   readonly name: string
 
+  @IsEnum(Kind)
+  readonly kind: Kind
+
   @IsEnum(Size)
   readonly size: Size
 
@@ -60,6 +65,9 @@ export class SavePetRequest {
   @Length(2, 20)
   @Transform(({ value }: TransformFnParams) => value?.trim())
   readonly name: string
+
+  @IsEnum(Kind)
+  readonly kind: Kind
 
   @IsEnum(Size)
   readonly size: Size

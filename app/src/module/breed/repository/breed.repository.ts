@@ -5,7 +5,7 @@ import { Model, type ProjectionType, type QueryFilter, type QueryOptions } from 
 
 import { Breed, type BreedDocument } from './breed.schema'
 
-import type { Kind } from '../type/kind.enum'
+import type { Kind } from '../type/kind'
 
 @Injectable()
 export class BreedRepository {

@@ -3,7 +3,7 @@ import type { NestFastifyApplication } from '@nestjs/platform-fastify'
 import type { AuthResponse, TokenResponse } from '@/module/auth/auth.response'
 import type { Token } from '@/module/auth/type/token'
 import type { BreedResponse } from '@/module/breed/breed.response'
-import { Kind } from '@/module/breed/type/kind.enum'
+import { Kind } from '@/module/breed/type/kind'
 import type { FavResponse } from '@/module/fav/fav.response'
 import type { LocationResponse } from '@/module/location/location.response'
 import type { OrganizationResponse } from '@/module/organization/organization.response'
@@ -121,6 +121,7 @@ export class Scenario {
           .headers({ Authorization: `Bearer ${hash}` })
           .body({
             name,
+            kind: Kind.DOG,
             size: Size.MEDIUM,
             gender: Gender.MALE,
             breed: breed

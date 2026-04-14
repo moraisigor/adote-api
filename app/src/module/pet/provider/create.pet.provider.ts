@@ -8,10 +8,11 @@ export class CreatePetProvider {
   constructor(private readonly repository: PetRepository) {}
 
   private build(request: CreatePetRequest, user: string) {
-    const { name, size, gender, breed, organization } = request
+    const { name, kind, size, gender, breed, organization } = request
 
     const pet = {
       name,
+      kind,
       size,
       gender,
       breed: new Types.ObjectId(breed)

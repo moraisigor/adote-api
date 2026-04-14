@@ -11,10 +11,11 @@ export class SavePetProvider {
   constructor(private readonly repository: PetRepository) {}
 
   async run(id: string, request: SavePetRequest): Promise<PetResponse> {
-    const { name, size, gender, breed } = request
+    const { name, kind, size, gender, breed } = request
 
     const map: { [key: string]: unknown } = {
       name,
+      kind,
       size,
       gender,
       breed: new Types.ObjectId(breed)

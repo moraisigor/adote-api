@@ -3,6 +3,8 @@ import { InjectModel } from '@nestjs/mongoose'
 
 import type { Model, ProjectionType, QueryFilter, QueryOptions, Types } from 'mongoose'
 
+import type { Kind } from '@/module/breed/type/kind'
+
 import { Pet, type PetDocument } from './pet.schema'
 
 import type { Gender } from '../type/gender'
@@ -45,6 +47,7 @@ export class PetRepository {
   // prettier-ignore
   create(pet: {
     name: string,
+    kind: Kind,
     size: Size,
     gender: Gender,
     breed: Types.ObjectId,

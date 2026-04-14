@@ -2,7 +2,7 @@ import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose'
 
 import type { HydratedDocument } from 'mongoose'
 
-import { Kind } from '../type/kind.enum'
+import { Kind } from '../type/kind'
 
 export type BreedDocument = HydratedDocument<Breed>
 
