@@ -92,7 +92,7 @@ export class Scenario {
       }
     },
     organization: {
-      create: async () => {
+      create: async (name: string = 'Name') => {
         const { token: { hash } = { hash: '' } } = this.authorization
 
         const { json } = await this.application
@@ -100,7 +100,7 @@ export class Scenario {
           .post('/organization')
           .headers({ Authorization: `Bearer ${hash}` })
           .body({
-            name: 'Name'
+            name
           })
           .end()
 
@@ -108,7 +108,7 @@ export class Scenario {
       }
     },
     pet: {
-      create: async () => {
+      create: async (name: string = 'Oreo') => {
         const { token: { hash } = { hash: '' } } = this.authorization
 
         const list = await this.build.breed.list()
@@ -120,7 +120,7 @@ export class Scenario {
           .post('/pet')
           .headers({ Authorization: `Bearer ${hash}` })
           .body({
-            name: 'Oreo',
+            name,
             size: Size.MEDIUM,
             gender: Gender.MALE,
             breed: breed
@@ -154,7 +154,7 @@ export class Scenario {
       }
     },
     user: {
-      save: async () => {
+      save: async (name: string = 'Name') => {
         const { token: { hash } = { hash: '' } } = this.authorization
 
         const [{ id: location }] = await this.build.location.search()
@@ -164,7 +164,7 @@ export class Scenario {
           .put('/user')
           .headers({ Authorization: `Bearer ${hash}` })
           .body({
-            name: 'Name',
+            name,
             contact: {
               mail: 'mail@example.com',
               phone: '+5599999999999',

@@ -16,7 +16,7 @@ import {
   SaveOrganizationParam,
   SaveOrganizationRequest
 } from './organization.request'
-import { OrganizationResponse } from './organization.response'
+import { OrganizationResponse, RemoveOrganizationResponse } from './organization.response'
 import { OrganizationProvider } from './provider'
 import { OrganizationRole } from './type/organization.role'
 
@@ -60,9 +60,8 @@ export class OrganizationController {
   }
 
   @Delete(':id')
-  @HttpCode(HttpStatus.NO_CONTENT)
   @OrganizationPermission([OrganizationRole.MANAGER])
-  remove(@Param() param: RemoveOrganizationParam): Promise<void> {
+  remove(@Param() param: RemoveOrganizationParam): Promise<RemoveOrganizationResponse> {
     const { id } = param
 
     return this.provider.remove.run(id)

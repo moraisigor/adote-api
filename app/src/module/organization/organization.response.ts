@@ -30,3 +30,11 @@ export class OrganizationResponse {
     }
   }
 }
+
+export class RemoveOrganizationResponse {
+  readonly id: string
+
+  constructor(id: string) {
+    this.id = id
+  }
+}
