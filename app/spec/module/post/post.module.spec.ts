@@ -221,6 +221,31 @@ describe('post module', async () => {
     })
   })
 
+  // put /post/id/publish
+  describe('/post/id/publish', () => {
+    test('should publish post', async () => {
+      const {
+        authorization: { token: { hash } = { hash: '' } }
+      } = spec.scenario
+
+      const { id } = await spec.scenario.build.post.create()
+
+      const { json } = await spec.application
+        .inject()
+        .put(`/post/${id}/publish`)
+        .headers({ Authorization: `Bearer ${hash}` })
+        .body({ publish: true })
+        .end()
+
+      const response = json<PostResponse>()
+
+      expect(response).toMatchObject({
+        id: expect.any(String),
+        publish: true
+      })
+    })
+  })
+
   // delete /post/id
   describe('/post/id', () => {
     test('should remove post', async () => {

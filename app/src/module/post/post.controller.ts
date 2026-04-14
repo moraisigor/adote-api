@@ -15,7 +15,7 @@ import {
   SavePostParam,
   SavePostRequest
 } from './post.request'
-import type { PostResponse, RemovePostResponse } from './post.response'
+import type { PostResponse, PublishPostResponse, RemovePostResponse } from './post.response'
 import { PostProvider } from './provider'
 
 @Controller('post')
@@ -55,7 +55,7 @@ export class PostController {
     @Param() param: PublishPostParam,
     @Body() request: PublishPostRequest,
     @UserCurrent() user: User
-  ): Promise<void> {
+  ): Promise<PublishPostResponse> {
     const { id } = param
     const { publish } = request
     const { id: current } = user

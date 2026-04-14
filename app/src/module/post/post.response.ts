@@ -126,6 +126,16 @@ export class PostResponse {
   }
 }
 
+export class PublishPostResponse {
+  readonly id: string
+  readonly publish: boolean
+
+  constructor(post: PostDocument) {
+    this.id = post.id
+    this.publish = post.publish
+  }
+}
+
 export class RemovePostResponse {
   readonly id: string
 
