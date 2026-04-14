@@ -1,4 +1,4 @@
-import type { ListPetRequest } from '../pet.request'
+import { ListPetRequest } from '../pet.request'
 import { PetResponse } from '../pet.response'
 import { PetRepository } from '../repository/pet.repository'
 

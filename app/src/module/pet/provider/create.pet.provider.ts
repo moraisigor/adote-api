@@ -1,6 +1,6 @@
 import { Types } from 'mongoose'
 
-import type { CreatePetRequest } from '../pet.request'
+import { CreatePetRequest } from '../pet.request'
 import { PetResponse } from '../pet.response'
 import { PetRepository } from '../repository/pet.repository'
 

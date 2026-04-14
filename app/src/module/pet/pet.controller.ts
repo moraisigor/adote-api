@@ -4,7 +4,7 @@ import type { User } from '@/type/token'
 
 import { UserCurrent } from '@/decorator/user.current.decorator'
 
-import type {
+import {
   CreatePetRequest,
   GetPetParam,
   ListPetRequest,

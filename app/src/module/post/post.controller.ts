@@ -5,7 +5,7 @@ import type { User } from '@/type/token'
 import { Public } from '@/decorator/public.decorator'
 import { UserCurrent } from '@/decorator/user.current.decorator'
 
-import type {
+import {
   CreatePostRequest,
   GetPostParam,
   ListPostRequest,
