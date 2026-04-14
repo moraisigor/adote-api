@@ -48,6 +48,36 @@ describe('pet module', async () => {
     })
   })
 
+  // get /pet/id
+  describe('/pet/id', () => {
+    test('should get pet', async () => {
+      const {
+        authorization: { token: { hash } = { hash: '' } }
+      } = spec.scenario
+
+      const { id: pet } = await spec.scenario.build.pet.create()
+
+      const { json } = await spec.application
+        .inject()
+        .get(`/pet/${pet}`)
+        .headers({ Authorization: `Bearer ${hash}` })
+        .end()
+
+      const response = json<PetResponse>()
+
+      expect(response).toMatchObject({
+        id: pet,
+        name: 'Oreo',
+        size: Size.MEDIUM,
+        gender: Gender.MALE,
+        breed: {
+          id: expect.any(String),
+          name: 'Buldogue Inglês'
+        }
+      })
+    })
+  })
+
   // post /pet
   describe('/pet', () => {
     test('should create pet', async () => {
@@ -81,6 +111,45 @@ describe('pet module', async () => {
         breed: {
           id: expect.any(String),
           name: 'Buldogue Inglês'
+        }
+      })
+    })
+  })
+
+  // put /pet/id
+  describe('/pet/id', () => {
+    test('should save pet', async () => {
+      const {
+        authorization: { token: { hash } = { hash: '' } }
+      } = spec.scenario
+
+      const { id } = await spec.scenario.build.pet.create()
+
+      const list = await spec.scenario.build.breed.list()
+
+      const { id: breed } = list.find((e) => e.name === 'Sem Raça Definida') ?? { id: null }
+
+      const { json } = await spec.application
+        .inject()
+        .put(`/pet/${id}`)
+        .headers({ Authorization: `Bearer ${hash}` })
+        .body({
+          name: 'Estopinha',
+          size: Size.MEDIUM,
+          gender: Gender.FEMALE,
+          breed: breed
+        })
+        .end()
+
+      const response = json<PetResponse>()
+
+      expect(response).toMatchObject({
+        name: 'Estopinha',
+        size: Size.MEDIUM,
+        gender: Gender.FEMALE,
+        breed: {
+          id: expect.any(String),
+          name: 'Sem Raça Definida'
         }
       })
     })
