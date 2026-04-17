@@ -1,3 +1,5 @@
+import { HttpStatus } from '@nestjs/common'
+
 import { afterAll, beforeAll, describe, expect, test } from 'bun:test'
 
 import type { BreedResponse } from '@/module/breed/breed.response'
@@ -18,11 +20,17 @@ describe('breed module', async () => {
   describe('/breed', () => {
     // /breed?kind=cat
     test('should list breed with kind cat', async () => {
-      const { json } = await spec.application.inject().get('/breed').query({ kind: Kind.CAT }).end()
+      const { statusCode: status, json } = await spec.application
+        .inject()
+        .get('/breed')
+        .query({ kind: Kind.CAT })
+        .end()
 
       const response = json<BreedResponse[]>()
 
       const breed = response.find((e) => e.name === 'Sem Raça Definida')
+
+      expect(status).toBe(HttpStatus.OK)
 
       expect(response).toHaveLength(25)
 
@@ -34,11 +42,17 @@ describe('breed module', async () => {
 
     // /breed?kind=dog
     test('should list breed with kind dog', async () => {
-      const { json } = await spec.application.inject().get('/breed').query({ kind: Kind.DOG }).end()
+      const { statusCode: status, json } = await spec.application
+        .inject()
+        .get('/breed')
+        .query({ kind: Kind.DOG })
+        .end()
 
       const response = json<BreedResponse[]>()
 
       const breed = response.find((e) => e.name === 'Buldogue Inglês')
+
+      expect(status).toBe(HttpStatus.OK)
 
       expect(response).toHaveLength(42)
 
