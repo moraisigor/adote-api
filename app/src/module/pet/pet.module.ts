@@ -6,8 +6,10 @@ import { PetProvider } from './provider'
 import { PetRepository } from './repository/pet.repository'
 import { Pet, PetSchema } from './repository/pet.schema'
 
+import { PermissionModule } from '../permission/permission.module'
+
 @Module({
-  imports: [MongooseModule.forFeature([{ name: Pet.name, schema: PetSchema }])],
+  imports: [MongooseModule.forFeature([{ name: Pet.name, schema: PetSchema }]), PermissionModule],
   providers: [PetProvider, PetRepository],
   controllers: [PetController]
 })

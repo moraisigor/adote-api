@@ -11,6 +11,12 @@ import type { OrganizationRole } from '../type/organization.role'
 export class OrganizationRepository {
   constructor(@InjectModel(Organization.name) private readonly model: Model<Organization>) {}
 
+  async exists(query: QueryFilter<Organization>) {
+    const result = await this.model.exists(query).exec()
+
+    return Boolean(result)
+  }
+
   list(
     query?: QueryFilter<Organization>,
     projection?: ProjectionType<Organization>,

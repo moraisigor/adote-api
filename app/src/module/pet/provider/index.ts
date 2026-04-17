@@ -1,5 +1,7 @@
 import { Injectable } from '@nestjs/common'
 
+import { PermissionProvider } from '@/module/permission/provider/permission.provider'
+
 import { CreatePetProvider } from './create.pet.provider'
 import { GetPetProvider } from './get.pet.provider'
 import { ListPetProvider } from './list.pet.provider'
@@ -16,11 +18,14 @@ export class PetProvider {
   readonly save: SavePetProvider
   readonly remove: RemovePetProvider
 
-  constructor(private readonly repository: PetRepository) {
+  constructor(
+    private readonly permission: PermissionProvider,
+    private readonly repository: PetRepository
+  ) {
     this.get = new GetPetProvider(this.repository)
     this.list = new ListPetProvider(this.repository)
     this.create = new CreatePetProvider(this.repository)
     this.save = new SavePetProvider(this.repository)
-    this.remove = new RemovePetProvider(this.repository)
+    this.remove = new RemovePetProvider(this.permission, this.repository)
   }
 }

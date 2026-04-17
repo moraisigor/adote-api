@@ -57,18 +57,18 @@ describe('pet module', async () => {
         authorization: { token: { hash } = { hash: '' } }
       } = spec.scenario
 
-      const { id: pet } = await spec.scenario.build.pet.create()
+      const { id } = await spec.scenario.build.pet.create()
 
       const { json } = await spec.application
         .inject()
-        .get(`/pet/${pet}`)
+        .get(`/pet/${id}`)
         .headers({ Authorization: `Bearer ${hash}` })
         .end()
 
       const response = json<PetResponse>()
 
       expect(response).toMatchObject({
-        id: pet,
+        id,
         name: 'Oreo',
         kind: Kind.DOG,
         size: Size.MEDIUM,
@@ -169,18 +169,18 @@ describe('pet module', async () => {
         authorization: { token: { hash } = { hash: '' } }
       } = spec.scenario
 
-      const { id: pet } = await spec.scenario.build.pet.create()
+      const { id } = await spec.scenario.build.pet.create()
 
       const { json } = await spec.application
         .inject()
-        .delete(`/pet/${pet}`)
+        .delete(`/pet/${id}`)
         .headers({ Authorization: `Bearer ${hash}` })
         .end()
 
       const response = json<RemovePetResponse>()
 
       expect(response).toMatchObject({
-        id: pet
+        id
       })
     })
   })
