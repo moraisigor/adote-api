@@ -1,3 +1,5 @@
+import { HttpStatus } from '@nestjs/common'
+
 import { afterAll, beforeAll, describe, expect, test } from 'bun:test'
 
 import type { LocationResponse } from '@/module/location/location.response'
@@ -17,9 +19,15 @@ describe('location module', async () => {
   describe('/location', () => {
     // /location?search=recife
     test('should search location', async () => {
-      const { json } = await spec.application.inject().get('/location').query({ search: 'recife' }).end()
+      const { statusCode: status, json } = await spec.application
+        .inject()
+        .get('/location')
+        .query({ search: 'recife' })
+        .end()
 
       const response = json<LocationResponse[]>()
+
+      expect(status).toBe(HttpStatus.OK)
 
       expect(response).toHaveLength(1)
 
