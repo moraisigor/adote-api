@@ -1,3 +1,5 @@
+import { HttpStatus } from '@nestjs/common'
+
 import { Gender } from '@/module/pet/type/gender'
 import { Size } from '@/module/pet/type/size'
 import type { PostResponse, RemovePostResponse } from '@/module/post/post.response'
@@ -20,13 +22,15 @@ describe('post module', async () => {
 
       const [{ id: location }] = await spec.scenario.build.location.search()
 
-      const { json } = await spec.application
+      const { statusCode: status, json } = await spec.application
         .inject()
         .get('/post')
         .query({ page: '1', amount: '10', location: [location] })
         .end()
 
       const response = json<PostResponse[]>()
+
+      expect(status).toBe(HttpStatus.OK)
 
       expect(response).toHaveLength(1)
 
@@ -72,13 +76,15 @@ describe('post module', async () => {
 
       const { id: post } = await spec.scenario.build.post.create()
 
-      const { json } = await spec.application
+      const { statusCode: status, json } = await spec.application
         .inject()
         .get(`/post/${post}`)
         .headers({ Authorization: `Bearer ${hash}` })
         .end()
 
       const response = json<PostResponse>()
+
+      expect(status).toBe(HttpStatus.OK)
 
       expect(response).toMatchObject({
         id: post,
@@ -121,7 +127,7 @@ describe('post module', async () => {
       const { id: pet } = await spec.scenario.build.pet.create()
       const [{ id: location }] = await spec.scenario.build.location.search()
 
-      const { json } = await spec.application
+      const { statusCode: status, json } = await spec.application
         .inject()
         .post('/post')
         .headers({ Authorization: `Bearer ${hash}` })
@@ -134,6 +140,8 @@ describe('post module', async () => {
         .end()
 
       const response = json<PostResponse>()
+
+      expect(status).toBe(HttpStatus.CREATED)
 
       expect(response).toMatchObject({
         id: expect.any(String),
@@ -177,7 +185,7 @@ describe('post module', async () => {
 
       const [{ id: location }] = await spec.scenario.build.location.search()
 
-      const { json } = await spec.application
+      const { statusCode: status, json } = await spec.application
         .inject()
         .put(`/post/${id}`)
         .headers({ Authorization: `Bearer ${hash}` })
@@ -189,6 +197,8 @@ describe('post module', async () => {
         .end()
 
       const response = json<PostResponse>()
+
+      expect(status).toBe(HttpStatus.OK)
 
       expect(response).toMatchObject({
         id: expect.any(String),
@@ -230,7 +240,7 @@ describe('post module', async () => {
 
       const { id } = await spec.scenario.build.post.create()
 
-      const { json } = await spec.application
+      const { statusCode: status, json } = await spec.application
         .inject()
         .put(`/post/${id}/publish`)
         .headers({ Authorization: `Bearer ${hash}` })
@@ -238,6 +248,8 @@ describe('post module', async () => {
         .end()
 
       const response = json<PostResponse>()
+
+      expect(status).toBe(HttpStatus.OK)
 
       expect(response).toMatchObject({
         id: expect.any(String),
@@ -255,13 +267,15 @@ describe('post module', async () => {
 
       const { id: post } = await spec.scenario.build.post.create()
 
-      const { json } = await spec.application
+      const { statusCode: status, json } = await spec.application
         .inject()
         .delete(`/post/${post}`)
         .headers({ Authorization: `Bearer ${hash}` })
         .end()
 
       const response = json<RemovePostResponse>()
+
+      expect(status).toBe(HttpStatus.OK)
 
       expect(response).toMatchObject({
         id: post
