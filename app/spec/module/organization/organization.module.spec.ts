@@ -24,7 +24,7 @@ describe('organization module', async () => {
       const response = json<OrganizationResponse>()
 
       expect(response).toMatchObject({
-        id: id,
+        id,
         name: 'Name'
       })
     })
@@ -80,7 +80,7 @@ describe('organization module', async () => {
       const response = json<OrganizationResponse>()
 
       expect(response).toMatchObject({
-        id: id,
+        id,
         name: 'Save',
         contact: {
           mail: 'mail@example.com',
@@ -108,7 +108,7 @@ describe('organization module', async () => {
       const response = json<RemoveOrganizationResponse>()
 
       expect(response).toMatchObject({
-        id: id
+        id
       })
     })
   })

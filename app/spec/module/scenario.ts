@@ -67,6 +67,15 @@ export class Scenario {
           .end()
 
         return json<LocationResponse[]>()
+      },
+      user: async () => {
+        const { json } = await this.application
+          .inject()
+          .post('/configuration/user')
+          .headers({ Authorization: `Basic ${this.BASIC_AUTHORIZATION}` })
+          .end()
+
+        return json<UserResponse>()
       }
     },
     fav: {
