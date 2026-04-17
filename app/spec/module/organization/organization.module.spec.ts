@@ -1,3 +1,5 @@
+import { HttpStatus } from '@nestjs/common'
+
 import type {
   OrganizationResponse,
   RemoveOrganizationResponse
@@ -19,9 +21,11 @@ describe('organization module', async () => {
     test('should get organization', async () => {
       const { id } = await spec.scenario.build.organization.create()
 
-      const { json } = await spec.application.inject().get(`/organization/${id}`).end()
+      const { statusCode: status, json } = await spec.application.inject().get(`/organization/${id}`).end()
 
       const response = json<OrganizationResponse>()
+
+      expect(status).toBe(HttpStatus.OK)
 
       expect(response).toMatchObject({
         id,
@@ -37,7 +41,7 @@ describe('organization module', async () => {
         authorization: { token: { hash } = { hash: '' } }
       } = spec.scenario
 
-      const { json } = await spec.application
+      const { statusCode: status, json } = await spec.application
         .inject()
         .post('/organization')
         .headers({ Authorization: `Bearer ${hash}` })
@@ -47,6 +51,8 @@ describe('organization module', async () => {
         .end()
 
       const response = json<OrganizationResponse>()
+
+      expect(status).toBe(HttpStatus.CREATED)
 
       expect(response).toMatchObject({
         id: expect.any(String),
@@ -64,7 +70,7 @@ describe('organization module', async () => {
 
       const { id } = await spec.scenario.build.organization.create('Save')
 
-      const { json } = await spec.application
+      const { statusCode: status, json } = await spec.application
         .inject()
         .put(`/organization/${id}`)
         .headers({ Authorization: `Bearer ${hash}` })
@@ -78,6 +84,8 @@ describe('organization module', async () => {
         .end()
 
       const response = json<OrganizationResponse>()
+
+      expect(status).toBe(HttpStatus.OK)
 
       expect(response).toMatchObject({
         id,
@@ -99,13 +107,15 @@ describe('organization module', async () => {
 
       const { id } = await spec.scenario.build.organization.create('Remove')
 
-      const { json } = await spec.application
+      const { statusCode: status, json } = await spec.application
         .inject()
         .delete(`/organization/${id}`)
         .headers({ Authorization: `Bearer ${hash}` })
         .end()
 
       const response = json<RemoveOrganizationResponse>()
+
+      expect(status).toBe(HttpStatus.OK)
 
       expect(response).toMatchObject({
         id
