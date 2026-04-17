@@ -18,6 +18,7 @@ import { HealthModule } from '@/module/health/health.module'
 import { LocationModule } from '@/module/location/location.module'
 import { MessageModule } from '@/module/message/message.module'
 import { OrganizationModule } from '@/module/organization/organization.module'
+import { PermissionModule } from '@/module/permission/permission.module'
 import { PetModule } from '@/module/pet/pet.module'
 import { PostModule } from '@/module/post/post.module'
 import { UserModule } from '@/module/user/user.module'
@@ -45,6 +46,7 @@ export class Spec {
         LocationModule,
         MessageModule,
         OrganizationModule,
+        PermissionModule,
         PetModule,
         PostModule,
         UserModule,
