@@ -26,15 +26,15 @@ export class OrganizationPermissionGuard implements CanActivate {
 
     const {
       user: { id: user },
-      params: { space: id }
+      params: { organization: id }
     } = context.switchToHttp().getRequest()
 
-    const space = await this.repository.find({
+    const organization = await this.repository.find({
       '_id': id,
       'member.user': new Types.ObjectId(user as string)
     })
 
-    const member = space?.member.find((e) => e.user === user)
+    const member = organization?.member.find((e) => e.user === user)
 
     if (isNil(member)) {
       return false
