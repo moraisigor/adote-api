@@ -1,3 +1,5 @@
+import { HttpStatus } from '@nestjs/common'
+
 import { afterAll, beforeAll, describe, expect, test } from 'bun:test'
 
 import { TokenResponse, type AuthResponse } from '@/module/auth/auth.response'
@@ -14,7 +16,7 @@ describe('auth module', async () => {
   // post /auth
   describe('/auth', () => {
     test('should start auth', async () => {
-      const { json } = await spec.application
+      const { statusCode: status, json } = await spec.application
         .inject()
         .post('/auth')
         .body({
@@ -23,6 +25,8 @@ describe('auth module', async () => {
         .end()
 
       const response = json<AuthResponse>()
+
+      expect(status).toBe(HttpStatus.OK)
 
       expect(response).toMatchObject({
         id: expect.any(String),
@@ -37,9 +41,15 @@ describe('auth module', async () => {
     test('should auth user with key', async () => {
       const { key } = await spec.scenario.build.auth.auth()
 
-      const { json } = await spec.application.inject().post('/auth/key').headers({ Key: key }).end()
+      const { statusCode: status, json } = await spec.application
+        .inject()
+        .post('/auth/key')
+        .headers({ Key: key })
+        .end()
 
       const response = json<TokenResponse>()
+
+      expect(status).toBe(HttpStatus.OK)
 
       expect(response).toMatchObject({
         token: {
@@ -59,7 +69,7 @@ describe('auth module', async () => {
     test('should auth user with code', async () => {
       const { phone } = await spec.scenario.build.auth.auth()
 
-      const { json } = await spec.application
+      const { statusCode: status, json } = await spec.application
         .inject()
         .post('/auth/verify')
         .body({
@@ -69,6 +79,8 @@ describe('auth module', async () => {
         .end()
 
       const response = json<TokenResponse>()
+
+      expect(status).toBe(HttpStatus.OK)
 
       expect(response).toMatchObject({
         token: {
@@ -90,13 +102,15 @@ describe('auth module', async () => {
         renew: { hash }
       } = await spec.scenario.build.auth.key()
 
-      const { json } = await spec.application
+      const { statusCode: status, json } = await spec.application
         .inject()
         .post('/auth/renew')
         .headers({ Authorization: `Bearer ${hash}` })
         .end()
 
       const response = json<TokenResponse>()
+
+      expect(status).toBe(HttpStatus.OK)
 
       expect(response).toMatchObject({
         token: {
