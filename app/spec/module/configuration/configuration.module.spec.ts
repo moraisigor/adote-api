@@ -1,3 +1,5 @@
+import { HttpStatus } from '@nestjs/common'
+
 import type { BreedResponse } from '@/module/breed/breed.response'
 import type { LocationResponse } from '@/module/location/location.response'
 import type { UserResponse } from '@/module/user/user.response'
@@ -16,13 +18,15 @@ describe('configuration module', async () => {
     test('should load breed list', async () => {
       const { BASIC_AUTHORIZATION } = spec.scenario
 
-      const { json } = await spec.application
+      const { statusCode: status, json } = await spec.application
         .inject()
         .post('/configuration/breed')
         .headers({ Authorization: `Basic ${BASIC_AUTHORIZATION}` })
         .end()
 
       const response = json<BreedResponse[]>()
+
+      expect(status).toBe(HttpStatus.CREATED)
 
       expect(response).toHaveLength(67)
     })
@@ -33,13 +37,15 @@ describe('configuration module', async () => {
     test('should load location list', async () => {
       const { BASIC_AUTHORIZATION } = spec.scenario
 
-      const { json } = await spec.application
+      const { statusCode: status, json } = await spec.application
         .inject()
         .post('/configuration/location')
         .headers({ Authorization: `Basic ${BASIC_AUTHORIZATION}` })
         .end()
 
       const response = json<LocationResponse[]>()
+
+      expect(status).toBe(HttpStatus.CREATED)
 
       expect(response).toHaveLength(5694)
     })
@@ -50,13 +56,15 @@ describe('configuration module', async () => {
     test('should load user', async () => {
       const { BASIC_AUTHORIZATION } = spec.scenario
 
-      const { json } = await spec.application
+      const { statusCode: status, json } = await spec.application
         .inject()
         .post('/configuration/user')
         .headers({ Authorization: `Basic ${BASIC_AUTHORIZATION}` })
         .end()
 
       const response = json<UserResponse>()
+
+      expect(status).toBe(HttpStatus.CREATED)
 
       expect(response).toMatchObject({
         id: expect.any(String),

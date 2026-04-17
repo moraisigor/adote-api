@@ -15,7 +15,6 @@ export class ConfigurationController {
 
   @Post('/user')
   @Public()
-  @HttpCode(HttpStatus.OK)
   @UseGuards(BasicGuard)
   user(): Promise<UserResponse> {
     return this.provider.user.run()
@@ -23,7 +22,6 @@ export class ConfigurationController {
 
   @Post('/breed')
   @Public()
-  @HttpCode(HttpStatus.OK)
   @UseGuards(BasicGuard)
   breed(): Promise<BreedResponse[]> {
     return this.provider.breed.run()
@@ -31,7 +29,6 @@ export class ConfigurationController {
 
   @Post('/location')
   @Public()
-  @HttpCode(HttpStatus.OK)
   @UseGuards(BasicGuard)
   location(): Promise<LocationResponse[]> {
     return this.provider.location.run()
