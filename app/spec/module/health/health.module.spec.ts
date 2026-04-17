@@ -1,3 +1,5 @@
+import { HttpStatus } from '@nestjs/common'
+
 import { afterAll, beforeAll, describe, expect, test } from 'bun:test'
 
 import { Spec } from '../spec'
@@ -12,9 +14,11 @@ describe('health module', async () => {
   // get /health
   describe('/health', () => {
     test('should verify health', async () => {
-      const { json } = await spec.application.inject().get('/health').end()
+      const { statusCode: status, json } = await spec.application.inject().get('/health').end()
 
       const response = json<{ state: boolean }>()
+
+      expect(status).toBe(HttpStatus.OK)
 
       expect(response).toMatchObject({
         state: true
