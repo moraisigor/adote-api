@@ -13,6 +13,7 @@ export class FavController {
   constructor(private readonly provider: FavProvider) {}
 
   @Post(':post')
+  @HttpCode(HttpStatus.OK)
   add(@Param() param: AddFavParam, @UserCurrent() user: User): Promise<FavResponse> {
     const { id } = user
     const { post } = param

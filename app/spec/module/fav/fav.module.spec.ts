@@ -1,3 +1,5 @@
+import { HttpStatus } from '@nestjs/common'
+
 import type { FavResponse } from '@/module/fav/fav.response'
 
 import { Spec } from '../spec'
@@ -20,13 +22,15 @@ describe('fav module', async () => {
 
       const { id: post } = await spec.scenario.build.post.create()
 
-      const { json } = await spec.application
+      const { statusCode: status, json } = await spec.application
         .inject()
         .post(`/user/fav/${post}`)
         .headers({ Authorization: `Bearer ${hash}` })
         .end()
 
       const response = json<FavResponse>()
+
+      expect(status).toBe(HttpStatus.OK)
 
       expect(response).toMatchObject({
         id: post
@@ -43,13 +47,15 @@ describe('fav module', async () => {
 
       const { id: post } = await spec.scenario.build.fav.add()
 
-      const { json } = await spec.application
+      const { statusCode: status, json } = await spec.application
         .inject()
         .delete(`/user/fav/${post}`)
         .headers({ Authorization: `Bearer ${hash}` })
         .end()
 
       const response = json<FavResponse>()
+
+      expect(status).toBe(HttpStatus.OK)
 
       expect(response).toMatchObject({
         id: post
