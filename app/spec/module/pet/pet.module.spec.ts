@@ -1,3 +1,5 @@
+import { HttpStatus } from '@nestjs/common'
+
 import { Kind } from '@/module/breed/type/kind'
 import type { PetResponse, RemovePetResponse } from '@/module/pet/pet.response'
 import { Gender } from '@/module/pet/type/gender'
@@ -23,7 +25,7 @@ describe('pet module', async () => {
 
       await spec.scenario.build.pet.create()
 
-      const { json } = await spec.application
+      const { statusCode: status, json } = await spec.application
         .inject()
         .get('/pet')
         .headers({ Authorization: `Bearer ${hash}` })
@@ -31,6 +33,8 @@ describe('pet module', async () => {
         .end()
 
       const response = json<PetResponse[]>()
+
+      expect(status).toBe(HttpStatus.OK)
 
       expect(response).toHaveLength(1)
 
@@ -59,13 +63,15 @@ describe('pet module', async () => {
 
       const { id } = await spec.scenario.build.pet.create()
 
-      const { json } = await spec.application
+      const { statusCode: status, json } = await spec.application
         .inject()
         .get(`/pet/${id}`)
         .headers({ Authorization: `Bearer ${hash}` })
         .end()
 
       const response = json<PetResponse>()
+
+      expect(status).toBe(HttpStatus.OK)
 
       expect(response).toMatchObject({
         id,
@@ -92,7 +98,7 @@ describe('pet module', async () => {
 
       const { id: breed } = list.find((e) => e.name === 'Buldogue Inglês') ?? { id: null }
 
-      const { json } = await spec.application
+      const { statusCode: status, json } = await spec.application
         .inject()
         .post('/pet')
         .headers({ Authorization: `Bearer ${hash}` })
@@ -106,6 +112,8 @@ describe('pet module', async () => {
         .end()
 
       const response = json<PetResponse>()
+
+      expect(status).toBe(HttpStatus.CREATED)
 
       expect(response).toMatchObject({
         id: expect.any(String),
@@ -134,7 +142,7 @@ describe('pet module', async () => {
 
       const { id: breed } = list.find((e) => e.name === 'Sem Raça Definida') ?? { id: null }
 
-      const { json } = await spec.application
+      const { statusCode: status, json } = await spec.application
         .inject()
         .put(`/pet/${id}`)
         .headers({ Authorization: `Bearer ${hash}` })
@@ -148,6 +156,8 @@ describe('pet module', async () => {
         .end()
 
       const response = json<PetResponse>()
+
+      expect(status).toBe(HttpStatus.OK)
 
       expect(response).toMatchObject({
         name: 'Estopinha',
@@ -171,13 +181,15 @@ describe('pet module', async () => {
 
       const { id } = await spec.scenario.build.pet.create()
 
-      const { json } = await spec.application
+      const { statusCode: status, json } = await spec.application
         .inject()
         .delete(`/pet/${id}`)
         .headers({ Authorization: `Bearer ${hash}` })
         .end()
 
       const response = json<RemovePetResponse>()
+
+      expect(status).toBe(HttpStatus.OK)
 
       expect(response).toMatchObject({
         id
