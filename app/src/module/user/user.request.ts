@@ -12,7 +12,7 @@ import {
 } from 'class-validator'
 
 export class GetUserParam {
-  @IsMongoId({ message: 'the id is invalid' })
+  @IsMongoId({ message: 'the id is not valid' })
   readonly id: string
 }
 
@@ -40,7 +40,7 @@ export class SaveUserRequest {
   @ValidateNested()
   readonly contact: ContactRequest
 
-  @IsMongoId({ message: 'the id is invalid' })
+  @IsMongoId({ message: 'the id is not valid' })
   @IsOptional()
   readonly location?: string
 }

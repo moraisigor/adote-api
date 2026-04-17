@@ -12,22 +12,22 @@ import {
 } from 'class-validator'
 
 export class GetPostParam {
-  @IsMongoId({ message: 'the id is invalid' })
+  @IsMongoId({ message: 'the id is not valid' })
   readonly id: string
 }
 
 export class SavePostParam {
-  @IsMongoId({ message: 'the id is invalid' })
+  @IsMongoId({ message: 'the id is not valid' })
   readonly id: string
 }
 
 export class PublishPostParam {
-  @IsMongoId({ message: 'the id is invalid' })
+  @IsMongoId({ message: 'the id is not valid' })
   readonly id: string
 }
 
 export class RemovePostParam {
-  @IsMongoId({ message: 'the id is invalid' })
+  @IsMongoId({ message: 'the id is not valid' })
   readonly id: string
 }
 
@@ -43,7 +43,7 @@ export class ListPostRequest {
   readonly amount: number
 
   @IsArray()
-  @IsMongoId({ each: true, message: 'the location is invalid' })
+  @IsMongoId({ each: true, message: 'the location is not valid' })
   @Transform(({ value }: TransformFnParams) => {
     if (isArray(value)) {
       return value
@@ -60,13 +60,13 @@ export class CreatePostRequest {
   @IsNotEmpty({ each: true })
   readonly image: string[]
 
-  @IsMongoId({ message: 'the pet is invalid' })
+  @IsMongoId({ message: 'the pet is not valid' })
   readonly pet: string
 
-  @IsMongoId({ message: 'the location is invalid' })
+  @IsMongoId({ message: 'the location is not valid' })
   readonly location: string
 
-  @IsMongoId({ message: 'the organization is invalid' })
+  @IsMongoId({ message: 'the organization is not valid' })
   @IsOptional()
   readonly organization?: string
 
@@ -81,7 +81,7 @@ export class SavePostRequest {
   @IsNotEmpty({ each: true })
   readonly image: string[]
 
-  @IsMongoId({ message: 'the location is invalid' })
+  @IsMongoId({ message: 'the location is not valid' })
   readonly location: string
 
   @IsBoolean()

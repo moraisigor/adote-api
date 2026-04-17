@@ -7,17 +7,17 @@ import { Size } from './type/size'
 import { Kind } from '../breed/type/kind'
 
 export class GetPetParam {
-  @IsMongoId({ message: 'the id is invalid' })
+  @IsMongoId({ message: 'the id is not valid' })
   readonly id: string
 }
 
 export class SavePetParam {
-  @IsMongoId({ message: 'the id is invalid' })
+  @IsMongoId({ message: 'the id is not valid' })
   readonly id: string
 }
 
 export class RemovePetParam {
-  @IsMongoId({ message: 'the id is invalid' })
+  @IsMongoId({ message: 'the id is not valid' })
   readonly id: string
 }
 
@@ -32,7 +32,7 @@ export class ListPetRequest {
   @Type(() => Number)
   readonly amount: number
 
-  @IsMongoId({ message: 'the organization is invalid' })
+  @IsMongoId({ message: 'the organization is not valid' })
   @IsOptional()
   readonly organization?: string
 }
@@ -52,10 +52,10 @@ export class CreatePetRequest {
   @IsEnum(Gender)
   readonly gender: Gender
 
-  @IsMongoId({ message: 'the breed is invalid' })
+  @IsMongoId({ message: 'the breed is not valid' })
   readonly breed: string
 
-  @IsMongoId({ message: 'the organization is invalid' })
+  @IsMongoId({ message: 'the organization is not valid' })
   @IsOptional()
   readonly organization?: string
 }
@@ -75,6 +75,6 @@ export class SavePetRequest {
   @IsEnum(Gender)
   readonly gender: Gender
 
-  @IsMongoId({ message: 'the breed is invalid' })
+  @IsMongoId({ message: 'the breed is not valid' })
   readonly breed: string
 }

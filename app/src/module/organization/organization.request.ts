@@ -15,17 +15,17 @@ import {
 } from 'class-validator'
 
 export class GetOrganizationParam {
-  @IsMongoId({ message: 'the id is invalid' })
+  @IsMongoId({ message: 'the id is not valid' })
   readonly id: string
 }
 
 export class SaveOrganizationParam {
-  @IsMongoId({ message: 'the id is invalid' })
+  @IsMongoId({ message: 'the id is not valid' })
   readonly id: string
 }
 
 export class RemoveOrganizationParam {
-  @IsMongoId({ message: 'the id is invalid' })
+  @IsMongoId({ message: 'the id is not valid' })
   readonly id: string
 }
 
