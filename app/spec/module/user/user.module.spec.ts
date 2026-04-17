@@ -1,3 +1,5 @@
+import { HttpStatus } from '@nestjs/common/enums'
+
 import type { UserResponse } from '@/module/user/user.response'
 
 import { Spec } from '../spec'
@@ -16,9 +18,11 @@ describe('user module', async () => {
     test('should get user', async () => {
       const { id } = await spec.scenario.build.user.save()
 
-      const { json } = await spec.application.inject().get(`/user/${id}`).end()
+      const { statusCode: status, json } = await spec.application.inject().get(`/user/${id}`).end()
 
       const response = json<UserResponse>()
+
+      expect(status).toBe(HttpStatus.OK)
 
       expect(response).toMatchObject({
         id: expect.any(String),
@@ -46,13 +50,15 @@ describe('user module', async () => {
 
       await spec.scenario.build.user.save()
 
-      const { json } = await spec.application
+      const { statusCode: status, json } = await spec.application
         .inject()
         .get('/user/current')
         .headers({ Authorization: `Bearer ${hash}` })
         .end()
 
       const response = json<UserResponse>()
+
+      expect(status).toBe(HttpStatus.OK)
 
       expect(response).toMatchObject({
         id: expect.any(String),
@@ -80,7 +86,7 @@ describe('user module', async () => {
 
       const [{ id: location }] = await spec.scenario.build.location.search()
 
-      const { json } = await spec.application
+      const { statusCode: status, json } = await spec.application
         .inject()
         .put('/user')
         .headers({ Authorization: `Bearer ${hash}` })
@@ -96,6 +102,8 @@ describe('user module', async () => {
         .end()
 
       const response = json<UserResponse>()
+
+      expect(status).toBe(HttpStatus.OK)
 
       expect(response).toMatchObject({
         id: expect.any(String),
