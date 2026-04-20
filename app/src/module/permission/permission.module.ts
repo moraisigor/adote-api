@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common'
 
-import { PermissionProvider } from './provider/permission.provider'
+import { PermissionProvider } from './provider'
 
 import { OrganizationModule } from '../organization/organization.module'
 
