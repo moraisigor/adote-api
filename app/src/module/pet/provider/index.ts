@@ -19,13 +19,13 @@ export class PetProvider {
   readonly remove: RemovePetProvider
 
   constructor(
-    private readonly permission: PermissionProvider,
+    private readonly provider: PermissionProvider,
     private readonly repository: PetRepository
   ) {
-    this.get = new GetPetProvider(this.permission, this.repository)
-    this.list = new ListPetProvider(this.permission, this.repository)
-    this.create = new CreatePetProvider(this.permission, this.repository)
-    this.save = new SavePetProvider(this.permission, this.repository)
-    this.remove = new RemovePetProvider(this.permission, this.repository)
+    this.get = new GetPetProvider(this.provider, this.repository)
+    this.list = new ListPetProvider(this.provider, this.repository)
+    this.create = new CreatePetProvider(this.provider, this.repository)
+    this.save = new SavePetProvider(this.provider, this.repository)
+    this.remove = new RemovePetProvider(this.provider, this.repository)
   }
 }
