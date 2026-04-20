@@ -1,20 +1,43 @@
-import { NotFoundException } from '@nestjs/common'
+import { BadRequestException } from '@nestjs/common'
+
+import { isNil } from 'lodash'
+import type { Types } from 'mongoose'
+
+import { PermissionProvider } from '@/module/permission/provider'
+
+import { Permission } from '@/helper/permission'
 
 import { RemovePostResponse } from '../post.response'
-import type { PostRepository } from '../repository/post.repository'
+import { PostRepository } from '../repository/post.repository'
 
 export class RemovePostProvider {
-  private readonly empty = 0
+  constructor(
+    private readonly provider: PermissionProvider,
+    private readonly repository: PostRepository
+  ) {}
 
-  constructor(private readonly repository: PostRepository) {}
+  async run(id: string, current: string): Promise<RemovePostResponse> {
+    const post = await this.repository.find({ _id: id })
 
-  async run(id: string, user: string): Promise<RemovePostResponse> {
-    const amount = await this.repository.remove({ _id: id })
-
-    if (this.empty === amount) {
-      throw new NotFoundException()
+    if (isNil(post)) {
+      throw new BadRequestException()
     }
 
-    return new RemovePostResponse(id)
+    const { user, organization } = post
+
+    const permission = await new Permission(current, this.provider).run(
+      user as Types.ObjectId,
+      organization as Types.ObjectId
+    )
+
+    if (permission) {
+      const result = await this.repository.remove({ _id: id })
+
+      if (result) {
+        return new RemovePostResponse(id)
+      }
+    }
+
+    throw new BadRequestException()
   }
 }
