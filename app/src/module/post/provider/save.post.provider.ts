@@ -17,6 +17,16 @@ export class SavePostProvider {
     private readonly repository: PostRepository
   ) {}
 
+  private build(request: SavePostRequest): { [key: string]: unknown } {
+    const { image, location, publish } = request
+
+    return {
+      image,
+      location: new Types.ObjectId(location),
+      publish
+    }
+  }
+
   async run(id: string, request: SavePostRequest, current: string): Promise<PostResponse> {
     const post = await this.repository.find({ _id: id })
 

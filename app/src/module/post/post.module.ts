@@ -6,8 +6,10 @@ import { PostProvider } from './provider'
 import { PostRepository } from './repository/post.repository'
 import { Post, PostSchema } from './repository/post.schema'
 
+import { PermissionModule } from '../permission/permission.module'
+
 @Module({
-  imports: [MongooseModule.forFeature([{ name: Post.name, schema: PostSchema }])],
+  imports: [MongooseModule.forFeature([{ name: Post.name, schema: PostSchema }]), PermissionModule],
   providers: [PostProvider, PostRepository],
   controllers: [PostController]
 })
