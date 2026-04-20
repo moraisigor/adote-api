@@ -1,6 +1,6 @@
 import { BadRequestException } from '@nestjs/common'
 
-import { eq, isNil } from 'lodash'
+import { isNil } from 'lodash'
 import { Types } from 'mongoose'
 
 import type { PermissionProvider } from '@/module/permission/provider'
@@ -44,15 +44,15 @@ export class SavePetProvider {
     )
 
     if (permission) {
-      const pet = await this.repository.save(new Types.ObjectId(id), this.build(request), {
+      const result = await this.repository.save(new Types.ObjectId(id), this.build(request), {
         returnDocument: 'after'
       })
 
-      if (isNil(pet)) {
+      if (isNil(result)) {
         throw new BadRequestException()
       }
 
-      return new PetResponse(pet)
+      return new PetResponse(result)
     }
 
     throw new BadRequestException()
