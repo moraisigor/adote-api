@@ -1,32 +1,60 @@
 import { BadRequestException } from '@nestjs/common'
 
-import { isNil } from 'lodash'
+import { eq, isNil } from 'lodash'
 import { Types } from 'mongoose'
+
+import type { PermissionProvider } from '@/module/permission/provider'
+
+import { Permission } from '@/helper/permission'
 
 import { SavePetRequest } from '../pet.request'
 import { PetResponse } from '../pet.response'
 import { PetRepository } from '../repository/pet.repository'
 
 export class SavePetProvider {
-  constructor(private readonly repository: PetRepository) {}
+  constructor(
+    private readonly provider: PermissionProvider,
+    private readonly repository: PetRepository
+  ) {}
 
-  async run(id: string, request: SavePetRequest): Promise<PetResponse> {
+  private build(request: SavePetRequest): { [key: string]: unknown } {
     const { name, kind, size, gender, breed } = request
 
-    const map: { [key: string]: unknown } = {
+    return {
       name,
       kind,
       size,
       gender,
       breed: new Types.ObjectId(breed)
     }
+  }
 
-    const pet = await this.repository.save(new Types.ObjectId(id), map, { returnDocument: 'after' })
+  async run(id: string, request: SavePetRequest, current: string): Promise<PetResponse> {
+    const pet = await this.repository.find({ _id: id })
 
     if (isNil(pet)) {
       throw new BadRequestException()
     }
 
-    return new PetResponse(pet)
+    const { user, organization } = pet
+
+    const permission = await new Permission(current, this.provider).run(
+      user as Types.ObjectId,
+      organization as Types.ObjectId
+    )
+
+    if (permission) {
+      const pet = await this.repository.save(new Types.ObjectId(id), this.build(request), {
+        returnDocument: 'after'
+      })
+
+      if (isNil(pet)) {
+        throw new BadRequestException()
+      }
+
+      return new PetResponse(pet)
+    }
+
+    throw new BadRequestException()
   }
 }

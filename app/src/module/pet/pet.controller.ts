@@ -21,30 +21,36 @@ export class PetController {
 
   @Get()
   list(@Query() request: ListPetRequest, @UserCurrent() user: User): Promise<PetResponse[]> {
-    const { id } = user
+    const { id: current } = user
 
-    return this.provider.list.run(request, id)
+    return this.provider.list.run(request, current)
   }
 
   @Get(':id')
-  get(@Param() param: GetPetParam): Promise<PetResponse> {
+  get(@Param() param: GetPetParam, @UserCurrent() user: User): Promise<PetResponse> {
     const { id } = param
+    const { id: current } = user
 
-    return this.provider.get.run(id)
+    return this.provider.get.run(id, current)
   }
 
   @Post()
   create(@Body() request: CreatePetRequest, @UserCurrent() user: User): Promise<PetResponse> {
-    const { id } = user
+    const { id: current } = user
 
-    return this.provider.create.run(request, id)
+    return this.provider.create.run(request, current)
   }
 
   @Put(':id')
-  save(@Param() param: SavePetParam, @Body() request: SavePetRequest): Promise<PetResponse> {
+  save(
+    @Param() param: SavePetParam,
+    @Body() request: SavePetRequest,
+    @UserCurrent() user: User
+  ): Promise<PetResponse> {
     const { id } = param
+    const { id: current } = user
 
-    return this.provider.save.run(id, request)
+    return this.provider.save.run(id, request, current)
   }
 
   @Delete(':id')
