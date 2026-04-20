@@ -1,26 +1,23 @@
-import { eq } from 'lodash'
+import { Types } from 'mongoose'
 
 import { OrganizationRole } from '@/module/organization/type/organization.role'
 import { PermissionProvider } from '@/module/permission/provider'
 
-export const permission = async (
-  current: string,
-  request: {
-    user?: string
-    organization?: string
-    permission?: OrganizationRole[]
-  },
-  provider: PermissionProvider
-): Promise<boolean> => {
-  const { user, organization, permission } = request
+export class Permission {
+  constructor(
+    private readonly current: string,
+    private readonly provider: PermissionProvider
+  ) {}
 
-  if (eq(user, current)) {
-    return true
+  async run(user?: Types.ObjectId, organization?: Types.ObjectId, permission?: OrganizationRole[]) {
+    if (user) {
+      return user.equals(new Types.ObjectId(this.current))
+    }
+
+    if (organization) {
+      return await this.provider.organization.run(this.current, String(organization), permission)
+    }
+
+    return false
   }
-
-  if (organization) {
-    return await provider.organization.run(current, organization, permission)
-  }
-
-  return false
 }
