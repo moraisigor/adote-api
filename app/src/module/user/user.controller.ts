@@ -31,31 +31,31 @@ export class UserController {
 
   @Get('current')
   current(@UserCurrent() user: User): Promise<UserResponse> {
-    const { id } = user
+    const { id: current } = user
 
-    return this.provider.get.run(id)
+    return this.provider.get.run(current)
   }
 
   @Put()
   save(@Body() request: SaveUserRequest, @UserCurrent() user: User): Promise<UserResponse> {
-    const { id } = user
+    const { id: current } = user
 
-    return this.provider.save.run(id, request)
+    return this.provider.save.run(current, request)
   }
 
   @Put('image')
   image(@Body() request: SaveImageRequest, @UserCurrent() user: User): Promise<UserResponse> {
-    const { id } = user
     const { image } = request
+    const { id: current } = user
 
-    return this.provider.image.run(id, image)
+    return this.provider.image.run(current, image)
   }
 
   @Delete()
   @HttpCode(HttpStatus.NO_CONTENT)
   remove(@UserCurrent() user: User): Promise<void> {
-    const { id } = user
+    const { id: current } = user
 
-    return this.provider.remove.run(id)
+    return this.provider.remove.run(current)
   }
 }

@@ -43,9 +43,9 @@ export class OrganizationController {
     @Body() request: CreateOrganizationRequest,
     @UserCurrent() user: User
   ): Promise<OrganizationResponse> {
-    const { id } = user
+    const { id: current } = user
 
-    return this.provider.create.run(request, id)
+    return this.provider.create.run(request, current)
   }
 
   @Put(':id')

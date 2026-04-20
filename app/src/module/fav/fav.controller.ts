@@ -15,17 +15,17 @@ export class FavController {
   @Post(':post')
   @HttpCode(HttpStatus.OK)
   add(@Param() param: AddFavParam, @UserCurrent() user: User): Promise<FavResponse> {
-    const { id } = user
     const { post } = param
+    const { id: current } = user
 
-    return this.provider.add.run(post, id)
+    return this.provider.add.run(post, current)
   }
 
   @Delete(':post')
   remove(@Param() param: RemoveFavParam, @UserCurrent() user: User): Promise<FavResponse> {
-    const { id } = user
     const { post } = param
+    const { id: current } = user
 
-    return this.provider.remove.run(post, id)
+    return this.provider.remove.run(post, current)
   }
 }

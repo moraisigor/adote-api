@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common'
 
-import { PetRepository } from '@/module/pet/repository/pet.repository'
+import { PermissionProvider } from '@/module/permission/provider'
 
 import { CreatePostProvider } from './create.post.provider'
 import { GetPostProvider } from './get.post.provider'
@@ -20,12 +20,15 @@ export class PostProvider {
   readonly publish: PublishPostProvider
   readonly remove: RemovePostProvider
 
-  constructor(private readonly repository: PostRepository) {
+  constructor(
+    private readonly provider: PermissionProvider,
+    private readonly repository: PostRepository
+  ) {
     this.get = new GetPostProvider(this.repository)
     this.list = new ListPostProvider(this.repository)
-    this.create = new CreatePostProvider(this.repository)
-    this.save = new SavePostProvider(this.repository)
-    this.publish = new PublishPostProvider(this.repository)
-    this.remove = new RemovePostProvider(this.repository)
+    this.create = new CreatePostProvider(this.provider, this.repository)
+    this.save = new SavePostProvider(this.provider, this.repository)
+    this.publish = new PublishPostProvider(this.provider, this.repository)
+    this.remove = new RemovePostProvider(this.provider, this.repository)
   }
 }
