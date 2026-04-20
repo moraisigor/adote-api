@@ -85,9 +85,9 @@ export class PostRepository {
       .exec()
   }
 
-  async remove(query?: QueryFilter<Post>): Promise<number> {
-    const { deletedCount: amount } = await this.model.deleteOne(query).exec()
+  async remove(query?: QueryFilter<Post>): Promise<boolean> {
+    const { acknowledged: result } = await this.model.deleteOne(query).exec()
 
-    return amount
+    return result
   }
 }

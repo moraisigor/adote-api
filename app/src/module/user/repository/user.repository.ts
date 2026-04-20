@@ -56,9 +56,9 @@ export class UserRepository {
       .exec()
   }
 
-  async remove(query?: QueryFilter<User>): Promise<number> {
-    const { deletedCount: amount } = await this.model.deleteOne(query).exec()
+  async remove(query?: QueryFilter<User>): Promise<boolean> {
+    const { acknowledged: result } = await this.model.deleteOne(query).exec()
 
-    return amount
+    return result
   }
 }

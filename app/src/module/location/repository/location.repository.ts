@@ -25,9 +25,9 @@ export class LocationRepository {
     return this.model.insertMany(list)
   }
 
-  async remove(query?: QueryFilter<Location>): Promise<number> {
-    const { deletedCount: amount } = await this.model.deleteMany(query).exec()
+  async remove(query?: QueryFilter<Location>): Promise<boolean> {
+    const { acknowledged: result } = await this.model.deleteMany(query).exec()
 
-    return amount
+    return result
   }
 }

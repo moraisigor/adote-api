@@ -51,9 +51,9 @@ export class OrganizationRepository {
     return this.model.findByIdAndUpdate(id, organization, options).exec()
   }
 
-  async remove(query?: QueryFilter<Organization>): Promise<number> {
-    const { deletedCount: amount } = await this.model.deleteOne(query).exec()
+  async remove(query?: QueryFilter<Organization>): Promise<boolean> {
+    const { acknowledged: result } = await this.model.deleteOne(query).exec()
 
-    return amount
+    return result
   }
 }
