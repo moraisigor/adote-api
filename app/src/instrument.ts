@@ -1,4 +1,4 @@
-import Sentry from '@sentry/nestjs'
+import * as Sentry from '@sentry/nestjs'
 
 Sentry.init({
   dsn: '',
