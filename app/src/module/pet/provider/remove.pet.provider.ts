@@ -1,15 +1,18 @@
-import { NotFoundException } from '@nestjs/common'
+import { BadRequestException } from '@nestjs/common'
 
 import { isNil } from 'lodash'
+import type { Types } from 'mongoose'
 
-import { PermissionProvider } from '@/module/permission/provider/permission.provider'
+import { PermissionProvider } from '@/module/permission/provider'
+
+import { Permission } from '@/helper/permission'
 
 import { RemovePetResponse } from '../pet.response'
 import { PetRepository } from '../repository/pet.repository'
 
 export class RemovePetProvider {
   constructor(
-    private readonly permission: PermissionProvider,
+    private readonly provider: PermissionProvider,
     private readonly repository: PetRepository
   ) {}
 
@@ -17,19 +20,24 @@ export class RemovePetProvider {
     const pet = await this.repository.find({ _id: id })
 
     if (isNil(pet)) {
-      throw new NotFoundException()
+      throw new BadRequestException()
     }
 
     const { user, organization } = pet
 
-    const permission = await this.permission.run(current, String(user), String(organization))
+    const permission = await new Permission(current, this.provider).run(
+      user as Types.ObjectId,
+      organization as Types.ObjectId
+    )
 
     if (permission) {
-      await this.repository.remove({ _id: id })
+      const result = await this.repository.remove({ _id: id })
 
-      return new RemovePetResponse(id)
+      if (result) {
+        return new RemovePetResponse(id)
+      }
     }
 
-    throw new NotFoundException()
+    throw new BadRequestException()
   }
 }

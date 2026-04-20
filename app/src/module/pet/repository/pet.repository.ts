@@ -45,7 +45,7 @@ export class PetRepository {
   }
 
   // prettier-ignore
-  create(pet: {
+  async create(pet: {
     name: string,
     kind: Kind,
     size: Size,
@@ -54,13 +54,11 @@ export class PetRepository {
     user?: Types.ObjectId,
     organization?: Types.ObjectId
   }): Promise<PetDocument> {
-    return this.model
-      .create(pet)
-      .then((model) =>
-        model.populate([
-          { path: 'breed' },
-        ])
-      )
+    const model = await this.model.create(pet)
+
+    return model.populate([
+      { path: 'breed' },
+    ])
   }
 
   save(
@@ -74,9 +72,9 @@ export class PetRepository {
       .exec()
   }
 
-  async remove(query?: QueryFilter<Pet>): Promise<number> {
-    const { deletedCount: amount } = await this.model.deleteOne(query).exec()
+  async remove(query?: QueryFilter<Pet>): Promise<boolean> {
+    const { acknowledged: result } = await this.model.deleteOne(query).exec()
 
-    return amount
+    return result
   }
 }
