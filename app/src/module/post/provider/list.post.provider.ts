@@ -13,6 +13,7 @@ export class ListPostProvider {
     const skip = (page - 1) * amount
 
     const list = await this.repository.list(skip, amount, {
+      publish: true,
       location: { $in: location.map((e) => new Types.ObjectId(e)) }
     })
 
