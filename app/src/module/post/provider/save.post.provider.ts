@@ -1,30 +1,48 @@
-import { NotFoundException } from '@nestjs/common'
+import { BadRequestException } from '@nestjs/common'
 
 import { isNil } from 'lodash'
 import { Types } from 'mongoose'
+
+import { PermissionProvider } from '@/module/permission/provider'
+
+import { Permission } from '@/helper/permission'
 
 import { SavePostRequest } from '../post.request'
 import { PostResponse } from '../post.response'
 import { PostRepository } from '../repository/post.repository'
 
 export class SavePostProvider {
-  constructor(private readonly repository: PostRepository) {}
+  constructor(
+    private readonly provider: PermissionProvider,
+    private readonly repository: PostRepository
+  ) {}
 
-  async run(id: string, request: SavePostRequest): Promise<PostResponse> {
-    const { image, location, publish } = request
-
-    const map: { [key: string]: unknown } = {
-      image,
-      location: new Types.ObjectId(location),
-      publish
-    }
-
-    const post = await this.repository.save(new Types.ObjectId(id), map, { returnDocument: 'after' })
+  async run(id: string, request: SavePostRequest, current: string): Promise<PostResponse> {
+    const post = await this.repository.find({ _id: id })
 
     if (isNil(post)) {
-      throw new NotFoundException()
+      throw new BadRequestException()
     }
 
-    return new PostResponse(post)
+    const { user, organization } = post
+
+    const permission = await new Permission(current, this.provider).run(
+      user as Types.ObjectId,
+      organization as Types.ObjectId
+    )
+
+    if (permission) {
+      const result = await this.repository.save(new Types.ObjectId(id), this.build(request), {
+        returnDocument: 'after'
+      })
+
+      if (isNil(result)) {
+        throw new BadRequestException()
+      }
+
+      return new PostResponse(result)
+    }
+
+    throw new BadRequestException()
   }
 }
