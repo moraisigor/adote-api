@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, HttpCode, HttpStatus, Param, Post, Put, Query } from '@nestjs/common'
+import { Body, Controller, Delete, Get, Param, Put } from '@nestjs/common'
 
 import type { User } from '@/type/token'
 
@@ -9,7 +9,7 @@ import { UserCurrent } from '@/decorator/user.current.decorator'
 import { UserProvider } from './provider'
 import { Role } from './type/role'
 import { GetUserParam, SaveImageRequest, SaveUserRequest } from './user.request'
-import { UserResponse } from './user.response'
+import { RemoveUserResponse, UserResponse } from './user.response'
 
 @Controller()
 export class UserController {
@@ -52,8 +52,7 @@ export class UserController {
   }
 
   @Delete()
-  @HttpCode(HttpStatus.NO_CONTENT)
-  remove(@UserCurrent() user: User): Promise<void> {
+  remove(@UserCurrent() user: User): Promise<RemoveUserResponse> {
     const { id: current } = user
 
     return this.provider.remove.run(current)

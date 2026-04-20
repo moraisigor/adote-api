@@ -53,3 +53,11 @@ export class UserResponse {
     }
   }
 }
+
+export class RemoveUserResponse {
+  readonly id: string
+
+  constructor(id: string) {
+    this.id = id
+  }
+}

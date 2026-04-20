@@ -1,17 +1,18 @@
-import { NotFoundException } from '@nestjs/common'
+import { BadRequestException } from '@nestjs/common'
 
 import { UserRepository } from '../repository/user.repository'
+import { RemoveUserResponse } from '../user.response'
 
 export class RemoveUserProvider {
-  private readonly empty = 0
-
   constructor(private readonly repository: UserRepository) {}
 
-  async run(id: string): Promise<void> {
-    const amount = await this.repository.remove({ _id: id })
+  async run(id: string): Promise<RemoveUserResponse> {
+    const result = await this.repository.remove({ _id: id })
 
-    if (this.empty === amount) {
-      throw new NotFoundException()
+    if (result) {
+      return new RemoveUserResponse(id)
     }
+
+    throw new BadRequestException()
   }
 }
