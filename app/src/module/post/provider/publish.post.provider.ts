@@ -1,4 +1,4 @@
-import { BadRequestException, NotFoundException } from '@nestjs/common'
+import { BadRequestException, Injectable } from '@nestjs/common'
 
 import { isNil } from 'lodash'
 import { Types } from 'mongoose'
@@ -10,6 +10,7 @@ import { Permission } from '@/helper/permission'
 import { PublishPostResponse } from '../post.response'
 import { PostRepository } from '../repository/post.repository'
 
+@Injectable()
 export class PublishPostProvider {
   constructor(
     private readonly provider: PermissionProvider,

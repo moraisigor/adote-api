@@ -1,9 +1,12 @@
+import { Injectable } from '@nestjs/common'
+
 import { Types } from 'mongoose'
 
 import { ListPostRequest } from '../post.request'
 import { PostResponse } from '../post.response'
 import { PostRepository } from '../repository/post.repository'
 
+@Injectable()
 export class ListPostProvider {
   constructor(private readonly repository: PostRepository) {}
 
