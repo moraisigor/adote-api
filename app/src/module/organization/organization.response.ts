@@ -3,10 +3,12 @@ import type { Contact, OrganizationDocument } from './repository/organization.sc
 export class ContactResponse {
   readonly mail?: string
   readonly phone?: string
+  readonly social?: string
 
   constructor(contact: Contact) {
     this.mail = contact.mail
     this.phone = contact.phone
+    this.social = contact.social
   }
 }
 

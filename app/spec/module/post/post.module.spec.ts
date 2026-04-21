@@ -174,6 +174,63 @@ describe('post module', async () => {
         }
       })
     })
+
+    test('should create post with organization', async () => {
+      const {
+        authorization: { token: { hash } = { hash: '' } }
+      } = spec.scenario
+
+      const { id: pet } = await spec.scenario.build.pet.create()
+
+      const [{ id: location }] = await spec.scenario.build.location.search()
+      const [{ id: organization }] = await spec.scenario.build.user.organization()
+
+      const { statusCode: status, json } = await spec.application
+        .inject()
+        .post('/post')
+        .headers({ Authorization: `Bearer ${hash}` })
+        .body({
+          image: ['image.jpg'],
+          pet: pet,
+          location: location,
+          publish: true,
+          organization: organization
+        })
+        .end()
+
+      const response = json<PostResponse>()
+
+      expect(status).toBe(HttpStatus.CREATED)
+
+      expect(response).toMatchObject({
+        id: expect.any(String),
+        image: ['image.jpg'],
+        pet: {
+          id: expect.any(String),
+          name: 'Oreo',
+          size: Size.MEDIUM,
+          gender: Gender.MALE,
+          breed: {
+            id: expect.any(String),
+            name: 'Buldogue Inglês'
+          }
+        },
+        location: {
+          id: expect.any(String),
+          city: 'Recife',
+          state: 'Pernambuco'
+        },
+        organization: {
+          id: expect.any(String),
+          name: 'Name',
+          contact: {
+            mail: 'mail@example.com',
+            phone: '+5599999999999',
+            social: 'https://example.com/name'
+          }
+        }
+      })
+    })
   })
 
   // put /post/id

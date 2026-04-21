@@ -114,6 +114,30 @@ export class Scenario {
           .end()
 
         return json<OrganizationResponse>()
+      },
+      save: async (name: string = 'Name') => {
+        const { token: { hash } = { hash: '' } } = this.authorization
+
+        const [{ id }] = await this.build.user.organization()
+
+        const [{ id: location }] = await this.build.location.search()
+
+        const { json } = await this.application
+          .inject()
+          .put(`/organization/${id}`)
+          .headers({ Authorization: `Bearer ${hash}` })
+          .body({
+            name,
+            contact: {
+              mail: 'mail@example.com',
+              phone: '+5599999999999',
+              social: 'https://example.com/name'
+            },
+            location: location
+          })
+          .end()
+
+        return json<OrganizationResponse>()
       }
     },
     pet: {
@@ -256,6 +280,7 @@ export class Scenario {
     await this.build.organization.create()
 
     await this.build.user.save()
+    await this.build.organization.save()
   }
 
   async user() {

@@ -18,7 +18,8 @@ export class SaveOrganizationProvider {
       'name': name,
       'document': document,
       'contact.mail': contact?.mail,
-      'contact.phone': contact?.phone
+      'contact.phone': contact?.phone,
+      'contact.social': contact?.social
     }
 
     const organization = await this.repository.save(new Types.ObjectId(id), map, { returnDocument: 'after' })
