@@ -1,4 +1,4 @@
-import { BadRequestException } from '@nestjs/common'
+import { BadRequestException, Injectable } from '@nestjs/common'
 
 import { isNil } from 'lodash'
 import type { Types } from 'mongoose'
@@ -10,6 +10,7 @@ import { Permission } from '@/helper/permission'
 import { PetResponse } from '../pet.response'
 import { PetRepository } from '../repository/pet.repository'
 
+@Injectable()
 export class GetPetProvider {
   constructor(
     private readonly provider: PermissionProvider,

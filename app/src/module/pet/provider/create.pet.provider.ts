@@ -1,3 +1,5 @@
+import { Injectable } from '@nestjs/common'
+
 import { Types } from 'mongoose'
 
 import { PermissionProvider } from '@/module/permission/provider'
@@ -6,6 +8,7 @@ import { CreatePetRequest } from '../pet.request'
 import { PetResponse } from '../pet.response'
 import { PetRepository } from '../repository/pet.repository'
 
+@Injectable()
 export class CreatePetProvider {
   constructor(
     private readonly provider: PermissionProvider,
