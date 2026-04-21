@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common'
 
 import { Types } from 'mongoose'
 
-import type { PermissionProvider } from '@/module/permission/provider'
+import { PermissionProvider } from '@/module/permission/provider'
 
 import { CreatePostRequest } from '../post.request'
 import { PostResponse } from '../post.response'

@@ -3,7 +3,7 @@ import { BadRequestException, Injectable } from '@nestjs/common'
 import { isNil } from 'lodash'
 import { Types } from 'mongoose'
 
-import type { PermissionProvider } from '@/module/permission/provider'
+import { PermissionProvider } from '@/module/permission/provider'
 
 import { Permission } from '@/helper/permission'
 

@@ -4,7 +4,7 @@ import { ConfigService } from '@nestjs/config'
 import { JwtService } from '@nestjs/jwt'
 
 import * as bcrypt from 'bcrypt'
-import type { Cache as CacheManager } from 'cache-manager'
+import type { Cache } from 'cache-manager'
 import { isNil } from 'lodash'
 
 import { UserRepository } from '@/module/user/repository/user.repository'
