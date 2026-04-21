@@ -1,4 +1,4 @@
-import { BadRequestException } from '@nestjs/common'
+import { BadRequestException, Injectable } from '@nestjs/common'
 
 import { isNil } from 'lodash'
 import { Types } from 'mongoose'
@@ -7,6 +7,7 @@ import { SaveOrganizationRequest } from '../organization.request'
 import { OrganizationResponse } from '../organization.response'
 import { OrganizationRepository } from '../repository/organization.repository'
 
+@Injectable()
 export class SaveOrganizationProvider {
   constructor(private readonly repository: OrganizationRepository) {}
 

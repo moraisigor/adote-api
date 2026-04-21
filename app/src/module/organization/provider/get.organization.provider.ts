@@ -1,10 +1,11 @@
-import { NotFoundException } from '@nestjs/common'
+import { Injectable, NotFoundException } from '@nestjs/common'
 
 import { isNil } from 'lodash'
 
 import { OrganizationResponse } from '../organization.response'
 import { OrganizationRepository } from '../repository/organization.repository'
 
+@Injectable()
 export class GetOrganizationProvider {
   constructor(private readonly repository: OrganizationRepository) {}
 
