@@ -1,4 +1,4 @@
-import { BadRequestException } from '@nestjs/common'
+import { BadRequestException, Injectable } from '@nestjs/common'
 import { ConfigService } from '@nestjs/config'
 import { JwtService } from '@nestjs/jwt'
 
@@ -8,6 +8,7 @@ import { UserRepository } from '@/module/user/repository/user.repository'
 
 import { TokenResponse } from '../auth.response'
 
+@Injectable()
 export class KeyAuthProvider {
   private readonly TokenSecret: string
   private readonly TokenExpire: number

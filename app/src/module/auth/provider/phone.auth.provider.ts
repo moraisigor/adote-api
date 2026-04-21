@@ -1,3 +1,6 @@
+import { CACHE_MANAGER } from '@nestjs/cache-manager'
+import { Inject, Injectable } from '@nestjs/common'
+
 import * as bcrypt from 'bcrypt'
 import type { Cache } from 'cache-manager'
 import { isNil } from 'lodash'
@@ -10,9 +13,10 @@ import { unique } from '@/helper/id'
 
 import { AuthResponse } from '../auth.response'
 
+@Injectable()
 export class PhoneAuthProvider {
   constructor(
-    private readonly store: Cache,
+    @Inject(CACHE_MANAGER) private readonly store: Cache,
     private readonly message: MessageProvider,
     private readonly repository: UserRepository
   ) {}

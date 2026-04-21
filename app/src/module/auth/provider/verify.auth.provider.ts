@@ -1,4 +1,5 @@
-import { BadRequestException } from '@nestjs/common'
+import { CACHE_MANAGER } from '@nestjs/cache-manager'
+import { BadRequestException, Inject, Injectable } from '@nestjs/common'
 import { ConfigService } from '@nestjs/config'
 import { JwtService } from '@nestjs/jwt'
 
@@ -10,6 +11,7 @@ import { UserRepository } from '@/module/user/repository/user.repository'
 
 import { TokenResponse } from '../auth.response'
 
+@Injectable()
 export class VerifyAuthProvider {
   private readonly TokenSecret: string
   private readonly TokenExpire: number
@@ -17,8 +19,8 @@ export class VerifyAuthProvider {
   private readonly TokenRenewExpire: number
 
   constructor(
+    @Inject(CACHE_MANAGER) private readonly store: Cache,
     private readonly token: JwtService,
-    private readonly store: CacheManager,
     private readonly config: ConfigService,
     private readonly repository: UserRepository
   ) {
