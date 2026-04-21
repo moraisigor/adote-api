@@ -28,7 +28,7 @@ export class Contact {
 })
 export class Organization {
   @Prop({ type: String, unique: true, required: true })
-  name: string
+  name!: string
 
   @Prop({ type: String })
   image?: string
@@ -40,7 +40,7 @@ export class Organization {
   contact?: Contact
 
   @Prop({ type: [Member], required: true })
-  member: Member[]
+  member!: Member[]
 
   @Prop({ type: [{ type: Types.ObjectId, ref: 'Pet' }], default: [] })
   pet?: PetDocument[] = []

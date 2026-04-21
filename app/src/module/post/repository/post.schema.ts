@@ -16,13 +16,13 @@ export type PostDocument = HydratedDocument<Post>
 })
 export class Post {
   @Prop({ type: [String], required: true })
-  image: string[]
+  image!: string[]
 
   @Prop({ type: Types.ObjectId, ref: 'Pet', required: true })
-  pet: Types.ObjectId | PetDocument
+  pet!: Types.ObjectId | PetDocument
 
   @Prop({ type: Types.ObjectId, ref: 'Location' })
-  location: Types.ObjectId | LocationDocument
+  location!: Types.ObjectId | LocationDocument
 
   @Prop({ type: Types.ObjectId, ref: 'User' })
   user?: Types.ObjectId | UserDocument
@@ -31,7 +31,7 @@ export class Post {
   organization?: Types.ObjectId | OrganizationDocument
 
   @Prop({ type: Boolean, required: true })
-  publish: boolean
+  publish!: boolean
 }
 
 export const PostSchema = SchemaFactory.createForClass(Post)

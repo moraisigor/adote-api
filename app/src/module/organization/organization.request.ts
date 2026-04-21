@@ -16,17 +16,17 @@ import {
 
 export class GetOrganizationParam {
   @IsMongoId({ message: 'the id is not valid' })
-  readonly id: string
+  readonly id!: string
 }
 
 export class SaveOrganizationParam {
   @IsMongoId({ message: 'the id is not valid' })
-  readonly id: string
+  readonly id!: string
 }
 
 export class RemoveOrganizationParam {
   @IsMongoId({ message: 'the id is not valid' })
-  readonly id: string
+  readonly id!: string
 }
 
 export class ContactRequest {
@@ -47,14 +47,14 @@ export class CreateOrganizationRequest {
   @IsString()
   @Length(4, 40)
   @Transform(({ value }: TransformFnParams) => value?.trim())
-  readonly name: string
+  readonly name!: string
 }
 
 export class SaveOrganizationRequest {
   @IsString()
   @Length(4, 40)
   @Transform(({ value }: TransformFnParams) => value?.trim())
-  readonly name: string
+  readonly name!: string
 
   @IsNumberString({ no_symbols: true })
   @IsOptional()

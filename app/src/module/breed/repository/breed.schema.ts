@@ -13,10 +13,10 @@ export type BreedDocument = HydratedDocument<Breed>
 })
 export class Breed {
   @Prop({ type: String, required: true })
-  name: string
+  name!: string
 
   @Prop({ type: String, enum: Kind, required: true })
-  kind: Kind
+  kind!: Kind
 }
 
 export const BreedSchema = SchemaFactory.createForClass(Breed)

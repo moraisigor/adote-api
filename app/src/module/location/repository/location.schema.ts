@@ -11,10 +11,10 @@ export type LocationDocument = HydratedDocument<Location>
 })
 export class Location {
   @Prop({ type: String, required: true })
-  city: string
+  city!: string
 
   @Prop({ type: String, required: true })
-  state: string
+  state!: string
 }
 
 export const LocationSchema = SchemaFactory.createForClass(Location)

@@ -19,19 +19,19 @@ export type PetDocument = HydratedDocument<Pet>
 })
 export class Pet {
   @Prop({ type: String, required: true })
-  name: string
+  name!: string
 
   @Prop({ type: String, enum: Kind, required: true })
-  kind: Kind
+  kind!: Kind
 
   @Prop({ type: String, enum: Size, required: true })
-  size: Size
+  size!: Size
 
   @Prop({ type: String, enum: Gender, required: true })
-  gender: Gender
+  gender!: Gender
 
   @Prop({ type: Types.ObjectId, ref: 'Breed', required: true })
-  breed: Types.ObjectId | BreedDocument
+  breed!: Types.ObjectId | BreedDocument
 
   @Prop({ type: Types.ObjectId, ref: 'User' })
   user?: Types.ObjectId | UserDocument

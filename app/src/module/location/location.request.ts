@@ -5,5 +5,5 @@ export class SearchLocationRequest {
   @IsString()
   @MinLength(2)
   @Transform(({ value }: TransformFnParams) => value?.trim())
-  readonly search: string
+  readonly search!: string
 }

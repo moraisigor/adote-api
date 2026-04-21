@@ -28,10 +28,10 @@ export class Contact {
 })
 export class User {
   @Prop({ type: String, unique: true, required: true })
-  key: string
+  key!: string
 
   @Prop({ type: String, unique: true, required: true })
-  phone: string
+  phone!: string
 
   @Prop({ type: String })
   name?: string

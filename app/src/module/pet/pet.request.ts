@@ -8,29 +8,29 @@ import { Kind } from '../breed/type/kind'
 
 export class GetPetParam {
   @IsMongoId({ message: 'the id is not valid' })
-  readonly id: string
+  readonly id!: string
 }
 
 export class SavePetParam {
   @IsMongoId({ message: 'the id is not valid' })
-  readonly id: string
+  readonly id!: string
 }
 
 export class RemovePetParam {
   @IsMongoId({ message: 'the id is not valid' })
-  readonly id: string
+  readonly id!: string
 }
 
 export class ListPetRequest {
   @IsNumber()
   @Min(1)
   @Type(() => Number)
-  readonly page: number
+  readonly page!: number
 
   @IsNumber()
   @Min(1)
   @Type(() => Number)
-  readonly amount: number
+  readonly amount!: number
 
   @IsMongoId({ message: 'the organization is not valid' })
   @IsOptional()
@@ -41,19 +41,19 @@ export class CreatePetRequest {
   @IsString()
   @Length(2, 20)
   @Transform(({ value }: TransformFnParams) => value?.trim())
-  readonly name: string
+  readonly name!: string
 
   @IsEnum(Kind)
-  readonly kind: Kind
+  readonly kind!: Kind
 
   @IsEnum(Size)
-  readonly size: Size
+  readonly size!: Size
 
   @IsEnum(Gender)
-  readonly gender: Gender
+  readonly gender!: Gender
 
   @IsMongoId({ message: 'the breed is not valid' })
-  readonly breed: string
+  readonly breed!: string
 
   @IsMongoId({ message: 'the organization is not valid' })
   @IsOptional()
@@ -64,17 +64,17 @@ export class SavePetRequest {
   @IsString()
   @Length(2, 20)
   @Transform(({ value }: TransformFnParams) => value?.trim())
-  readonly name: string
+  readonly name!: string
 
   @IsEnum(Kind)
-  readonly kind: Kind
+  readonly kind!: Kind
 
   @IsEnum(Size)
-  readonly size: Size
+  readonly size!: Size
 
   @IsEnum(Gender)
-  readonly gender: Gender
+  readonly gender!: Gender
 
   @IsMongoId({ message: 'the breed is not valid' })
-  readonly breed: string
+  readonly breed!: string
 }

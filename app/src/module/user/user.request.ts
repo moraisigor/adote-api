@@ -13,7 +13,7 @@ import {
 
 export class GetUserParam {
   @IsMongoId({ message: 'the id is not valid' })
-  readonly id: string
+  readonly id!: string
 }
 
 class ContactRequest {
@@ -34,11 +34,11 @@ export class SaveUserRequest {
   @IsString()
   @Length(2, 20)
   @Transform(({ value }: TransformFnParams) => value?.trim())
-  readonly name: string
+  readonly name!: string
 
   @Type(() => ContactRequest)
   @ValidateNested()
-  readonly contact: ContactRequest
+  readonly contact!: ContactRequest
 
   @IsMongoId({ message: 'the id is not valid' })
   @IsOptional()
@@ -49,5 +49,5 @@ export class SaveImageRequest {
   @IsString()
   @IsNotEmpty()
   @Transform(({ value }: TransformFnParams) => value?.trim())
-  readonly image: string
+  readonly image!: string
 }

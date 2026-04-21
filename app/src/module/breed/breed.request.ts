@@ -4,5 +4,5 @@ import { Kind } from './type/kind'
 
 export class ListBreedRequest {
   @IsEnum(Kind)
-  readonly kind: Kind
+  readonly kind!: Kind
 }
