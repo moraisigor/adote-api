@@ -1,6 +1,9 @@
+import { Injectable } from '@nestjs/common'
+
 import { UserRepository } from '../repository/user.repository'
 import { UserResponse } from '../user.response'
 
+@Injectable()
 export class ListUserProvider {
   constructor(private readonly repository: UserRepository) {}
 

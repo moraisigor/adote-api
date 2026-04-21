@@ -1,8 +1,11 @@
+import { Injectable } from '@nestjs/common'
+
 import { Types } from 'mongoose'
 
 import { OrganizationResponse } from '@/module/organization/organization.response'
 import { OrganizationRepository } from '@/module/organization/repository/organization.repository'
 
+@Injectable()
 export class ListOrganizationProvider {
   constructor(private readonly repository: OrganizationRepository) {}
 

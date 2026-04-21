@@ -1,4 +1,4 @@
-import { BadRequestException } from '@nestjs/common'
+import { BadRequestException, Injectable } from '@nestjs/common'
 
 import { isNil } from 'lodash'
 import { Types } from 'mongoose'
@@ -6,6 +6,7 @@ import { Types } from 'mongoose'
 import { UserRepository } from '../repository/user.repository'
 import { UserResponse } from '../user.response'
 
+@Injectable()
 export class SaveImageProvider {
   constructor(private readonly repository: UserRepository) {}
 

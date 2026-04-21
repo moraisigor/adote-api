@@ -1,4 +1,4 @@
-import { BadRequestException } from '@nestjs/common'
+import { BadRequestException, Injectable } from '@nestjs/common'
 
 import { isNil } from 'lodash'
 import { Types } from 'mongoose'
@@ -7,6 +7,7 @@ import { UserRepository } from '../repository/user.repository'
 import { SaveUserRequest } from '../user.request'
 import { UserResponse } from '../user.response'
 
+@Injectable()
 export class SaveUserProvider {
   constructor(private readonly repository: UserRepository) {}
 

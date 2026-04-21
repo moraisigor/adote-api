@@ -1,8 +1,9 @@
-import { BadRequestException } from '@nestjs/common'
+import { BadRequestException, Injectable } from '@nestjs/common'
 
 import { UserRepository } from '../repository/user.repository'
 import { RemoveUserResponse } from '../user.response'
 
+@Injectable()
 export class RemoveUserProvider {
   constructor(private readonly repository: UserRepository) {}
 
