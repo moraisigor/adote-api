@@ -164,6 +164,17 @@ export class Scenario {
       }
     },
     user: {
+      organization: async () => {
+        const { token: { hash } = { hash: '' } } = this.authorization
+
+        const { json } = await this.application
+          .inject()
+          .get('/user/organization')
+          .headers({ Authorization: `Bearer ${hash}` })
+          .end()
+
+        return json<OrganizationResponse[]>()
+      },
       save: async (name: string = 'Name') => {
         const { token: { hash } = { hash: '' } } = this.authorization
 
@@ -232,6 +243,8 @@ export class Scenario {
     await this.authenticate()
 
     await this.build.configuration.breed()
+
+    await this.build.organization.create()
   }
 
   async post() {
@@ -239,6 +252,8 @@ export class Scenario {
 
     await this.build.configuration.breed()
     await this.build.configuration.location()
+
+    await this.build.organization.create()
 
     await this.build.user.save()
   }

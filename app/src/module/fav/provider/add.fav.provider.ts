@@ -1,4 +1,4 @@
-import { BadRequestException, NotFoundException } from '@nestjs/common'
+import { BadRequestException } from '@nestjs/common'
 
 import { isNil } from 'lodash'
 import { Types } from 'mongoose'

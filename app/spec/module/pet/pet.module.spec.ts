@@ -129,6 +129,48 @@ describe('pet module', async () => {
         }
       })
     })
+
+    test('should create pet with organization', async () => {
+      const {
+        authorization: { token: { hash } = { hash: '' } }
+      } = spec.scenario
+
+      const list = await spec.scenario.build.breed.list()
+
+      const { id: breed } = list.find((e) => e.name === 'Buldogue Inglês') ?? { id: null }
+
+      const [{ id: organization }] = await spec.scenario.build.user.organization()
+
+      const { statusCode: status, json } = await spec.application
+        .inject()
+        .post('/pet')
+        .headers({ Authorization: `Bearer ${hash}` })
+        .body({
+          name: 'Oreo',
+          kind: Kind.DOG,
+          size: Size.MEDIUM,
+          gender: Gender.MALE,
+          breed: breed,
+          organization: organization
+        })
+        .end()
+
+      const response = json<PetResponse>()
+
+      expect(status).toBe(HttpStatus.CREATED)
+
+      expect(response).toMatchObject({
+        id: expect.any(String),
+        name: 'Oreo',
+        kind: Kind.DOG,
+        size: Size.MEDIUM,
+        gender: Gender.MALE,
+        breed: {
+          id: expect.any(String),
+          name: 'Buldogue Inglês'
+        }
+      })
+    })
   })
 
   // put /pet/id

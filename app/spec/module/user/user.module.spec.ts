@@ -15,12 +15,20 @@ describe('user module', async () => {
     await spec.scenario.user()
   })
 
-  // get /user/id
-  describe('/user/id', () => {
-    test('should get user', async () => {
-      const { id } = await spec.scenario.build.user.save()
+  // get /user/current
+  describe('/user/current', () => {
+    test('should get current user', async () => {
+      const {
+        authorization: { token: { hash } = { hash: '' } }
+      } = spec.scenario
 
-      const { statusCode: status, json } = await spec.application.inject().get(`/user/${id}`).end()
+      await spec.scenario.build.user.save()
+
+      const { statusCode: status, json } = await spec.application
+        .inject()
+        .get('/user/current')
+        .headers({ Authorization: `Bearer ${hash}` })
+        .end()
 
       const response = json<UserResponse>()
 
@@ -43,20 +51,12 @@ describe('user module', async () => {
     })
   })
 
-  // get /user/current
-  describe('/user/current', () => {
-    test('should get current user', async () => {
-      const {
-        authorization: { token: { hash } = { hash: '' } }
-      } = spec.scenario
+  // get /user/id
+  describe('/user/id', () => {
+    test('should get user', async () => {
+      const { id } = await spec.scenario.build.user.save()
 
-      await spec.scenario.build.user.save()
-
-      const { statusCode: status, json } = await spec.application
-        .inject()
-        .get('/user/current')
-        .headers({ Authorization: `Bearer ${hash}` })
-        .end()
+      const { statusCode: status, json } = await spec.application.inject().get(`/user/${id}`).end()
 
       const response = json<UserResponse>()
 

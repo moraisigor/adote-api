@@ -22,7 +22,13 @@ export class OrganizationRepository {
     projection?: ProjectionType<Organization>,
     options?: QueryOptions<Organization>
   ): Promise<OrganizationDocument[]> {
-    return this.model.find(query).projection(projection).options(options).exec()
+    return (
+      this.model
+        .find(query)
+        // .projection(projection)
+        // .options(options)
+        .exec()
+    )
   }
 
   find(
