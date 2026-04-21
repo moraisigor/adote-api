@@ -11,11 +11,7 @@ export class SaveImageProvider {
   constructor(private readonly repository: UserRepository) {}
 
   async run(id: string, image: string): Promise<UserResponse> {
-    const map: { [key: string]: unknown } = {
-      image: image
-    }
-
-    const user = await this.repository.save(new Types.ObjectId(id), map, { new: true })
+    const user = await this.repository.save(new Types.ObjectId(id), { image }, { returnDocument: 'after' })
 
     if (isNil(user)) {
       throw new BadRequestException()
