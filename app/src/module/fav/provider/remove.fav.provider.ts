@@ -1,4 +1,4 @@
-import { BadRequestException } from '@nestjs/common'
+import { BadRequestException, Injectable } from '@nestjs/common'
 
 import { isNil } from 'lodash'
 import { Types } from 'mongoose'
@@ -6,6 +6,7 @@ import { Types } from 'mongoose'
 import { FavResponse } from '../fav.response'
 import { FavRepository } from '../repository/fav.repository'
 
+@Injectable()
 export class RemoveFavProvider {
   constructor(private readonly repository: FavRepository) {}
 
