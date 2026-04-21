@@ -1,6 +1,9 @@
+import { Injectable } from '@nestjs/common'
+
 import { LocationResponse } from '../location.response'
 import { LocationRepository } from '../repository/location.repository'
 
+@Injectable()
 export class SearchLocationProvider {
   constructor(private readonly repository: LocationRepository) {}
 
