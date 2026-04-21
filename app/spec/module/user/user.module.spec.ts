@@ -2,6 +2,7 @@ import { HttpStatus } from '@nestjs/common/enums'
 
 import { afterAll, beforeAll, describe, expect, test } from 'bun:test'
 
+import type { OrganizationResponse } from '@/module/organization/organization.response'
 import type { UserResponse } from '@/module/user/user.response'
 
 import { Spec } from '../spec'
@@ -48,6 +49,39 @@ describe('user module', async () => {
           state: 'Pernambuco'
         }
       })
+    })
+  })
+
+  // get /user/organization
+  describe('/user/organization', () => {
+    test('should list organization', async () => {
+      const {
+        authorization: { token: { hash } = { hash: '' } }
+      } = spec.scenario
+
+      const { statusCode: status, json } = await spec.application
+        .inject()
+        .get('/user/organization')
+        .headers({ Authorization: `Bearer ${hash}` })
+        .end()
+
+      const response = json<OrganizationResponse[]>()
+
+      expect(status).toBe(HttpStatus.OK)
+
+      expect(response).toHaveLength(1)
+
+      expect(response).toMatchObject([
+        {
+          id: expect.any(String),
+          name: 'Name',
+          contact: {
+            mail: 'mail@example.com',
+            phone: '+5599999999999',
+            social: 'https://example.com/name'
+          }
+        }
+      ])
     })
   })
 

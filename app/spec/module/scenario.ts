@@ -287,5 +287,9 @@ export class Scenario {
     await this.authenticate()
 
     await this.build.configuration.location()
+
+    await this.build.organization.create()
+
+    await this.build.organization.save()
   }
 }
