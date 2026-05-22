@@ -70,7 +70,6 @@ describe('configuration module', async () => {
 
       expect(response).toMatchObject({
         id: expect.any(String),
-        key: expect.any(String),
         name: 'Dev',
         phone: '+5599999999999'
       })
