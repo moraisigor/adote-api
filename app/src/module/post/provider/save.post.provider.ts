@@ -47,11 +47,9 @@ export class SavePostProvider {
         returnDocument: 'after'
       })
 
-      if (isNil(result)) {
-        throw new BadRequestException()
+      if (result) {
+        return new PostResponse(result)
       }
-
-      return new PostResponse(result)
     }
 
     throw new BadRequestException()

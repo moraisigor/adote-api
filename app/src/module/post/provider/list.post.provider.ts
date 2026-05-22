@@ -10,15 +10,16 @@ import { PostRepository } from '../repository/post.repository'
 export class ListPostProvider {
   constructor(private readonly repository: PostRepository) {}
 
+  private object = (location: string[]) => location.map((e) => new Types.ObjectId(e))
+
   async run(request: ListPostRequest): Promise<PostResponse[]> {
     const { page, amount, location } = request
 
     const skip = (page - 1) * amount
 
-    const list = await this.repository.list(skip, amount, {
-      publish: true,
-      location: { $in: location.map((e) => new Types.ObjectId(e)) }
-    })
+    const query = Object.assign({ publish: true }, location && { location: { $in: this.object(location) } })
+
+    const list = await this.repository.list(skip, amount, query)
 
     return list.map((e) => new PostResponse(e))
   }

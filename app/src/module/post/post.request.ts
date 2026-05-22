@@ -44,6 +44,7 @@ export class ListPostRequest {
 
   @IsArray()
   @IsMongoId({ each: true, message: 'the location is not valid' })
+  @IsOptional()
   @Transform(({ value }: TransformFnParams) => {
     if (isArray(value)) {
       return value
@@ -51,7 +52,7 @@ export class ListPostRequest {
 
     return [value]
   })
-  readonly location!: string[]
+  readonly location?: string[]
 }
 
 export class CreatePostRequest {
