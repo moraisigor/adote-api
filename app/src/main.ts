@@ -23,7 +23,7 @@ const application = async () => {
 
   application.useGlobalPipes(new ValidationPipe({ transform: true }))
 
-  await application.listen(process.env.PORT ?? 8000, '0.0.0.0')
+  await application.listen(process.env.PORT ?? 9000, '0.0.0.0')
 }
 
 application()
