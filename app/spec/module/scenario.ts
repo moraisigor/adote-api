@@ -11,7 +11,7 @@ import type { PetResponse } from '@/module/pet/pet.response'
 import { Gender } from '@/module/pet/type/gender'
 import { Size } from '@/module/pet/type/size'
 import type { PostResponse } from '@/module/post/post.response'
-import type { UserResponse } from '@/module/user/user.response'
+import type { UserCurrentResponse, UserResponse } from '@/module/user/user.response'
 
 import { encode } from '@/helper/string'
 
@@ -21,7 +21,9 @@ export type Authorization = {
 }
 
 export class Scenario {
-  public readonly BASIC_AUTHORIZATION = encode(`${process.env.USER}:${process.env.PASS}`)
+  public readonly BASIC_AUTHORIZATION = encode(
+    `${process.env.AUTHENTICATION_BASIC_USER}:${process.env.AUTHENTICATION_BASIC_PASS}`
+  )
 
   public readonly authorization: Authorization = {}
 
@@ -33,13 +35,6 @@ export class Scenario {
         const { json } = await this.application.inject().post('/auth').body({ phone: '+5599999999999' }).end()
 
         return json<AuthResponse>()
-      },
-      key: async () => {
-        const { key } = await this.build.auth.auth()
-
-        const { json } = await this.application.inject().post('/auth/key').headers({ Key: key }).end()
-
-        return json<TokenResponse>()
       }
     },
     breed: {
@@ -188,6 +183,17 @@ export class Scenario {
       }
     },
     user: {
+      current: async () => {
+        const { token: { hash } = { hash: '' } } = this.authorization
+
+        const { json } = await this.application
+          .inject()
+          .get('/user/current')
+          .headers({ Authorization: `Bearer ${hash}` })
+          .end()
+
+        return json<UserCurrentResponse>()
+      },
       organization: async () => {
         const { token: { hash } = { hash: '' } } = this.authorization
 

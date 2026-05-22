@@ -30,7 +30,6 @@ describe('auth module', async () => {
 
       expect(response).toMatchObject({
         id: expect.any(String),
-        key: expect.any(String),
         phone: '+5599999999999'
       })
     })
@@ -38,8 +37,12 @@ describe('auth module', async () => {
 
   // post /auth/key
   describe('/auth/key', () => {
+    beforeAll(async () => {
+      await spec.scenario.authenticate()
+    })
+
     test('should auth user with key', async () => {
-      const { key } = await spec.scenario.build.auth.auth()
+      const { key } = await spec.scenario.build.user.current()
 
       const { statusCode: status, json } = await spec.application
         .inject()
@@ -97,10 +100,14 @@ describe('auth module', async () => {
 
   // post /auth/renew
   describe('/auth/renew', () => {
+    beforeAll(async () => {
+      await spec.scenario.authenticate()
+    })
+
     test('should renew auth', async () => {
       const {
-        renew: { hash }
-      } = await spec.scenario.build.auth.key()
+        authorization: { renew: { hash } = { hash: '' } }
+      } = spec.scenario
 
       const { statusCode: status, json } = await spec.application
         .inject()
