@@ -2,7 +2,7 @@
   "name": "adote",
   "version": "1.0.0",
   "description": "",
-  "author": "hollow",
+  "author": "igor morais",
   "private": true,
   "scripts": {
     "lint": "eslint \"{src,spec}/**/*.ts\" --fix",
