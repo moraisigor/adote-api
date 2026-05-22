@@ -143,7 +143,6 @@ describe('user module', async () => {
 
       expect(response).toMatchObject({
         id: expect.any(String),
-        key: expect.any(String),
         phone: '+5599999999999',
         name: 'Name',
         contact: {

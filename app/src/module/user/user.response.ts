@@ -28,7 +28,6 @@ class LocationResponse {
 
 export class UserResponse {
   readonly id: string
-  readonly key: string
   readonly phone: string
   readonly name?: string
   readonly image?: string
@@ -39,7 +38,6 @@ export class UserResponse {
     const { contact, location } = user
 
     this.id = user.id
-    this.key = user.key
     this.phone = user.phone
     this.name = user.name
     this.image = user.image
@@ -51,6 +49,16 @@ export class UserResponse {
     if (location) {
       this.location = new LocationResponse(location)
     }
+  }
+}
+
+export class UserCurrentResponse extends UserResponse {
+  readonly key: string
+
+  constructor(user: UserDocument) {
+    super(user)
+
+    this.key = user.key
   }
 }
 
