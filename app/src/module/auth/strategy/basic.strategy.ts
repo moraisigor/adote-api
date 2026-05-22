@@ -11,6 +11,9 @@ export class BasicStrategy extends PassportStrategy(Strategy, 'Basic') {
   }
 
   validate(user: string, pass: string): boolean {
-    return user === this.config.getOrThrow<string>('USER') && pass === this.config.getOrThrow<string>('PASS')
+    return (
+      user === this.config.getOrThrow<string>('AUTHENTICATION_BASIC_USER') &&
+      pass === this.config.getOrThrow<string>('AUTHENTICATION_BASIC_PASS')
+    )
   }
 }
