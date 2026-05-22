@@ -9,7 +9,7 @@ import { UserCurrent } from '@/decorator/user.current.decorator'
 import { UserProvider } from './provider'
 import { Role } from './type/role'
 import { GetUserParam, SaveImageRequest, SaveUserRequest } from './user.request'
-import { RemoveUserResponse, UserResponse } from './user.response'
+import { RemoveUserResponse, UserCurrentResponse, UserResponse } from './user.response'
 
 import type { OrganizationResponse } from '../organization/organization.response'
 
@@ -32,7 +32,7 @@ export class UserController {
 
   @Get(':id')
   @Public()
-  get(@Param() param: GetUserParam): Promise<UserResponse> {
+  get(@Param() param: GetUserParam): Promise<UserCurrentResponse> {
     const { id } = param
 
     return this.provider.get.run(id)
