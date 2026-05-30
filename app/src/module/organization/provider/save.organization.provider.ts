@@ -24,10 +24,10 @@ export class SaveOrganizationProvider {
 
     const organization = await this.repository.save(new Types.ObjectId(id), map, { returnDocument: 'after' })
 
-    if (isNil(organization)) {
-      throw new BadRequestException()
+    if (organization) {
+      return new OrganizationResponse(organization)
     }
 
-    return new OrganizationResponse(organization)
+    throw new BadRequestException()
   }
 }

@@ -49,11 +49,11 @@ export class SavePetProvider {
         returnDocument: 'after'
       })
 
-      if (isNil(result)) {
-        throw new BadRequestException()
+      if (result) {
+        return new PetResponse(result)
       }
 
-      return new PetResponse(result)
+      throw new BadRequestException()
     }
 
     throw new BadRequestException()

@@ -13,10 +13,10 @@ export class SaveImageProvider {
   async run(id: string, image: string): Promise<UserResponse> {
     const user = await this.repository.save(new Types.ObjectId(id), { image }, { returnDocument: 'after' })
 
-    if (isNil(user)) {
-      throw new BadRequestException()
+    if (user) {
+      return new UserResponse(user)
     }
 
-    return new UserResponse(user)
+    throw new BadRequestException()
   }
 }

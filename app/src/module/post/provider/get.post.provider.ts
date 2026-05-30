@@ -12,10 +12,10 @@ export class GetPostProvider {
   async run(id: string): Promise<PostResponse> {
     const post = await this.repository.find({ _id: id, publish: true })
 
-    if (isNil(post)) {
-      throw new BadRequestException()
+    if (post) {
+      return new PostResponse(post)
     }
 
-    return new PostResponse(post)
+    throw new BadRequestException()
   }
 }

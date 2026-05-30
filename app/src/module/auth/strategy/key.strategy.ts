@@ -17,10 +17,10 @@ export class KeyStrategy extends PassportStrategy(Strategy, 'Key') {
   async validate(key: string, next: Next): Promise<unknown> {
     const user = await this.repository.find({ key })
 
-    if (isNil(user)) {
-      return next(new BadRequestException(), null)
+    if (user) {
+      return next(null, user)
     }
 
-    return next(null, user)
+    return next(new BadRequestException(), null)
   }
 }

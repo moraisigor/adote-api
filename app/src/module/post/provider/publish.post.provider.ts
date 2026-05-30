@@ -38,11 +38,11 @@ export class PublishPostProvider {
         { returnDocument: 'after' }
       )
 
-      if (isNil(result)) {
-        throw new BadRequestException()
+      if (result) {
+        return new PublishPostResponse(post)
       }
 
-      return new PublishPostResponse(post)
+      throw new BadRequestException()
     }
 
     throw new BadRequestException()

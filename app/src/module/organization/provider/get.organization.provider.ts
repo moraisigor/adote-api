@@ -12,10 +12,10 @@ export class GetOrganizationProvider {
   async run(id: string): Promise<OrganizationResponse> {
     const organization = await this.repository.find({ _id: id })
 
-    if (isNil(organization)) {
-      throw new NotFoundException()
+    if (organization) {
+      return new OrganizationResponse(organization)
     }
 
-    return new OrganizationResponse(organization)
+    throw new NotFoundException()
   }
 }

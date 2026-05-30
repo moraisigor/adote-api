@@ -15,10 +15,10 @@ export class AddFavProvider {
       returnDocument: 'after'
     })
 
-    if (isNil(result)) {
-      throw new BadRequestException()
+    if (result) {
+      return new FavResponse(post)
     }
 
-    return new FavResponse(post)
+    throw new BadRequestException()
   }
 }

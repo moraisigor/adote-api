@@ -24,10 +24,10 @@ export class SaveUserProvider {
 
     const user = await this.repository.save(new Types.ObjectId(id), map, { returnDocument: 'after' })
 
-    if (isNil(user)) {
-      throw new BadRequestException()
+    if (user) {
+      return new UserResponse(user)
     }
 
-    return new UserResponse(user)
+    throw new BadRequestException()
   }
 }
