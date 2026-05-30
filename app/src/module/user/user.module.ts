@@ -2,6 +2,7 @@ import { Module } from '@nestjs/common'
 import { MongooseModule } from '@nestjs/mongoose'
 
 import { UserProvider } from './provider'
+import { GetCurrentProvider } from './provider/get.current.provider'
 import { GetUserProvider } from './provider/get.user.provider'
 import { ListOrganizationProvider } from './provider/list.organization.provider'
 import { ListUserProvider } from './provider/list.user.provider'
@@ -25,6 +26,7 @@ import { OrganizationModule } from '../organization/organization.module'
   providers: [
     UserProvider,
     GetUserProvider,
+    GetCurrentProvider,
     ListUserProvider,
     ListOrganizationProvider,
     SaveUserProvider,
