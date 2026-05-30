@@ -24,15 +24,15 @@ export class UserController {
   }
 
   @Get('current')
-  current(@UserCurrent() user: User): Promise<UserResponse> {
+  current(@UserCurrent() user: User): Promise<UserCurrentResponse> {
     const { id: current } = user
 
-    return this.provider.get.run(current)
+    return this.provider.current.run(current)
   }
 
   @Get(':id')
   @Public()
-  get(@Param() param: GetUserParam): Promise<UserCurrentResponse> {
+  get(@Param() param: GetUserParam): Promise<UserResponse> {
     const { id } = param
 
     return this.provider.get.run(id)

@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common'
 
+import { GetCurrentProvider } from './get.current.provider'
 import { GetUserProvider } from './get.user.provider'
 import { ListOrganizationProvider } from './list.organization.provider'
 import { ListUserProvider } from './list.user.provider'
@@ -11,6 +12,7 @@ import { SaveUserProvider } from './save.user.provider'
 export class UserProvider {
   constructor(
     readonly get: GetUserProvider,
+    readonly current: GetCurrentProvider,
     readonly list: ListUserProvider,
     readonly organization: ListOrganizationProvider,
     readonly save: SaveUserProvider,
