@@ -5,6 +5,8 @@ import { afterAll, beforeAll, describe, expect, test } from 'bun:test'
 import type { OrganizationResponse } from '@/module/organization/organization.response'
 import type { UserResponse } from '@/module/user/user.response'
 
+import { unique } from '@/helper/id'
+
 import { Spec } from '../spec'
 
 describe('user module', async () => {
@@ -145,6 +147,49 @@ describe('user module', async () => {
         id: expect.any(String),
         phone: '+5599999999999',
         name: 'Name',
+        contact: {
+          mail: 'mail@example.com',
+          phone: '+5599999999999',
+          social: 'https://example.com/name'
+        },
+        location: {
+          id: expect.any(String),
+          city: 'Recife',
+          state: 'Pernambuco'
+        }
+      })
+    })
+  })
+
+  // put /user/image
+  describe('/user/image', () => {
+    test('should save image', async () => {
+      const {
+        authorization: { token: { hash } = { hash: '' } }
+      } = spec.scenario
+
+      await spec.scenario.build.user.save()
+
+      const image = `${unique()}.jpg`
+
+      const { statusCode: status, json } = await spec.application
+        .inject()
+        .put('/user/image')
+        .headers({ Authorization: `Bearer ${hash}` })
+        .body({
+          image
+        })
+        .end()
+
+      const response = json<UserResponse>()
+
+      expect(status).toBe(HttpStatus.OK)
+
+      expect(response).toMatchObject({
+        id: expect.any(String),
+        phone: '+5599999999999',
+        name: 'Name',
+        image: image,
         contact: {
           mail: 'mail@example.com',
           phone: '+5599999999999',
