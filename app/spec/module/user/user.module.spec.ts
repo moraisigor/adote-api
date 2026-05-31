@@ -5,8 +5,6 @@ import { afterAll, beforeAll, describe, expect, test } from 'bun:test'
 import type { OrganizationResponse } from '@/module/organization/organization.response'
 import type { UserResponse } from '@/module/user/user.response'
 
-import { unique } from '@/helper/id'
-
 import { Spec } from '../spec'
 
 describe('user module', async () => {
@@ -170,14 +168,12 @@ describe('user module', async () => {
 
       await spec.scenario.build.user.save()
 
-      const image = `${unique()}.jpg`
-
       const { statusCode: status, json } = await spec.application
         .inject()
         .put('/user/image')
         .headers({ Authorization: `Bearer ${hash}` })
         .body({
-          image
+          image: 'image.jpg'
         })
         .end()
 
@@ -189,7 +185,7 @@ describe('user module', async () => {
         id: expect.any(String),
         phone: '+5599999999999',
         name: 'Name',
-        image: image,
+        image: 'image.jpg',
         contact: {
           mail: 'mail@example.com',
           phone: '+5599999999999',
