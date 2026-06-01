@@ -1,7 +1,5 @@
 import { BadRequestException, Injectable } from '@nestjs/common'
 
-import { isNil } from 'lodash'
-
 import { PostResponse } from '../post.response'
 import { PostRepository } from '../repository/post.repository'
 

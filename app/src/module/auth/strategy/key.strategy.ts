@@ -1,7 +1,6 @@
 import { BadRequestException, Injectable } from '@nestjs/common'
 import { PassportStrategy } from '@nestjs/passport'
 
-import { isNil } from 'lodash'
 import { HeaderAPIKeyStrategy as Strategy } from 'passport-headerapikey'
 
 import { UserRepository } from '@/module/user/repository/user.repository'

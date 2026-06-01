@@ -1,6 +1,5 @@
 import { BadRequestException, Injectable } from '@nestjs/common'
 
-import { isNil } from 'lodash'
 import { Types } from 'mongoose'
 
 import { SaveOrganizationRequest } from '../organization.request'
