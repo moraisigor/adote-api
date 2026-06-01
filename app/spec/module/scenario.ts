@@ -63,7 +63,7 @@ export class Scenario {
 
         return json<LocationResponse[]>()
       },
-      user: async () => {
+      manager: async () => {
         const { json } = await this.application
           .inject()
           .post('/configuration/user')
@@ -297,5 +297,11 @@ export class Scenario {
     await this.build.organization.create()
 
     await this.build.organization.save()
+  }
+
+  async manager() {
+    await this.build.configuration.manager()
+
+    await this.authenticate()
   }
 }
