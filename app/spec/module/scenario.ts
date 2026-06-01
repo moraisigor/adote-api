@@ -253,10 +253,10 @@ export class Scenario {
   }
 
   async fav() {
-    await this.authenticate()
-
     await this.build.configuration.breed()
     await this.build.configuration.location()
+
+    await this.authenticate()
 
     await this.build.user.save()
   }
@@ -270,18 +270,18 @@ export class Scenario {
   }
 
   async pet() {
-    await this.authenticate()
-
     await this.build.configuration.breed()
+
+    await this.authenticate()
 
     await this.build.organization.create()
   }
 
   async post() {
-    await this.authenticate()
-
     await this.build.configuration.breed()
     await this.build.configuration.location()
+
+    await this.authenticate()
 
     await this.build.organization.create()
 
@@ -290,9 +290,9 @@ export class Scenario {
   }
 
   async user() {
-    await this.authenticate()
-
     await this.build.configuration.location()
+
+    await this.authenticate()
 
     await this.build.organization.create()
 
@@ -301,7 +301,12 @@ export class Scenario {
 
   async manager() {
     await this.build.configuration.manager()
+    await this.build.configuration.location()
 
     await this.authenticate()
+
+    await this.build.organization.create()
+
+    await this.build.organization.save()
   }
 }

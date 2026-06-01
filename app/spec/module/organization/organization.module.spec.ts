@@ -129,3 +129,52 @@ describe('organization module', async () => {
     await spec.stop()
   })
 })
+
+describe('organization module', async () => {
+  describe('as manager', async () => {
+    const spec = await Spec.build()
+
+    beforeAll(async () => {
+      await spec.start()
+
+      await spec.scenario.manager()
+    })
+
+    // get /organization
+    describe('/organization', () => {
+      test('should list organization', async () => {
+        const {
+          authorization: { token: { hash } = { hash: '' } }
+        } = spec.scenario
+
+        const { statusCode: status, json } = await spec.application
+          .inject()
+          .get('/organization')
+          .headers({ Authorization: `Bearer ${hash}` })
+          .end()
+
+        const response = json<OrganizationResponse[]>()
+
+        expect(status).toBe(HttpStatus.OK)
+
+        expect(response).toHaveLength(1)
+
+        expect(response).toMatchObject([
+          {
+            id: expect.any(String),
+            name: 'Name',
+            contact: {
+              mail: 'mail@example.com',
+              phone: '+5599999999999',
+              social: 'https://example.com/name'
+            }
+          }
+        ])
+      })
+    })
+
+    afterAll(async () => {
+      await spec.stop()
+    })
+  })
+})
