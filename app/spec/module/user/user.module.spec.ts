@@ -7,7 +7,7 @@ import type { UserResponse } from '@/module/user/user.response'
 
 import { Spec } from '../spec'
 
-describe('user module', () => {
+describe('user module', async () => {
   const spec = await Spec.build()
 
   beforeAll(async () => {
