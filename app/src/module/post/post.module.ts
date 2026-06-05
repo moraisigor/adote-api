@@ -16,6 +16,7 @@ import { PermissionModule } from '../permission/permission.module'
 
 @Module({
   imports: [MongooseModule.forFeature([{ name: Post.name, schema: PostSchema }]), PermissionModule],
+  exports: [PostRepository],
   providers: [
     PostProvider,
     GetPostProvider,

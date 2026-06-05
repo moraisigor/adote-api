@@ -290,12 +290,15 @@ export class Scenario {
   }
 
   async user() {
+    await this.build.configuration.breed()
     await this.build.configuration.location()
 
     await this.authenticate()
 
+    await this.build.post.create()
     await this.build.organization.create()
 
+    await this.build.user.save()
     await this.build.organization.save()
   }
 

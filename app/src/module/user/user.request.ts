@@ -3,17 +3,31 @@ import {
   IsEmail,
   IsMongoId,
   IsNotEmpty,
+  IsNumber,
   IsOptional,
   IsPhoneNumber,
   IsString,
   IsUrl,
   Length,
+  Min,
   ValidateNested
 } from 'class-validator'
 
 export class GetUserParam {
   @IsMongoId({ message: 'the id is not valid' })
   readonly id!: string
+}
+
+export class ListPostRequest {
+  @IsNumber()
+  @Min(1)
+  @Type(() => Number)
+  readonly page!: number
+
+  @IsNumber()
+  @Min(1)
+  @Type(() => Number)
+  readonly amount!: number
 }
 
 class ContactRequest {

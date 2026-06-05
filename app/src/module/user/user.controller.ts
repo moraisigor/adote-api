@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Param, Put } from '@nestjs/common'
+import { Body, Controller, Delete, Get, Param, Put, Query } from '@nestjs/common'
 
 import type { User } from '@/type/token'
 
@@ -8,10 +8,11 @@ import { UserCurrent } from '@/decorator/user.current.decorator'
 
 import { UserProvider } from './provider'
 import { Role } from './type/role'
-import { GetUserParam, SaveImageRequest, SaveUserRequest } from './user.request'
+import { GetUserParam, ListPostRequest, SaveImageRequest, SaveUserRequest } from './user.request'
 import { RemoveUserResponse, UserCurrentResponse, UserResponse } from './user.response'
 
 import type { OrganizationResponse } from '../organization/organization.response'
+import type { PostResponse } from '../post/post.response'
 
 @Controller()
 export class UserController {
@@ -30,12 +31,11 @@ export class UserController {
     return this.provider.current.run(current)
   }
 
-  @Get(':id')
-  @Public()
-  get(@Param() param: GetUserParam): Promise<UserResponse> {
-    const { id } = param
+  @Get('post')
+  post(@Query() request: ListPostRequest, @UserCurrent() user: User): Promise<PostResponse[]> {
+    const { id: current } = user
 
-    return this.provider.get.run(id)
+    return this.provider.post.run(request, current)
   }
 
   @Get('organization')
@@ -43,6 +43,14 @@ export class UserController {
     const { id: current } = user
 
     return this.provider.organization.run(current)
+  }
+
+  @Get(':id')
+  @Public()
+  get(@Param() param: GetUserParam): Promise<UserResponse> {
+    const { id } = param
+
+    return this.provider.get.run(id)
   }
 
   @Put()
