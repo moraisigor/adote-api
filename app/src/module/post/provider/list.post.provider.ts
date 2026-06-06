@@ -19,7 +19,7 @@ export class ListPostProvider {
 
     const query = Object.assign({ publish: true }, location && { location: { $in: this.object(location) } })
 
-    const list = await this.repository.list(skip, amount, query)
+    const list = await this.repository.list(skip, amount, query, {}, { sort: { create: 1 } })
 
     return list.map((e) => new PostResponse(e))
   }
