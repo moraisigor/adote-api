@@ -13,11 +13,15 @@ export class ListPostProvider {
   private object = (location: string[]) => location.map((e) => new Types.ObjectId(e))
 
   async run(request: ListPostRequest): Promise<PostResponse[]> {
-    const { page, amount, location } = request
+    const { page, amount, location, organization } = request
 
     const skip = (page - 1) * amount
 
-    const query = Object.assign({ publish: true }, location && { location: { $in: this.object(location) } })
+    const query = Object.assign(
+      { publish: true },
+      location && { location: { $in: this.object(location) } },
+      organization && { organization: new Types.ObjectId(organization) }
+    )
 
     const list = await this.repository.list(skip, amount, query, {}, { sort: { create: 1 } })
 

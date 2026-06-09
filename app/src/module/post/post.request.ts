@@ -53,6 +53,10 @@ export class ListPostRequest {
     return [value]
   })
   readonly location?: string[]
+
+  @IsMongoId({ message: 'the organization is not valid' })
+  @IsOptional()
+  readonly organization?: string
 }
 
 export class CreatePostRequest {
