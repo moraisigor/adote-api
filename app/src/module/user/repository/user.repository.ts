@@ -16,14 +16,10 @@ export class UserRepository {
     projection?: ProjectionType<User>,
     options?: QueryOptions<User>
   ): Promise<UserDocument[]> {
-    return (
-      this.model
-        .find(query)
-        // .projection(projection)
-        // .options(options)
-        .populate([{ path: 'contact' }, { path: 'location' }])
-        .exec()
-    )
+    return this.model
+      .find(query, projection, options)
+      .populate([{ path: 'contact' }, { path: 'location' }])
+      .exec()
   }
 
   find(

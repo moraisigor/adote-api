@@ -17,9 +17,7 @@ export class PostRepository {
     options?: QueryOptions<Post>
   ): Promise<PostDocument[]> {
     return this.model
-      .find(query)
-      .projection(projection)
-      .options(options)
+      .find(query, projection, options)
       .skip(skip)
       .limit(limit)
       .populate([

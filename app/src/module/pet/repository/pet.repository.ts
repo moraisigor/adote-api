@@ -21,16 +21,12 @@ export class PetRepository {
     projection?: ProjectionType<Pet>,
     options?: QueryOptions<Pet>
   ): Promise<PetDocument[]> {
-    return (
-      this.model
-        .find(query)
-        // .projection(projection)
-        // .options(options)
-        .skip(skip)
-        .limit(limit)
-        .populate([{ path: 'breed' }])
-        .exec()
-    )
+    return this.model
+      .find(query, projection, options)
+      .skip(skip)
+      .limit(limit)
+      .populate([{ path: 'breed' }])
+      .exec()
   }
 
   find(
