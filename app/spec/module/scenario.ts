@@ -104,7 +104,7 @@ export class Scenario {
           .post('/organization')
           .headers({ Authorization: `Bearer ${hash}` })
           .body({
-            name
+            name: name
           })
           .end()
 
@@ -122,7 +122,7 @@ export class Scenario {
           .put(`/organization/${id}`)
           .headers({ Authorization: `Bearer ${hash}` })
           .body({
-            name,
+            name: name,
             contact: {
               mail: 'mail@example.com',
               phone: '+5599999999999',
@@ -136,7 +136,7 @@ export class Scenario {
       }
     },
     pet: {
-      create: async (name: string = 'Oreo') => {
+      create: async (name: string = 'Oreo', organization?: string) => {
         const { token: { hash } = { hash: '' } } = this.authorization
 
         const list = await this.build.breed.list()
@@ -148,11 +148,12 @@ export class Scenario {
           .post('/pet')
           .headers({ Authorization: `Bearer ${hash}` })
           .body({
-            name,
+            name: name,
             kind: Kind.DOG,
             size: Size.MEDIUM,
             gender: Gender.MALE,
-            breed: breed
+            breed: breed,
+            organization: organization
           })
           .end()
 
@@ -160,10 +161,10 @@ export class Scenario {
       }
     },
     post: {
-      create: async () => {
+      create: async (name: string = 'Oreo', organization?: string) => {
         const { token: { hash } = { hash: '' } } = this.authorization
 
-        const { id: pet } = await this.build.pet.create()
+        const { id: pet } = await this.build.pet.create(name, organization)
 
         const [{ id: location }] = await this.build.location.search()
 
@@ -215,7 +216,7 @@ export class Scenario {
           .put('/user')
           .headers({ Authorization: `Bearer ${hash}` })
           .body({
-            name,
+            name: name,
             contact: {
               mail: 'mail@example.com',
               phone: '+5599999999999',
