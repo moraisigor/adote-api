@@ -71,10 +71,6 @@ export class CreatePostRequest {
   @IsMongoId({ message: 'the location is not valid' })
   readonly location!: string
 
-  @IsMongoId({ message: 'the organization is not valid' })
-  @IsOptional()
-  readonly organization?: string
-
   @IsBoolean()
   @Type(() => Boolean)
   readonly publish!: boolean

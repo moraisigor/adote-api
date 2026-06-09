@@ -13,9 +13,14 @@ import { PostRepository } from './repository/post.repository'
 import { Post, PostSchema } from './repository/post.schema'
 
 import { PermissionModule } from '../permission/permission.module'
+import { PetModule } from '../pet/pet.module'
 
 @Module({
-  imports: [MongooseModule.forFeature([{ name: Post.name, schema: PostSchema }]), PermissionModule],
+  imports: [
+    MongooseModule.forFeature([{ name: Post.name, schema: PostSchema }]),
+    PetModule,
+    PermissionModule
+  ],
   exports: [PostRepository],
   providers: [
     PostProvider,

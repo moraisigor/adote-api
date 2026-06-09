@@ -67,22 +67,63 @@ describe('post module', async () => {
         }
       ])
     })
+
+    test('should list post with organization', async () => {
+      const [{ id: organization }] = await spec.scenario.build.user.organization()
+
+      await spec.scenario.build.post.create('Oreo', organization)
+
+      const { statusCode: status, json } = await spec.application
+        .inject()
+        .get('/post')
+        .query({ page: '1', amount: '10', organization: organization })
+        .end()
+
+      const response = json<PostResponse[]>()
+
+      expect(status).toBe(HttpStatus.OK)
+
+      expect(response).toHaveLength(1)
+
+      expect(response).toMatchObject([
+        {
+          id: expect.any(String),
+          image: ['image.jpg'],
+          pet: {
+            id: expect.any(String),
+            name: 'Oreo',
+            size: Size.MEDIUM,
+            gender: Gender.MALE,
+            breed: {
+              id: expect.any(String),
+              name: 'Buldogue Inglês'
+            }
+          },
+          location: {
+            id: expect.any(String),
+            city: 'Recife',
+            state: 'Pernambuco'
+          },
+          organization: {
+            id: expect.any(String),
+            name: 'Name',
+            contact: {
+              mail: 'mail@example.com',
+              phone: '+5599999999999',
+              social: 'https://example.com/name'
+            }
+          }
+        }
+      ])
+    })
   })
 
   // get /post/id
   describe('/post/id', () => {
     test('should get post', async () => {
-      const {
-        authorization: { token: { hash } = { hash: '' } }
-      } = spec.scenario
-
       const { id: post } = await spec.scenario.build.post.create()
 
-      const { statusCode: status, json } = await spec.application
-        .inject()
-        .get(`/post/${post}`)
-        .headers({ Authorization: `Bearer ${hash}` })
-        .end()
+      const { statusCode: status, json } = await spec.application.inject().get(`/post/${post}`).end()
 
       const response = json<PostResponse>()
 
@@ -180,10 +221,10 @@ describe('post module', async () => {
         authorization: { token: { hash } = { hash: '' } }
       } = spec.scenario
 
-      const { id: pet } = await spec.scenario.build.pet.create()
-
       const [{ id: location }] = await spec.scenario.build.location.search()
       const [{ id: organization }] = await spec.scenario.build.user.organization()
+
+      const { id: pet } = await spec.scenario.build.pet.create('Oreo', organization)
 
       const { statusCode: status, json } = await spec.application
         .inject()
@@ -193,8 +234,7 @@ describe('post module', async () => {
           image: ['image.jpg'],
           pet: pet,
           location: location,
-          publish: true,
-          organization: organization
+          publish: true
         })
         .end()
 
