@@ -18,8 +18,8 @@ import { PetModule } from '../pet/pet.module'
 @Module({
   imports: [
     MongooseModule.forFeature([{ name: Post.name, schema: PostSchema }]),
-    PetModule,
-    PermissionModule
+    PermissionModule,
+    PetModule
   ],
   exports: [PostRepository],
   providers: [

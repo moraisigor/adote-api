@@ -16,6 +16,7 @@ import { UserController } from './user.controller'
 
 import { ImageModule } from '../image/image.module'
 import { OrganizationModule } from '../organization/organization.module'
+import { PermissionModule } from '../permission/permission.module'
 import { PostModule } from '../post/post.module'
 
 @Module({
@@ -23,6 +24,7 @@ import { PostModule } from '../post/post.module'
     MongooseModule.forFeature([{ name: User.name, schema: UserSchema }]),
     ImageModule,
     OrganizationModule,
+    PermissionModule,
     PostModule
   ],
   exports: [UserRepository],

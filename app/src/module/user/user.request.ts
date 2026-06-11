@@ -28,6 +28,10 @@ export class ListPostRequest {
   @Min(1)
   @Type(() => Number)
   readonly amount!: number
+
+  @IsMongoId({ message: 'the organization is not valid' })
+  @IsOptional()
+  readonly organization?: string
 }
 
 class ContactRequest {
