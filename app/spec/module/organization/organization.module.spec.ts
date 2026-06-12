@@ -147,6 +147,10 @@ describe('organization module', async () => {
           authorization: { token: { hash } = { hash: '' } }
         } = spec.scenario
 
+        await spec.scenario.build.organization.create()
+
+        await spec.scenario.build.organization.save()
+
         const { statusCode: status, json } = await spec.application
           .inject()
           .get('/organization')
