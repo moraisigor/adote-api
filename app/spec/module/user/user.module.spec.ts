@@ -63,6 +63,10 @@ describe('user module', async () => {
         authorization: { token: { hash } = { hash: '' } }
       } = spec.scenario
 
+      await spec.scenario.build.post.create()
+
+      await spec.scenario.build.user.save()
+
       const { statusCode: status, json } = await spec.application
         .inject()
         .get('/user/post')
@@ -115,6 +119,10 @@ describe('user module', async () => {
       const {
         authorization: { token: { hash } = { hash: '' } }
       } = spec.scenario
+
+      await spec.scenario.build.organization.create()
+
+      await spec.scenario.build.organization.save()
 
       const { statusCode: status, json } = await spec.application
         .inject()
@@ -296,7 +304,17 @@ describe('user module', () => {
           {
             id: expect.any(String),
             phone: '+5599999999999',
-            name: 'Dev'
+            name: 'Name',
+            contact: {
+              mail: 'mail@example.com',
+              phone: '+5599999999999',
+              social: 'https://example.com/name'
+            },
+            location: {
+              id: expect.any(String),
+              city: 'Recife',
+              state: 'Pernambuco'
+            }
           }
         ])
       })
