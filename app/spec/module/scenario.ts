@@ -272,6 +272,7 @@ export class Scenario {
 
   async pet() {
     await this.build.configuration.breed()
+    await this.build.configuration.location()
 
     await this.authenticate()
 
@@ -296,21 +297,16 @@ export class Scenario {
 
     await this.authenticate()
 
-    await this.build.post.create()
-    await this.build.organization.create()
-
     await this.build.user.save()
-    await this.build.organization.save()
   }
 
   async manager() {
-    await this.build.configuration.manager()
+    await this.build.configuration.breed()
     await this.build.configuration.location()
+    await this.build.configuration.manager()
 
     await this.authenticate()
 
-    await this.build.organization.create()
-
-    await this.build.organization.save()
+    await this.build.user.save()
   }
 }
